@@ -1,17 +1,19 @@
 const mongoose = require("mongoose")
-const Bundle = require("./bundle")
 const Schema = mongoose.Schema;
+// const ObjectId = require('mongoose').Types.ObjectId;
+// var BundleRef = mongoose.model('Bundle', Bundle);
 
 const SpaceFunSchema = new Schema({
     name: String,
-    bundle: Bundle
+    bundle: [{type: Schema.Types.ObjectId, ref: 'Bundle'}]
 })
 
 const SpaceFun = mongoose.model("SpaceFun", SpaceFunSchema)
-// Create a new house
-SpaceFun.create({
-    name: "Wrap6",
-    bundle: {name: "bundleled"}
-})
+
+//
+ SpaceFun.create({
+    name: "Wrap122",
+    bundle: ['643aa26410b6dbf248554532'] // bundelmongoid
+ })
 
 module.exports = SpaceFun
