@@ -3,8 +3,7 @@
 
 <!-- [![NodeJS CI/CD](https://github.com/iNkidzy/CatsRestAPI/actions/workflows/main.yaml/badge.svg)](https://github.com/iNkidzy/CatsRestAPI/actions/workflows/main.yaml) -->
 
-![MEVN Logo](https://www.caramelit.com/images/mevn.jpg#gh-dark-mode-only)
-![MEVN Logo](https://vuejsexamples.com/content/images/2022/01/Snipaste_2022-01-08_22-59-25.jpg#gh-light-mode-only)
+![MEVN Logo](https://vuejsexamples.com/content/images/2022/01/Snipaste_2022-01-08_22-59-25.jpg)
 
 
  <!-- ### Table of contents
