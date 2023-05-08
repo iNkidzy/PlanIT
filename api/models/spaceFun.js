@@ -5,15 +5,15 @@ const Schema = mongoose.Schema;
 
 const SpaceFunSchema = new Schema({
     name: String,
-    bundle: [{type: Schema.Types.ObjectId, ref: 'Bundle'}]
+    project: [{type: Schema.Types.ObjectId, ref: 'Project'}]
 })
 
 const SpaceFun = mongoose.model("SpaceFun", SpaceFunSchema)
 
-//
+//test data
  SpaceFun.create({
-    name: "Wrap122",
-    bundle: ['643aa26410b6dbf248554532'] // bundelmongoid
+    name: "Space1",
+    project: ['6458db96e8bd7ee58f9d7569'] // project MongoId
  })
 
 module.exports = SpaceFun

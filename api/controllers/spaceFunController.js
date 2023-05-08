@@ -1,13 +1,13 @@
-const Bundle = require('../models/bundle')
+const Project = require('../models/project')
 const SpaceFun = require('../models/spaceFun')
 
 const spaceFun = async(req , res) => {
  
     try {
-        const spacefunfound = await SpaceFun.findOne({ _id: '643aa26410b6dbf248554532' }) //finds specific spacefun + bundle
+        const spacefunfound = await SpaceFun.findOne({ _id: '6458db96e8bd7ee58f9d7569' }) //finds specific spacefun + project
         console.log(spacefunfound, 'Space fun found')
 
-        const spaceFun = await SpaceFun.find({}).populate('bundle')
+        const spaceFun = await SpaceFun.find({}).populate('project')
         if (!spaceFun) throw new Error('No Fun')
    
         res.json(spaceFun)
