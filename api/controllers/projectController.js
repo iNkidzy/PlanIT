@@ -24,7 +24,9 @@ const createProject = async (req, res) => {
     try {
         const newProject = new Project({
             name: req.body.name,
-            assignedTo: req.body.assignedTo
+            assignedTo: req.body.assignedTo,
+            task: req.body.task,
+            createdAt: req.body.createdAt
 
         })
         const savedProject = await newProject.save()
