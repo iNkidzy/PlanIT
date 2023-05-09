@@ -5,6 +5,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const TodolistRoutes = require('./routes/Todolist')
 const spaceFunRoutes = require('./routes/spaceFun')
+const projectRoutes = require('./routes/project')
 require('dotenv').config();
 
 app.use(cors({
@@ -12,8 +13,6 @@ app.use(cors({
     methods: ['GET', 'POST','PUT','DELETE']
 })) // to allow cross origin requests
 app.use(bodyParser.json()) // to convert the request into JSON
-
-
 
 
 mongoose
@@ -32,6 +31,7 @@ app.get("/api/welcome", (req, res) => {
 
 app.use('/api/todolist', TodolistRoutes)
 app.use('/api/spaceFun', spaceFunRoutes)
+app.use('/api/projects', projectRoutes)
 //for authentication
 //app.use("/api/user", authRoutes);
 
