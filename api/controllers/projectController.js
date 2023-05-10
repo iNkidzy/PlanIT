@@ -4,10 +4,8 @@ const Project = require('../models/project')
 const SpaceFun = require('../models/spaceFun')
 
 const project = async (req, res) => {
-
     try {
-
-        const projectFound = await Project.findOne({ _id: '6458db96e8bd7ee58f9d7569' }) //finds specific project
+        const projectFound = await Project.findOne({ _id: '6458db96e8bd7ee58f9d7569' }); //finds specific project
         console.log(projectFound, 'Project found')
 
         const project = await Project.find({}).populate('task')
@@ -18,7 +16,7 @@ const project = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
-}
+};
 
 const createProject = async (req, res) => {
     try {
@@ -28,7 +26,7 @@ const createProject = async (req, res) => {
             task: req.body.task,
             createdAt: req.body.createdAt
 
-        })
+        });
         const savedProject = await newProject.save()
         res.json(savedProject)
     } catch (error) {
@@ -37,13 +35,15 @@ const createProject = async (req, res) => {
     }
 }
 
-const getOneProject = async (req, res) => { }
-const { id } = req.params
-try {
-    const getProject = await Project.findById(id)
-} catch (error) {
-    res.status(500).json({ message: error.message })
-}
+// const getOneProject = async (req, res) => { }
+// const { id } = req.params
+// try {
+//     const getProject = await Project.findById(id)
+//     res.json(getProject)
+// } catch (error) {
+//     res.status(500).json({ message: error.message })
+// }
+
 
 const updateProject = async (req, res) => {
     try {
@@ -65,7 +65,7 @@ const getAllProjects = async (req, res) => {
     }
 }
 
-const deleteProject = async (req, res) => { }
+const deleteProject = async (req, res) => { 
 try {
     const deleteProject = await Project.findByIdAndDelete({ _id: req.params.id })
     if (!deleteProject) throw new error('Project not found')
@@ -74,5 +74,6 @@ try {
     res.status(500).json({ message: error.message })
 
 }
+}
 
-module.exports = { project, createProject, updateProject, getAllProjects, deleteProject, getOneProject }
+module.exports = { project, createProject, updateProject, getAllProjects, deleteProject }

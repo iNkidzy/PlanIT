@@ -10,13 +10,14 @@ require('dotenv').config();
 
 app.use(cors({
     origin: '*',
-    methods: ['GET', 'POST','PUT','DELETE']
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
 })) // to allow cross origin requests
 app.use(bodyParser.json()) // to convert the request into JSON
 
-
+console.log(process.env.MONGO_URI);
 mongoose
     .connect(process.env.MONGO_URI, {
+        
         useNewUrlParser: true,
         useUnifiedTopology: true,
 
@@ -26,7 +27,7 @@ mongoose
 
 //Define routes directly here
 app.get("/api/welcome", (req, res) => {
-    res.status(200).send({message: "Welcome to PlanIT :) "});
+    res.status(200).send({ message: "Welcome to PlanIT :) " });
 })
 
 app.use('/api/todolist', TodolistRoutes)
