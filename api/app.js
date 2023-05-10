@@ -5,6 +5,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const TodolistRoutes = require('./routes/Todolist')
 const spaceFunRoutes = require('./routes/spaceFun')
+const authRoutes = require("./routes/auth");
 require('dotenv').config();
 
 app.use(cors({
@@ -32,8 +33,9 @@ app.get("/api/welcome", (req, res) => {
 
 app.use('/api/todolist', TodolistRoutes)
 app.use('/api/spaceFun', spaceFunRoutes)
+
 //for authentication
-//app.use("/api/user", authRoutes);
+app.use("/api/user", authRoutes);
 
 
 app.listen(process.env.PORT, () => console.log(`Success: App running at http://localhost:${process.env.PORT}`))
