@@ -1,8 +1,8 @@
 const router = require('express').Router();
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
-const { validateRegister } = require('../validation');
-
+const { validateRegister, validateLogin } = require('../validation');
+const jwt = require('jsonwebtoken');
 
 router.post('/register', async (req, res) => {
 
@@ -57,7 +57,23 @@ router.post('/login', async (req, res) => {
 
 
      //token generation authentication with username and id
-     
+const token = jwt.sign(
+    {
+        name: user.username,
+        id: user._id
+    },
+    //SECRET TOKEN
+    process.env.TOKEN_SECRET,{
+     //EXP TIME
+        expiresIn: process.env.JWT_EXPIRES_IN
+    },
+);
+
+//attach to header
+res.header('auth-token', token).json({
+    error: null,
+    data: { token }
+})
     //return res.status(200).json({message: "Login route "});
 
 });
