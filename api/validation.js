@@ -10,7 +10,19 @@ const validateRegister = (data) => {
 
         }
     );
-//validate data according to schema rules
+    //validate data according to schema rules
     return schema.validate(data);
-}   
-module.exports = {validateRegister};
+}
+
+//validation for login - checks for the email and for the password
+const validateLogin = (data) => {
+    const schema = Joi.object(
+        {
+            password: Joi.string().min(6).max(255).required(),
+            email: Joi.string().min(6).max(255).required()
+
+        }
+    );
+    return schema.validate(data);
+
+    module.exports = { validateRegister, validateLogin };
