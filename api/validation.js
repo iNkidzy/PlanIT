@@ -24,5 +24,6 @@ const validateLogin = (data) => {
         }
     );
     return schema.validate(data);
+}
 
-    module.exports = { validateRegister, validateLogin };
+    module.exports = { validateRegister, validateLogin }
