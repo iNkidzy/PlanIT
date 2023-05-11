@@ -1,8 +1,9 @@
 const express = require('express')
-const app = express()
 const mongoose = require('mongoose')
-const cors = require('cors')
 const bodyParser = require('body-parser')
+const app = express()
+const cors = require('cors')
+
 const TodolistRoutes = require('./routes/Todolist')
 const spaceFunRoutes = require('./routes/spaceFun')
 const projectRoutes = require('./routes/project')
@@ -14,9 +15,10 @@ app.use(cors({
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE']
 })) // to allow cross origin requests
+
 app.use(bodyParser.json()) // to convert the request into JSON
 
-console.log(process.env.MONGO_URI);
+
 mongoose
     .connect(process.env.MONGO_URI, {
         
