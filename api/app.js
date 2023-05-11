@@ -3,7 +3,7 @@ const app = express()
 const mongoose = require('mongoose')
 const cors = require('cors')
 const bodyParser = require('body-parser')
-const TodolistRoutes = require('./routes/Todolist')
+const taskRoutes = require('./routes/task')
 const spaceFunRoutes = require('./routes/spaceFun')
 const projectRoutes = require('./routes/project')
 const authRoutes = require("./routes/auth");
@@ -32,7 +32,7 @@ app.get("/api/welcome", (req, res) => {
     res.status(200).send({ message: "Welcome to PlanIT :) " });
 })
 
-app.use('/api/todolist', TodolistRoutes)
+app.use('/api/task', taskRoutes)
 app.use('/api/spaceFun', spaceFunRoutes)
 
 app.use('/api/projects', projectRoutes)
