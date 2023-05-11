@@ -11,12 +11,12 @@ const ProjectSchema = new Schema({
 })
 const Project = mongoose.model('Project', ProjectSchema);
 //test data
-Project.create({
-    name: "Project1",
-    assignedTo: 'Someone',
-    task: ['6458db96e8bd7ee58f9d7569'],// task MongoId - rn random id
-    createdAt: Date.now()
-})
+// Project.create({
+//     name: "Project1",
+//     assignedTo: 'Someone',
+//     task: ['6458db96e8bd7ee58f9d7569'],// task MongoId - rn random id
+//     createdAt: Date.now()
+// })
 
 
 module.exports = Project

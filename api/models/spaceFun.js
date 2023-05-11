@@ -11,9 +11,9 @@ const SpaceFunSchema = new Schema({
 const SpaceFun = mongoose.model("SpaceFun", SpaceFunSchema)
 
 //test data
- SpaceFun.create({
-    name: "Space1",
-    project: ['6458db96e8bd7ee58f9d7569'] // project MongoId
- })
+//  SpaceFun.create({
+//     name: "Space1",
+//     project: ['6458db96e8bd7ee58f9d7569'] // project MongoId
+//  })
 
 module.exports = SpaceFun
