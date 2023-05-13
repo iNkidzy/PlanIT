@@ -1,79 +1,58 @@
-// find a project within a spacefun
+const project = require('../models/project')
+const express = require('express');
 
-const Project = require('../models/project')
-const SpaceFun = require('../models/spaceFun')
-
-const project = async (req, res) => {
-    try {
-        const projectFound = await Project.findOne({ _id: '6458db96e8bd7ee58f9d7569' }); //finds specific project
-        console.log(projectFound, 'Project found')
-
-        const project = await Project.find({}).populate('task')
-        if (!project) throw new Error('No Fun Project')
-
-        res.json(project)
-
-    } catch (error) {
-        res.status(500).json({ message: error.message })
-    }
-};
 
 const createProject = async (req, res) => {
-    try {
-        const newProject = new Project({
-            name: req.body.name,
-            assignedTo: req.body.assignedTo,
-            task: req.body.task,
-            createdAt: req.body.createdAt
+    data = req.body;
 
-        });
-        const savedProject = await newProject.save()
-        res.json(savedProject)
-    } catch (error) {
-        res.status(500).json({ message: error.message })
+    project.insertMany(data)
+        .then(data => { res.send(data) })
+        .catch(err => { res.status(500).send({ message: err.message }) })
+
+}
+    const getAllProjects = async (req, res) => {
+        project.find()
+            .then(data => { res.send(data) })
+            .catch(err => {
+                res.status(500).send({ message: err.message })
+            })
+    }
+
+
+    
+
+    const getSpecificProject = async (req, res) => {
+        project.findById(req.params.id)
+            .then(data => { res.send(data) })
+            .catch(err => { res.status(500).send({ message: err.message }) })
+    }
+    const updateProject = async (req, res) => {
+        const id = req.params.id;
+        const body = req.body;
+
+        project.findByIdAndUpdate(id, body)
+            .then(data => {
+                !data ? res.status(404).send({ message: "Cannot update project with id" + id + "Try Again" }) : res.send({ message: "SpaceFun successfully updated!" })
+
+            })
+            .catch(err => {
+                res.status(500).send({ message: "Error updating project with id:" + id })
+            })
+
 
     }
-}
 
-// const getOneProject = async (req, res) => { }
-// const { id } = req.params
-// try {
-//     const getProject = await Project.findById(id)
-//     res.json(getProject)
-// } catch (error) {
-//     res.status(500).json({ message: error.message })
-// }
+    const deleteProject = async (req, res) => {
+        const id = req.params.id;
 
+        project.findByIdAndDelete(id)
+            .then(data => {
+                res.send({ message: "Project successfully deleted!" })
+            })
+            .catch(err => {
+                res.status(500).send({ message: "Error deleting project with id:" + id })
+            })
 
-const updateProject = async (req, res) => {
-    try {
-        const updateProject = await Project.findByIdAndUpdate({ _id: req.params.id }, req.body)
-        if (!updateProject) throw new error('Project not found')
-        res.json(updateProject)
-    } catch (error) {
-        res.status(500).json({ message: error.message })
     }
-}
 
-const getAllProjects = async (req, res) => {
-    try {
-        const projects = await Project.find()
-        if (!projects) throw new error('No projects found')
-        res.json(projects)
-    } catch (error) {
-        res.status(500).json({ message: error.message })
-    }
-}
-
-const deleteProject = async (req, res) => { 
-try {
-    const deleteProject = await Project.findByIdAndDelete({ _id: req.params.id })
-    if (!deleteProject) throw new error('Project not found')
-    res.json(deleteProject, 'Project deleted')
-} catch (error) {
-    res.status(500).json({ message: error.message })
-
-}
-}
-
-module.exports = { project, createProject, updateProject, getAllProjects, deleteProject }
+    module.exports = { createProject, updateProject, getAllProjects, getSpecificProject, deleteProject }
