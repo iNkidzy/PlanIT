@@ -5,9 +5,9 @@ info:
   version: 1.0.0
 servers:
  - url: http://localhost:5500/api/
-   description: localhost version
-#  - url: https://planIT-restapi.onrender.com/api/
-#    description: deployed version
+   description: localhost server
+ - url: https://planit-api.onrender.com/api/
+   description: deployed server
 
 tags:
   - name: Authentication
