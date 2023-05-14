@@ -3,8 +3,8 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const { signupValidation, loginValidation } = require('../validation');
 const jwt = require('jsonwebtoken');
-const { 
-   // createUser,
+const {
+    // createUser,
     getAllUsers,
     getSpecificUser,
     updateUser,
@@ -15,7 +15,7 @@ router.post('/signup', async (req, res) => {
     //userinput validation
     const { error } = signupValidation(req.body);
     if (error) return res.status(400).json({ message: error.details[0].message });
-   
+
     //duplicate username check // shouldn't there be a check for duplicate email as well?
     const usernameCheck = await User.findOne({ username: req.body.username });
     if (usernameCheck) return res.status(400).json({ message: "Username already exists" });
@@ -35,51 +35,53 @@ router.post('/signup', async (req, res) => {
 
     try {
         const userSaved = await userObj.save();
-        res.json({ error: null, data: userSaved._id }); 
+        res.json({ error: null, data: userSaved._id });
     } catch (error) {
-        res.status(400).json({error});
-    }   
+        res.status(400).json({ error });
+    }
 
 });
 
 router.post('/login', async (req, res) => {
 
-     //userinput validation
-     const { error } = loginValidation(req.body);
-     if (error) {
+    //userinput validation
+    const { error } = loginValidation(req.body);
+    if (error) {
         return res.status(400).json({ message: error.details[0].message });
-     }
-     //valid login data finds a user
-     const user = await User.findOne({username: req.body.username});
-     
-     //wrong username error or there is no user with this username
-     if (!user) return res.status(400).json({ message: "Error: Wrong username or User doesn't exists" });
+    }
+    //valid login data finds a user
+    const user = await User.findOne({ username: req.body.username });
 
-     // check password
-     const passwordIsValid = await bcrypt.compare(req.body.password, user.password);
-     if (!passwordIsValid) return res.status(400).json({ message: "Error: Incorrect password" });
+    //wrong username error or there is no user with this username
+    if (!user) return res.status(400).json({ message: "Error: Wrong username or User doesn't exists" });
+
+    // check password
+    const passwordIsValid = await bcrypt.compare(req.body.password, user.password);
+    if (!passwordIsValid) return res.status(400).json({ message: "Error: Incorrect password" });
 
 
-     //token generation authentication with username and id
+    //token generation authentication with username and id
     const token = jwt.sign(
         {
             username: user.username,
             id: user._id
         },
         //SECRET TOKEN
-        process.env.TOKEN_SECRET,{
+        process.env.TOKEN_SECRET, {
         //EXP TIME
         expiresIn: process.env.JWT_EXPIRES_IN
-        },
+    },
+
+
+
     )
     //attach to header
     res.header('auth-token', token).json({
         error: null,
         data: { token }
     })
-    //return res.status(200).json({message: "Login route "});
-
 });
+
 
 
 // router.post('/create', createUser)

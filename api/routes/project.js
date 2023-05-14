@@ -9,7 +9,7 @@ const {
     updateProject,
     deleteProject } = require('../controllers/projectController');
 
-router.get('/', getAllProjects )
+router.get('/', getAllProjects)
 
 
 router.get('/:id', getSpecificProject)

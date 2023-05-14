@@ -1,4 +1,6 @@
 const router = require('express').Router();
+const { tokenVerification } = require("../validation");
+
 // const SpaceFun = require('../models/spaceFun')
 const { 
     createSpaceFun,
@@ -8,7 +10,7 @@ const {
     deleteSpaceFun } = require('../controllers/spaceFunController');
 
 
-router.get('/', getAllSpaceFuns )
+router.get('/', tokenVerification, getAllSpaceFuns )
 
 router.get('/:id', getSpecificSpaceFun)
 
