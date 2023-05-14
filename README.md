@@ -41,11 +41,11 @@ It includes simple testing using Mocha&Chai, GitHub actions for CI/CD and Authen
 ## Live verison
 
 Live version:
-- Api: https://planit-api.onrender.com/api/welcome
+- Api: [planit-api.onrender.com](https://planit-api.onrender.com/api/welcome)
 
 - PlanIT:
 
-Documentation: https://planit-api.onrender.com/api/docs/
+Documentation: [planit-api.onrender.com/docs](https://planit-api.onrender.com/api/docs/)
 
 	
 ## Technologies
