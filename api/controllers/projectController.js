@@ -3,12 +3,15 @@ const project = require('../models/project')
 
 
     const createProject = async (req, res) => {
-        data = req.body;
-
-        project.insertMany(data)
-            .then(data => { res.send(data) })
-            .catch(err => { res.status(500).send({ message: err.message }) })
-            
+        try {
+            data = req.body;
+    
+            const newProject = await project.create(data)
+            res.send(newProject)
+        } catch (err) {
+            console.log(err.message)
+            res.send(err.message)
+        }
     }
 
     const getAllProjects = async (req, res) => {
