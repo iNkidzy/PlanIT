@@ -1,4 +1,6 @@
 const router = require('express').Router();
+const { tokenVerification } = require("../validation");
+
 const { 
     createTask,
     getAllTasks,
@@ -6,14 +8,14 @@ const {
     updateTask,
     deleteTask } = require('../controllers/taskController');
 
-router.post('/create', createTask)   
+router.post('/create', tokenVerification, createTask)   
 
 router.get('/', getAllTasks )
 
-router. get('/:id', getSpecificTask)
+router. get('/:id', tokenVerification, getSpecificTask)
 
-router.put('/:id', updateTask)
+router.put('/:id', tokenVerification, updateTask)
 
-router.delete('/:id', deleteTask)
+router.delete('/:id', tokenVerification, deleteTask)
 
 module.exports = router
