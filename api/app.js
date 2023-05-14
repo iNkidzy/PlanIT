@@ -3,6 +3,8 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const app = express()
 const cors = require('cors')
+const swaggerUi = require("swagger-ui-express")
+const yaml = require("yamljs")
 
 const taskRoutes = require('./routes/task')
 const spaceFunRoutes = require('./routes/spaceFun')
@@ -36,12 +38,12 @@ app.get("/api/welcome", (req, res) => {
 
 app.use('/api/task', taskRoutes)
 app.use('/api/spaceFun', spaceFunRoutes)
-
 app.use('/api/projects', projectRoutes)
-
-
-//for authentication
 app.use("/api/user", authRoutes);
+
+//setup swagger
+const swaggerDefinition = yaml.load('./swagger.yaml');
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDefinition));
 
 
 app.listen(process.env.PORT, () => console.log(`Success: App running at http://localhost:${process.env.PORT}`))
