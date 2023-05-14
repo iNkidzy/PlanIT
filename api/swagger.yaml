@@ -10,6 +10,8 @@ servers:
 #    description: deployed version
 
 tags:
+  - name: Authentication
+    description: Routes - signup & login for a user
   - name: Get All
     description: Read routes
   - name: Get Specific
@@ -20,17 +22,17 @@ tags:
     description: Update routes
   - name: Delete
     description: Delete routes
-  - name: Authentication
-    description: Routes - signup & login for a user
   - name: Admin
     description: User routes
 
 components:
-  securitySchemas:
-    ApiKeyAuth:
+  securitySchemes:
+    ApiKeyAuth:            
       type: apiKey
+      scheme: bearer
+      bearerFormat: JWT
       in: header
-      name: auth-token
+      name: auth-token 
 
   schemas:
     SpaceFun:
@@ -127,18 +129,18 @@ paths:
             schema:
               $ref: "#/components/schemas/User"
 
-    responses:
-      200:
-        description:  User created successfully
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                _id:
-                  type: string
+      responses:
+        200:
+          description:  User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  _id:
+                    type: string
 
   /user/login:
     post:
@@ -159,17 +161,17 @@ paths:
                   type: string
 
       responses:
-      201:
-        description:  User created successfully
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-                data:
-                  type: string
+        200:
+          description:  User logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  data:
+                    type: string
 
 # SpaceFun 
   /spaceFun:
@@ -178,6 +180,8 @@ paths:
       - Get All
       summary: All SpaceFuns
       description:  Reads all spacefuns from db as json objects.
+      security:
+        - ApiKeyAuth: []
       responses:
         200:
           description: A list of spacefuns in an array.
@@ -218,6 +222,8 @@ paths:
       - Get Specific
       summary: Specific SpaceFun
       description:  Reads one SpaceFun from db by id.
+      security:
+        - ApiKeyAuth: []
       parameters:
         - in: path
           name: id
@@ -298,6 +304,8 @@ paths:
       - Get All
       summary: All Projects
       description:  Reads all projects from db as json objects.
+      security:
+        - ApiKeyAuth: []
       responses:
         200:
           description: A list of spacefuns in an array.
@@ -337,6 +345,8 @@ paths:
       - Get Specific
       summary: Specific Project
       description:  Reads one Project from db by id.
+      security:
+        - ApiKeyAuth: []
       parameters:
         - in: path
           name: id
@@ -417,6 +427,8 @@ paths:
       - Get All
       summary: All Tasks
       description:  Reads all tasks from db as json objects.
+      security:
+        - ApiKeyAuth: []
       responses:
         200:
           description: A list of tasks in an array.
@@ -457,6 +469,8 @@ paths:
       - Get Specific
       summary: Specific Task
       description:  Reads one Task from db by id.
+      security:
+        - ApiKeyAuth: []
       parameters:
         - in: path
           name: id
@@ -532,6 +546,8 @@ paths:
       - Admin
       summary: All Users
       description:  Reads all users from db as json objects.
+      security:
+        - ApiKeyAuth: []
       responses:
         200:
           description: A list of users in an array.
@@ -571,6 +587,8 @@ paths:
       - Admin
       summary: Specific User
       description:  Reads one User from db by id.
+      security:
+        - ApiKeyAuth: []
       parameters:
         - in: path
           name: id
