@@ -10,7 +10,7 @@ const {
 
 router.post('/create', tokenVerification, createTask)   
 
-router.get('/', getAllTasks )
+router.get('/', tokenVerification ,getAllTasks )
 
 router. get('/:id', tokenVerification, getSpecificTask)
 

@@ -1,5 +1,5 @@
 const Joi = require('joi');
-
+const jwt = require('jsonwebtoken');
 //validation for register
 const signupValidation = (data) => {
     const schema = Joi.object(
