@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { tokenVerification } = require("../validation");
 
 // const Project = require('../models/project')
 
@@ -9,18 +10,18 @@ const {
     updateProject,
     deleteProject } = require('../controllers/projectController');
 
-router.get('/', getAllProjects)
+router.get('/', tokenVerification, getAllProjects)
 
 
-router.get('/:id', getSpecificProject)
+router.get('/:id', tokenVerification, getSpecificProject)
 
 
-router.post('/create', createProject)
+router.post('/create', tokenVerification, createProject)
 
 
-router.put('/:id', updateProject)
+router.put('/:id', tokenVerification, updateProject)
 
-router.delete('/:id', deleteProject)
+router.delete('/:id', tokenVerification, deleteProject)
 
 
 

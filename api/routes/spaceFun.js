@@ -12,13 +12,13 @@ const {
 
 router.get('/', tokenVerification, getAllSpaceFuns )
 
-router.get('/:id', getSpecificSpaceFun)
+router.get('/:id', tokenVerification, getSpecificSpaceFun)
 
-router.post('/create', createSpaceFun)
+router.post('/create', tokenVerification, createSpaceFun)
 
-router.put('/:id', updateSpaceFun)
+router.put('/:id',tokenVerification, updateSpaceFun)
 
-router.delete('/:id', deleteSpaceFun)
+router.delete('/:id', tokenVerification, deleteSpaceFun)
 
 
 module.exports = router
