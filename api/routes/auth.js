@@ -12,12 +12,11 @@ const {
 
 
 router.post('/signup', async (req, res) => {
-
     //userinput validation
     const { error } = signupValidation(req.body);
     if (error) return res.status(400).json({ message: error.details[0].message });
    
-    //duplicate username check
+    //duplicate username check // shouldn't there be a check for duplicate email as well?
     const usernameCheck = await User.findOne({ username: req.body.username });
     if (usernameCheck) return res.status(400).json({ message: "Username already exists" });
 
