@@ -1,63 +1,60 @@
 const spaceFun = require('../models/spaceFun')
 
 const createSpaceFun = async (req,res) => {
-    data = req.body;
+    try {
+        data = req.body;
+        const newSpaceFun = await spaceFun.create(data)
+        res.status(200).send(newSpaceFun)
+    } catch(err) {
+        res.status(500).send({message: err.message})
+    }
+}
 
-    spaceFun.insertMany(data)
-    .then(data => { res.send(data)})
-    .catch(err => {res.status(500).send({message: err.message}) 
-    })
-}
 const getAllSpaceFuns = async (req,res) => {
-    spaceFun.find()
-    .then(data => { res.send(data)})
-    .catch(err => {res.status(500).send({message: err.message}) 
-    })
+    try {
+        const getAllSpaceFuns = await spaceFun.find()
+        res.status(200).send(getAllSpaceFuns)
+    } catch(err) {
+        res.status(500).send({messager: err.message})
+    }
 }
+
 const getSpecificSpaceFun = async (req,res) => {
-    spaceFun.findById(req.params.id)
-    .then(data => { res.send(data)})
-    .catch(err => {res.status(500).send({message: err.message}) 
-    })
+    try {
+        const findOneSpaceFun = await spaceFun.findById(req.params.id)
+        res.status(200).send(findOneSpaceFun)
+    } catch(err) {
+        res.status(500).send({message: err.message})
+    }
 }
 
 const updateSpaceFun = async (req,res) => {
     const id = req.params.id
     const body = req.body
-
-    spaceFun.findByIdAndUpdate(id, body)
-    .then(data => { !data ? res.status(404).send({
-        message: "Cannot update SpaceFun with id:" + id + ".Try Again!"
-    }) : res.send({ message: "SpaceFun successfully updated!"})
-    })
-    .catch(err => {res.status(500).send({message: "Error updating SpaceFun with id:" + id}) 
-    })
+    try {
+        const updateSpaceFun = await spaceFun.findByIdAndUpdate(id, body)
+        if(!updateSpaceFun){
+            res.status(404).send({message:"Cannot update SpaceFun with id:" + id + ".Try Again!" })
+        } else {
+            res.status(200).send({ message: "SpaceFun successfully updated!"})
+        }
+    } catch(err){
+        res.status(500).send({message: "Error updating SpaceFun with id:" + id}) 
+    }
 }
 
 const deleteSpaceFun = async (req,res) => {
     const id = req.params.id
-
-    spaceFun.findByIdAndDelete(id)
-    .then(data => {res.send({ message: "SpaceFun successfully deleted!"})
-    })
-    .catch(err => {res.status(500).send({message: "Error deleting SpaceFun with id:" + id }) 
-    })
+    try {
+        const deleteSpaceFun = await spaceFun.findByIdAndDelete(id)
+        if(!deleteSpaceFun) {
+            res.status(404).send({message: "Error: Id not found" })
+        } else {
+            res.status(200).send({message:"SpaceFun successfully deleted!"})
+        }
+    } catch(err) {
+        res.status(500).send({message: err.message}) 
+    }
 }
 
-
 module.exports = {createSpaceFun, getAllSpaceFuns, getSpecificSpaceFun, updateSpaceFun,deleteSpaceFun}
-
-// const spaceFun = async (req, res) => {
-
-//     try {
-//         //Finds projct by id
-//         const spacefunfound = await SpaceFun.findOne({ _id: '6458db96e8bd7ee58f9d7569' })
-//         console.log(spacefunfound, 'Space fun found')
-//         //populates project and displays spacefuns
-//         const spaceFun = await SpaceFun.find({}).populate('project') //populates the project property on model
-//         res.json(spaceFun)
-
-//     } catch (error) {
-//         res.status(500).json({ message: error.message })
-//     }
-// }
