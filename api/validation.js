@@ -30,7 +30,7 @@ const loginValidation = (data) => {
 //verifying the token
 
 const tokenVerification = (req, res, next) => {
-    const token = req.header('auth-token');
+    const token = req.header("auth-token");
     if (!token) {
         return res.status(401).json({ error: 'Access Denied' });
     }
