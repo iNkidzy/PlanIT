@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const { signupValidation, loginValidation } = require('../validation');
 const jwt = require('jsonwebtoken');
 const { 
-   // createUser,
+    createUser,
     getAllUsers,
     getSpecificUser,
     updateUser,
@@ -36,7 +36,7 @@ router.post('/signup', async (req, res) => {
 
     try {
         const userSaved = await userObj.save();
-        res.json({ error: null, data: userSaved._id }); 
+        res.json({message:"Successfully created new user with id:" + userSaved._id })
     } catch (error) {
         res.status(400).json({error});
     }   
@@ -82,8 +82,9 @@ router.post('/login', async (req, res) => {
 
 });
 
+//For Admin 
 
-// router.post('/create', createUser)
+router.post('/create', createUser)
 
 router.get('/', getAllUsers)
 
