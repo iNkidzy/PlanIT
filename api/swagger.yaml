@@ -1,0 +1,646 @@
+openapi: 3.0.0
+info:
+  title: PlanIT Rest API
+  description: MongoDB ExpressJS NodeJS - Welcome to the documentation
+  version: 1.0.0
+servers:
+ - url: http://localhost:5500/api/
+   description: localhost version
+#  - url: https://planIT-restapi.onrender.com/api/
+#    description: deployed version
+
+tags:
+  - name: Get All
+    description: Read routes
+  - name: Get Specific
+    description: Read one by id routes
+  - name: Post
+    description: Create routes
+  - name: Update
+    description: Update routes
+  - name: Delete
+    description: Delete routes
+  - name: Authentication
+    description: Routes - signup & login for a user
+  - name: Admin
+    description: User routes
+
+components:
+  securitySchemas:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: auth-token
+
+  schemas:
+    SpaceFun:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        project: 
+          type: array
+          items:
+            type: string
+    
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        task:
+          type: array
+          items:
+            type: string
+        users:
+          type: array
+          items:
+            type: object
+            properties:
+              userId:
+                type: string
+              role:
+                type: string
+                enum:
+                  - 'LEADER'
+                  - 'USER'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2017-07-21T17:32:28Z'
+    
+    Task:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        author:
+          type: string
+        description:
+          type: string
+        comments:
+          type: string
+        creationDate:
+          type: string
+          format: date-time
+          example: '2017-07-21T17:32:28Z'
+    
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+        name:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+          enum:
+            - 'ADMIN'
+            - 'USER'
+
+        date:
+          type: string
+          format: date-time
+
+paths:
+
+  /user/signup:
+    post:
+      tags:
+      - Authentication
+      summary: Sign up
+      description: Create a new user in the database
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+
+    responses:
+      200:
+        description:  User created successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                _id:
+                  type: string
+
+  /user/login:
+    post:
+      tags:
+      - Authentication
+      summary: Login
+      description: Login as a existing user in the database and get JWT token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+
+      responses:
+      201:
+        description:  User created successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                data:
+                  type: string
+
+# SpaceFun 
+  /spaceFun:
+    get:
+      tags:
+      - Get All
+      summary: All SpaceFuns
+      description:  Reads all spacefuns from db as json objects.
+      responses:
+        200:
+          description: A list of spacefuns in an array.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SpaceFun"
+
+
+  /spaceFun/create:
+    post:
+      tags:
+      - Post
+      summary: Create new SpaceFun
+      description: Create new SpaceFun
+      security:
+        - ApiKeyAuth: []      
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SpaceFun"
+      responses:
+        200:
+          description: SpaceFun created succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SpaceFun"
+  
+
+  /spaceFun/{id}:
+    get:
+      tags:
+      - Get Specific
+      summary: Specific SpaceFun
+      description:  Reads one SpaceFun from db by id.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description:  MongoDB id
+          schema:
+            type: string
+      responses:
+        200:
+          description: A SpaceFun.
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: "#/components/schemas/SpaceFun"
+    
+    put:
+      tags:
+      - Update
+      summary:  Updates a SpaceFun
+      description:  Updates a SpaceFun
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description:  MongoDB id
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SpaceFun"
+
+      responses:
+        200:
+          description: Expecting to recieve message "SpaceFun successfully updated!"
+          content:
+            application/json:
+              schema:
+                  $ref: "#/components/schemas/SpaceFun"
+
+    delete:
+      tags:
+      - Delete
+      summary:  Deletes a SpaceFun
+      description:  Deletes a SpaceFun
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description:  MongoDB id
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/SpaceFun"
+
+      responses:
+        200:
+          description: Expecting to recieve message "SpaceFun successfully deleted!"
+          content:
+            application/json:
+              schema:
+                  $ref: "#/components/schemas/SpaceFun"
+
+# Projects
+  /projects:
+    get:
+      tags:
+      - Get All
+      summary: All Projects
+      description:  Reads all projects from db as json objects.
+      responses:
+        200:
+          description: A list of spacefuns in an array.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Project"
+
+  /projects/create:
+    post:
+      tags:
+      - Post
+      summary: Create new Project
+      description: Create new Project
+      security:
+        - ApiKeyAuth: []      
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Project"
+      responses:
+        200:
+          description: Project created succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+  
+
+  /projects/{id}:
+    get:
+      tags:
+      - Get Specific
+      summary: Specific Project
+      description:  Reads one Project from db by id.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description:  MongoDB id
+          schema:
+            type: string
+      responses:
+        200:
+          description: A Project.
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: "#/components/schemas/Project"
+    
+    put:
+      tags:
+      - Update
+      summary:  Updates a Project
+      description:  Updates a Project
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description:  MongoDB id
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Project"
+
+      responses:
+        200:
+          description: Expecting to recieve message "Project successfully updated!"
+          content:
+            application/json:
+              schema:
+                  $ref: "#/components/schemas/Project"
+
+    delete:
+      tags:
+      - Delete
+      summary:  Delete a Project
+      description:  Delete a Project
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description:  MongoDB id
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Project"
+
+      responses:
+          200:
+            description: Expecting to recieve message "Project successfully deleted!"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Project"
+
+# Tasks
+  /task:
+    get:
+      tags:
+      - Get All
+      summary: All Tasks
+      description:  Reads all tasks from db as json objects.
+      responses:
+        200:
+          description: A list of tasks in an array.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Task"
+
+
+  /task/create:
+    post:
+      tags:
+      - Post
+      summary: Create new Task
+      description: Create new Task
+      security:
+        - ApiKeyAuth: []      
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Task"
+      responses:
+        200:
+          description: Task created succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+  
+
+  /task/{id}:
+    get:
+      tags:
+      - Get Specific
+      summary: Specific Task
+      description:  Reads one Task from db by id.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description:  MongoDB id
+          schema:
+            type: string
+      responses:
+        200:
+          description: A Task.
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: "#/components/schemas/Task"
+    
+    put:
+      tags:
+      - Update
+      summary:  Updates a Task
+      description:  Updates a Task
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description:  MongoDB id
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Task"
+
+      responses:
+        200:
+          description: Expecting to recieve message "Task successfully updated!"
+          content:
+            application/json:
+              schema:
+                  $ref: "#/components/schemas/Task"
+
+    delete:
+      tags:
+      - Delete
+      summary:  Deletes a Task
+      description:  Deletes a Task
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description:  MongoDB id
+          schema:
+            type: string
+      responses:
+        200:
+          description: Expecting to recieve message "Task successfully deleted!"
+          content:
+            application/json:
+              schema:
+                  $ref: "#/components/schemas/Task"
+
+# User
+  /user:
+    get:
+      tags:
+      - Admin
+      summary: All Users
+      description:  Reads all users from db as json objects.
+      responses:
+        200:
+          description: A list of users in an array.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+
+
+  /user/create:
+    post:
+      tags:
+      - Admin
+      summary: Create new User
+      description: Create new User
+      security:
+        - ApiKeyAuth: []      
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        200:
+          description: User created succesfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  /user/{id}:
+    get:
+      tags:
+      - Admin
+      summary: Specific User
+      description:  Reads one User from db by id.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description:  MongoDB id
+          schema:
+            type: string
+      responses:
+        200:
+          description: A User.
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: "#/components/schemas/User"
+    
+    put:
+      tags:
+      - Admin
+      summary:  Updates a User
+      description:  Updates a User
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description:  MongoDB id
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+
+      responses:
+        200:
+          description: Expecting to recieve message "User successfully updated!"
+          content:
+            application/json:
+              schema:
+                  $ref: "#/components/schemas/User"
+
+    delete:
+      tags:
+      - Admin
+      summary:  Delete a User
+      description:  Delete a User
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description:  MongoDB id
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/User"
+
+      responses:
+        200:
+          description: Expecting to recieve message "User successfully deleted!"
+          content:
+            application/json:
+              schema:
+                  $ref: "#/components/schemas/User"
+  
