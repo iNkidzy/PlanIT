@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const { tokenVerification } = require("../validation");
 
-// const Project = require('../models/project')
 
 const {
     createProject,

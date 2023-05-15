@@ -30,10 +30,10 @@ const project = require('../models/project')
 }
 
     const updateProject = async (req, res) => {
-        const id = req.params.id;
-        const body = req.body;
-        try{
-            const updateProject = project.findByIdAndUpdate(id, body)
+        const id = req.params.id
+        const body = req.body
+        try {
+            const updateProject = await project.findByIdAndUpdate(id, body)
             if(!updateProject) {
                 res.status(404).send({ message: "Cannot update project with id:" + id + ".Try Again!" })
             } else {
