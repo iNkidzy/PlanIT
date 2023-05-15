@@ -1,16 +1,5 @@
 <template>
     <div>
-        <!-- <div v-for="user in state.users" key:="user.id">
-            <h4>
-{{ user.username }}
-            </h4>
-            <br>
-            <p>
-                {{ user.email }}
-            </p>
-        </div> -->
-
-
         <v-table fixed-header height="300px">
             <thead>
                 <tr>
