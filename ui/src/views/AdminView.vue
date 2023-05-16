@@ -25,16 +25,28 @@
                     <td>{{ user.username }}</td>
                     <td>{{ user.email }}</td>
                 </tr>
-
             </tbody>
         </v-table>
-
     </div>
     <div v-if="state.selectedUser">
-        <h2>Selected User</h2>
-        <p>Username: {{ state.selectedUser.username }}</p>
-        <p>Email: {{ state.selectedUser.email }}</p>
-        <!-- Add more details as needed -->
+        <v-card>
+            <v-card-title style="font-size: medium;">
+                <h2>Selected User</h2>
+                <v-card-subtitle>
+                    <v-card-text style="font-size: larger;">
+                        <p>Username: {{ state.selectedUser.username }}</p>
+                        <p>Name: {{ state.selectedUser.name }}</p>
+                        <p>Email: {{ state.selectedUser.email }}</p>
+                        <p>Password: {{ state.newUser.password }}</p>
+                        <v-card-actions>
+                            <v-btn @click="state.selectedUser = null">Close</v-btn>
+                            <v-btn color="primary">Edit</v-btn>
+                            <v-btn color="error">Delete</v-btn>
+                        </v-card-actions>
+                    </v-card-text>
+                </v-card-subtitle>
+            </v-card-title>
+        </v-card>
     </div>
 </template>
 
@@ -51,11 +63,8 @@ export default {
                 name: '',
                 email: '',
                 password: '',
-
             },
         })
-
-
 
         function getAllUsers() {
             fetch("http://localhost:5500/api/user")
@@ -64,16 +73,48 @@ export default {
                     state.users = data
                 })
         }
-
+        
         function selectUser(user) {
             state.selectedUser = user
             console.log("selected user:", user)
         }
 
-
-        //In summary, { ...state.newUser } creates a shallow copy of the state.newUser object, allowing us to work with a separate object that won't be modified unintentionally when making changes.
-
+        //In summary, { ...state.newUser } creates a shallow copy of the state.newUser object,
+        //allowing us to work with a separate object that won't be modified unintentionally when making changes.
         function createUser() {
+            if (!state.newUser.username || !state.newUser.name || !state.newUser.email || !state.newUser.password) {
+                alert("Please fill out all fields")
+                return
+            }
+            if (state.newUser.password.length < 8) {
+                alert("Password must be at least 8 characters")
+                return
+            } if (!state.newUser.email.includes("@")) {
+                alert("Please enter a valid email address")
+                return
+            } if (!state.newUser.email.includes(".")) {
+                alert("Please enter a valid email address")
+                return
+                
+            }  if (state.newUser.email.includes("*","!", (","), "#", "$", "%", "^", "&", "*", "(", ")", "+", "=", "?", "/", "<", ">", "~", "`", "[", "]", "{", "}", "|", ":", ";", "'", '"', "\\")) {
+                alert("Please enter a valid email address")
+                return
+            }
+            if (state.newUser.username.length < 4) {
+                alert("Username must be at least 4 characters")
+                return
+            } if (state.newUser.name.length < 4) {
+                alert("Name must be at least 4 characters")
+                return
+            }
+            if(state.users.find(user => user.username === state.newUser.username)){
+                alert("Username already exists")
+                return
+            }
+            if(state.users.find(user => user.email === state.newUser.email)){
+                alert("Email already exists")
+                return
+            }
             fetch("http://localhost:5500/api/user/create", {
                 method: "POST",
                 headers: {
@@ -85,12 +126,21 @@ export default {
                 .then(data => {
                     console.log("new user created:", data)
                     getAllUsers()
+                    clearForm()
+                    alert("User created successfully!")
+
                 })
+        }
+
+        function clearForm() {
+            state.newUser.username = ''
+            state.newUser.name = ''
+            state.newUser.email = ''
+            state.newUser.password = ''
         }
 
         getAllUsers()
         return { state, getAllUsers, selectUser, createUser }
     }
-
 }
 </script>
