@@ -1,26 +1,44 @@
 <template>
     <div>
-        <v-btn @click="state.showForm = true ">Create a new user account</v-btn>
+        <v-btn @click="state.showForm = true">Create a new user account</v-btn>
 
-            <v-card v-model="showForm">
-                <v-card-title>
-                    <span class="headline">Create User</span>
-                </v-card-title>
-                <v-card-text>
-                    <v-form v-if="state.showForm">
-                        <v-text-field v-model="state.newUser.username" label="Username" required></v-text-field>
-                        <v-text-field v-model="state.newUser.name" label="Name" required></v-text-field>
-                        <v-text-field v-model="state.newUser.email" label="Email" required></v-text-field>
-                        <v-text-field v-model="state.newUser.password" label="Password" required></v-text-field>
-                        <v-select v-model="state.newUser.role" :items="['user', 'admin']" label="Role"></v-select>
-                       <v-actions> <v-btn @click="createUser">Create a new user account</v-btn>
+        <v-card v-model="state.showForm">
+            <v-card-title>
+                <span class="headline">Create User</span>
+            </v-card-title>
+            <v-card-text>
+                <v-form v-if="state.showForm">
+                    <v-text-field v-model="state.newUser.username" label="Username" required></v-text-field>
+                    <v-text-field v-model="state.newUser.name" label="Name" required></v-text-field>
+                    <v-text-field v-model="state.newUser.email" label="Email" required></v-text-field>
+                    <v-text-field v-model="state.newUser.password" label="Password" required></v-text-field>
+                    <v-select v-model="state.newUser.role" :items="['user', 'admin']" label="Role"></v-select>
+                    <v-actions> <v-btn @click="createUser">Create a new user account</v-btn>
                         <v-btn @click="state.showForm = false">Cancel</v-btn></v-actions>
-                    </v-form>
-                </v-card-text>
-            </v-card>
- 
+                </v-form>
+            </v-card-text>
+        </v-card>
+
+        <v-card v-model="state.showForm_2">
+            <v-card-title>
+                <span class="headline">Edit User</span>
+            </v-card-title>
+            <v-card-text>
+                <v-form v-if="state.showForm_2">
+                    <v-text-field v-model="state.selectedUser.username" label="Username" required></v-text-field>
+                    <v-text-field v-model="state.selectedUser.name" label="Name" required></v-text-field>
+                    <v-text-field v-model="state.selectedUser.email" label="Email" required></v-text-field>
+                    <v-text-field v-model="state.selectedUser.password" label="Password" required></v-text-field>
+                    <v-select v-model="state.selectedUser.role" :items="['user', 'admin']" label="Role"></v-select>
+                    <v-actions> <v-btn @click="createUser">Update</v-btn>
+                        <v-btn @click="state.showForm_2 = false">Cancel</v-btn></v-actions>
+                </v-form>
+            </v-card-text>
+        </v-card>
+
+
         <br>
-        <v-table v-if="!state.showForm" fixed-header height="300px">
+        <v-table v-if="!state.showForm || !state.showForm_2" fixed-header height="300px">
             <thead>
                 <tr>
                     <th class="text-left">
@@ -51,7 +69,7 @@
                         <p>Password: {{ state.newUser.password }}</p>
                         <v-card-actions>
                             <v-btn @click="state.selectedUser = null">Close</v-btn>
-                            <v-btn color="primary">Edit</v-btn>
+                            <v-btn color="primary" @click="state.showForm_2 = true">Edit</v-btn>
                             <v-btn color="error">Delete</v-btn>
                         </v-card-actions>
                     </v-card-text>
@@ -76,10 +94,11 @@ export default {
                 password: '',
             },
             data() {
-    return {
-      showForm: false
-    };
-  }
+                return {
+                    showForm: false,
+                    showForm_2: false,
+                };
+            }
 
         })
 
@@ -159,7 +178,8 @@ export default {
 
 
         function cancelForm() {
-           state.showForm = false
+            state.showForm = false
+            state.showForm_2 = false
             clearForm()
         }
 
