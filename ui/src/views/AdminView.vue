@@ -1,15 +1,26 @@
 <template>
     <div>
-        <v-form>
-            <v-text-field v-model="state.newUser.username" label="Username" required></v-text-field>
-            <v-text-field v-model="state.newUser.name" label="Name" required></v-text-field>
-            <v-text-field v-model="state.newUser.email" label="Email" required></v-text-field>
-            <v-text-field v-model="state.newUser.password" label="Password" required></v-text-field>
-            <v-select v-model="state.newUser.role" :items="['user', 'admin']" label="Role"></v-select>
-            <v-btn @click="createUser">Create a new user account</v-btn>
-        </v-form>
+        <v-btn @click="state.showForm = true ">Create a new user account</v-btn>
+
+            <v-card v-model="showForm">
+                <v-card-title>
+                    <span class="headline">Create User</span>
+                </v-card-title>
+                <v-card-text>
+                    <v-form v-if="state.showForm">
+                        <v-text-field v-model="state.newUser.username" label="Username" required></v-text-field>
+                        <v-text-field v-model="state.newUser.name" label="Name" required></v-text-field>
+                        <v-text-field v-model="state.newUser.email" label="Email" required></v-text-field>
+                        <v-text-field v-model="state.newUser.password" label="Password" required></v-text-field>
+                        <v-select v-model="state.newUser.role" :items="['user', 'admin']" label="Role"></v-select>
+                       <v-actions> <v-btn @click="createUser">Create a new user account</v-btn>
+                        <v-btn @click="state.showForm = false">Cancel</v-btn></v-actions>
+                    </v-form>
+                </v-card-text>
+            </v-card>
+ 
         <br>
-        <v-table fixed-header height="300px">
+        <v-table v-if="!state.showForm" fixed-header height="300px">
             <thead>
                 <tr>
                     <th class="text-left">
@@ -64,6 +75,12 @@ export default {
                 email: '',
                 password: '',
             },
+            data() {
+    return {
+      showForm: false
+    };
+  }
+
         })
 
         function getAllUsers() {
@@ -73,7 +90,7 @@ export default {
                     state.users = data
                 })
         }
-        
+
         function selectUser(user) {
             state.selectedUser = user
             console.log("selected user:", user)
@@ -95,8 +112,8 @@ export default {
             } if (!state.newUser.email.includes(".")) {
                 alert("Please enter a valid email address")
                 return
-                
-            }  if (state.newUser.email.includes("*","!", (","), "#", "$", "%", "^", "&", "*", "(", ")", "+", "=", "?", "/", "<", ">", "~", "`", "[", "]", "{", "}", "|", ":", ";", "'", '"', "\\")) {
+
+            } if (state.newUser.email.includes("*", "!", (","), "#", "$", "%", "^", "&", "*", "(", ")", "+", "=", "?", "/", "<", ">", "~", "`", "[", "]", "{", "}", "|", ":", ";", "'", '"', "\\")) {
                 alert("Please enter a valid email address")
                 return
             }
@@ -107,11 +124,11 @@ export default {
                 alert("Name must be at least 4 characters")
                 return
             }
-            if(state.users.find(user => user.username === state.newUser.username)){
+            if (state.users.find(user => user.username === state.newUser.username)) {
                 alert("Username already exists")
                 return
             }
-            if(state.users.find(user => user.email === state.newUser.email)){
+            if (state.users.find(user => user.email === state.newUser.email)) {
                 alert("Email already exists")
                 return
             }
@@ -139,8 +156,15 @@ export default {
             state.newUser.password = ''
         }
 
+
+
+        function cancelForm() {
+           state.showForm = false
+            clearForm()
+        }
+
         getAllUsers()
-        return { state, getAllUsers, selectUser, createUser }
+        return { state, getAllUsers, selectUser, createUser, cancelForm, clearForm }
     }
 }
 </script>
