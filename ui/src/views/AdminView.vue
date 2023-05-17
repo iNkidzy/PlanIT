@@ -192,6 +192,19 @@ export default {
                     console.log(err, "user not updated")
                 })
         }
+        function deleteUser(id) {
+            fetch(`http://localhost:5500/api/user/${id}`, {
+                method: "DELETE",
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log("user deleted:", data)
+                    getAllUsers()
+                    state.selectedUser = null
+                    alert("User deleted successfully!")
+                })
+        }
+
 
         function clearForm() {
             state.newUser.username = ''
@@ -209,7 +222,7 @@ export default {
         }
 
         getAllUsers()
-        return { state, getAllUsers, selectUser, createUser, cancelForm, clearForm, updateUser }
+        return { state, getAllUsers, selectUser, createUser, cancelForm, clearForm, updateUser, deleteUser }
     }
 }
 </script>
