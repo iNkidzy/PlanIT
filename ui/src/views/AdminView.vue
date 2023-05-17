@@ -91,8 +91,8 @@ export default {
 
         })
 
-        function getAllUsers() {
-            fetch("http://localhost:5500/api/user")
+        async function getAllUsers() {
+            await fetch("http://localhost:5500/api/user")
                 .then(res => res.json())
                 .then(data => {
                     state.users = data
@@ -107,7 +107,7 @@ export default {
 
         //In summary, { ...state.newUser } creates a shallow copy of the state.newUser object,
         //allowing us to work with a separate object that won't be modified unintentionally when making changes.
-        function createUser() {
+       async function createUser() {
             if (!state.newUser.username || !state.newUser.name || !state.newUser.email || !state.newUser.password) {
                 alert("Please fill out all fields")
                 return
@@ -141,7 +141,7 @@ export default {
                 alert("Email already exists")
                 return
             }
-            fetch("http://localhost:5500/api/user/create", {
+          await fetch("http://localhost:5500/api/user/create", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -161,7 +161,7 @@ export default {
         }
 
         // there is no checks for valid password and email in the update function
-        function updateUser(id) {
+       async function updateUser(id) {
             if (state.selectedUser.password.length < 8) {
                 alert("Password must be at least 8 characters")
                 return
@@ -191,7 +191,7 @@ export default {
                 alert("Email already exists")
                 return
             }
-            fetch(`http://localhost:5500/api/user/${id}`, {
+           await fetch(`http://localhost:5500/api/user/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -212,8 +212,8 @@ export default {
                     console.log(err, "user not updated")
                 })
         }
-        function deleteUser(id) {
-            fetch(`http://localhost:5500/api/user/${id}`, {
+       async function deleteUser(id) {
+           await fetch(`http://localhost:5500/api/user/${id}`, {
                 method: "DELETE",
             })
                 .then(res => res.json())
