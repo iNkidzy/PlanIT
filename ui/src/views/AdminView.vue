@@ -160,8 +160,37 @@ export default {
                 })
         }
 
-// there is no checks for valid password and email in the update function
+        // there is no checks for valid password and email in the update function
         function updateUser(id) {
+            if (state.selectedUser.password.length < 8) {
+                alert("Password must be at least 8 characters")
+                return
+            } if (!state.selectedUser.email.includes("@")) {
+                alert("Please enter a valid email address")
+                return
+            } if (!state.selectedUser.email.includes(".")) {
+                alert("Please enter a valid email address")
+                return
+
+            } if (state.selectedUser.email.includes("*", "!", (","), "#", "$", "%", "^", "&", "*", "(", ")", "+", "=", "?", "/", "<", ">", "~", "`", "[", "]", "{", "}", "|", ":", ";", "'", '"', "\\")) {
+                alert("Please enter a valid email address")
+                return
+            }
+            if (state.selectedUser.username.length < 4) {
+                alert("Username must be at least 4 characters")
+                return
+            } if (state.selectedUser.name.length < 4) {
+                alert("Name must be at least 4 characters")
+                return
+            }
+            if (state.users.find(user => user.username === state.newUser.username)) {
+                alert("Username already exists")
+                return
+            }
+            if (state.users.find(user => user.email === state.newUser.email)) {
+                alert("Email already exists")
+                return
+            }
             fetch(`http://localhost:5500/api/user/${id}`, {
                 method: "PUT",
                 headers: {
