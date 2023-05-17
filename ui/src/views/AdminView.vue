@@ -30,7 +30,7 @@
                     <v-text-field v-model="state.selectedUser.email" label="Email" required></v-text-field>
                     <v-text-field v-model="state.selectedUser.password" label="Password" required></v-text-field>
                     <v-select v-model="state.selectedUser.role" :items="['user', 'admin']" label="Role"></v-select>
-                    <v-actions> <v-btn @click="createUser">Update</v-btn>
+                    <v-actions> <v-btn @click="updateUser(state.selectedUser._id)">Update</v-btn>
                         <v-btn @click="state.showForm_2 = false">Cancel</v-btn></v-actions>
                 </v-form>
             </v-card-text>
@@ -70,7 +70,7 @@
                         <v-card-actions>
                             <v-btn @click="state.selectedUser = null">Close</v-btn>
                             <v-btn color="primary" @click="state.showForm_2 = true">Edit</v-btn>
-                            <v-btn color="error">Delete</v-btn>
+                            <v-btn color="error" @click="deleteUser">Delete</v-btn>
                         </v-card-actions>
                     </v-card-text>
                 </v-card-subtitle>
@@ -107,11 +107,13 @@ export default {
                 .then(res => res.json())
                 .then(data => {
                     state.users = data
-                })
+
+                }).catch(err => console.log(alert = "cannot fetch users", err))
         }
 
         function selectUser(user) {
             state.selectedUser = user
+            state.selectedUser._id = user._id
             console.log("selected user:", user)
         }
 
@@ -168,6 +170,28 @@ export default {
                 })
         }
 
+        function updateUser() {
+
+            fetch("http://localhost:5500/api/user/:id", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ user: state.selectedUser }),
+            })
+                .then(res => res.json())
+                .then(data => {
+                    getAllUsers()
+                    clearForm()
+                    // alert("User updated successfully!")
+                    console.log("user updated:", data)
+
+                }).catch((err) => {
+                    console.log(err, "user not updated")
+                })
+        }
+
+       
         function clearForm() {
             state.newUser.username = ''
             state.newUser.name = ''
@@ -184,7 +208,7 @@ export default {
         }
 
         getAllUsers()
-        return { state, getAllUsers, selectUser, createUser, cancelForm, clearForm }
+        return { state, getAllUsers, selectUser, createUser, cancelForm, clearForm, updateUser }
     }
 }
 </script>
