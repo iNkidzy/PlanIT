@@ -9,7 +9,7 @@
                 <v-text-field v-model="state.newUser.name" label="Name" required></v-text-field>
                 <v-text-field v-model="state.newUser.email" label="Email" required></v-text-field>
                 <v-text-field v-model="state.newUser.password" label="Password" required></v-text-field>
-                <v-select v-model="state.newUser.role" :items="['user', 'admin']" label="Role"></v-select>
+                <v-select v-model="state.newUser.role" :items="['USER', 'ADMIN']" label="Role"></v-select>
                 <v-actions> <v-btn @click="createUser">Create a new user account</v-btn>
                     <v-btn @click="state.showForm = false">Cancel</v-btn></v-actions>
             </v-form>
@@ -20,7 +20,7 @@
                 <v-text-field v-model="state.selectedUser.name" label="Name" required></v-text-field>
                 <v-text-field v-model="state.selectedUser.email" label="Email" required></v-text-field>
                 <v-text-field v-model="state.selectedUser.password" label="Password" required></v-text-field>
-                <v-select v-model="state.selectedUser.role" :items="['user', 'admin']" label="Role"></v-select>
+                <v-select v-model="state.selectedUser.role" :items="['USER', 'ADMIN']" label="Role"></v-select>
                 <v-actions> <v-btn @click="updateUser(state.selectedUser._id)">Update</v-btn>
                     <v-btn @click="state.showForm_2 = false">Cancel</v-btn></v-actions>
                 <br><br>
@@ -88,7 +88,6 @@ export default {
                     showForm_2: false,
                 };
             }
-
         })
 
         async function getAllUsers() {
@@ -107,7 +106,7 @@ export default {
 
         //In summary, { ...state.newUser } creates a shallow copy of the state.newUser object,
         //allowing us to work with a separate object that won't be modified unintentionally when making changes.
-       async function createUser() {
+        async function createUser() {
             if (!state.newUser.username || !state.newUser.name || !state.newUser.email || !state.newUser.password) {
                 alert("Please fill out all fields")
                 return
@@ -141,7 +140,7 @@ export default {
                 alert("Email already exists")
                 return
             }
-          await fetch("http://localhost:5500/api/user/create", {
+            await fetch("http://localhost:5500/api/user/create", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -161,7 +160,7 @@ export default {
         }
 
         // there is no checks for valid password and email in the update function
-       async function updateUser(id) {
+        async function updateUser(id) {
             if (state.selectedUser.password.length < 8) {
                 alert("Password must be at least 8 characters")
                 return
@@ -191,7 +190,7 @@ export default {
                 alert("Email already exists")
                 return
             }
-           await fetch(`http://localhost:5500/api/user/${id}`, {
+            await fetch(`http://localhost:5500/api/user/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -206,14 +205,12 @@ export default {
                     console.log("user updated:", data)
                     console.log("user id:", id)
 
-
-
                 }).catch((err) => {
                     console.log(err, "user not updated")
                 })
         }
-       async function deleteUser(id) {
-           await fetch(`http://localhost:5500/api/user/${id}`, {
+        async function deleteUser(id) {
+            await fetch(`http://localhost:5500/api/user/${id}`, {
                 method: "DELETE",
             })
                 .then(res => res.json())
@@ -226,7 +223,6 @@ export default {
                     console.log(err, "user not deleted")
                 })
         }
-
 
         function clearForm() {
             state.newUser.username = ''
