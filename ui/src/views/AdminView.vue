@@ -69,8 +69,9 @@
                         <p>Password: {{ state.newUser.password }}</p>
                         <v-card-actions>
                             <v-btn @click="state.selectedUser = null">Close</v-btn>
-                            <v-btn color="primary" @click="state.showForm_2 = true">Edit</v-btn>
-                            <v-btn color="error" @click="deleteUser">Delete</v-btn>
+                            <v-btn color="primary" @click="state.showForm_2 = true"
+                                data-id="{{state.selectedUser.id}}">Edit</v-btn>
+                            <v-btn color="error" @click="deleteUser(state.selectedUser._id)">Delete</v-btn>
                         </v-card-actions>
                     </v-card-text>
                 </v-card-subtitle>
@@ -113,7 +114,6 @@ export default {
 
         function selectUser(user) {
             state.selectedUser = user
-            state.selectedUser._id = user._id
             console.log("selected user:", user)
         }
 
@@ -170,28 +170,29 @@ export default {
                 })
         }
 
-        function updateUser() {
-
-            fetch("http://localhost:5500/api/user/:id", {
+        function updateUser(id) {
+            fetch(`http://localhost:5500/api/user/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ user: state.selectedUser }),
+                body: JSON.stringify({ user: id, ...state.selectedUser }),
             })
                 .then(res => res.json())
                 .then(data => {
                     getAllUsers()
                     clearForm()
-                    // alert("User updated successfully!")
+                    alert("User updated successfully!")
                     console.log("user updated:", data)
+                    console.log("user id:", id)
+
+
 
                 }).catch((err) => {
                     console.log(err, "user not updated")
                 })
         }
 
-       
         function clearForm() {
             state.newUser.username = ''
             state.newUser.name = ''
