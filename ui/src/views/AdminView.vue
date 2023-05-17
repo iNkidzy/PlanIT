@@ -1,42 +1,31 @@
 <template>
     <div>
         <v-btn @click="state.showForm = true">Create a new user account</v-btn>
-
+        <br> <br> <br>
         <v-card v-model="state.showForm">
-            <v-card-title>
-                <span class="headline">Create User</span>
-            </v-card-title>
-            <v-card-text>
-                <v-form v-if="state.showForm">
-                    <v-text-field v-model="state.newUser.username" label="Username" required></v-text-field>
-                    <v-text-field v-model="state.newUser.name" label="Name" required></v-text-field>
-                    <v-text-field v-model="state.newUser.email" label="Email" required></v-text-field>
-                    <v-text-field v-model="state.newUser.password" label="Password" required></v-text-field>
-                    <v-select v-model="state.newUser.role" :items="['user', 'admin']" label="Role"></v-select>
-                    <v-actions> <v-btn @click="createUser">Create a new user account</v-btn>
-                        <v-btn @click="state.showForm = false">Cancel</v-btn></v-actions>
-                </v-form>
-            </v-card-text>
-        </v-card>
 
+            <v-form v-if="state.showForm" id="Forms">
+                <v-text-field v-model="state.newUser.username" label="Username" required></v-text-field>
+                <v-text-field v-model="state.newUser.name" label="Name" required></v-text-field>
+                <v-text-field v-model="state.newUser.email" label="Email" required></v-text-field>
+                <v-text-field v-model="state.newUser.password" label="Password" required></v-text-field>
+                <v-select v-model="state.newUser.role" :items="['user', 'admin']" label="Role"></v-select>
+                <v-actions> <v-btn @click="createUser">Create a new user account</v-btn>
+                    <v-btn @click="state.showForm = false">Cancel</v-btn></v-actions>
+            </v-form>
+        </v-card>
         <v-card v-model="state.showForm_2">
-            <v-card-title>
-                <span class="headline">Edit User</span>
-            </v-card-title>
-            <v-card-text>
-                <v-form v-if="state.showForm_2">
-                    <v-text-field v-model="state.selectedUser.username" label="Username" required></v-text-field>
-                    <v-text-field v-model="state.selectedUser.name" label="Name" required></v-text-field>
-                    <v-text-field v-model="state.selectedUser.email" label="Email" required></v-text-field>
-                    <v-text-field v-model="state.selectedUser.password" label="Password" required></v-text-field>
-                    <v-select v-model="state.selectedUser.role" :items="['user', 'admin']" label="Role"></v-select>
-                    <v-actions> <v-btn @click="updateUser(state.selectedUser._id)">Update</v-btn>
-                        <v-btn @click="state.showForm_2 = false">Cancel</v-btn></v-actions>
-                </v-form>
-            </v-card-text>
+            <v-form v-if="state.showForm_2" id="Forms">
+                <v-text-field v-model="state.selectedUser.username" label="Username" required></v-text-field>
+                <v-text-field v-model="state.selectedUser.name" label="Name" required></v-text-field>
+                <v-text-field v-model="state.selectedUser.email" label="Email" required></v-text-field>
+                <v-text-field v-model="state.selectedUser.password" label="Password" required></v-text-field>
+                <v-select v-model="state.selectedUser.role" :items="['user', 'admin']" label="Role"></v-select>
+                <v-actions> <v-btn @click="updateUser(state.selectedUser._id)">Update</v-btn>
+                    <v-btn @click="state.showForm_2 = false">Cancel</v-btn></v-actions>
+                <br><br>
+            </v-form>
         </v-card>
-
-
         <br>
         <v-table v-if="!state.showForm || !state.showForm_2" fixed-header height="300px">
             <thead>
@@ -66,7 +55,6 @@
                         <p>Username: {{ state.selectedUser.username }}</p>
                         <p>Name: {{ state.selectedUser.name }}</p>
                         <p>Email: {{ state.selectedUser.email }}</p>
-                        <p>Password: {{ state.newUser.password }}</p>
                         <v-card-actions>
                             <v-btn @click="state.selectedUser = null">Close</v-btn>
                             <v-btn color="primary" @click="state.showForm_2 = true"
@@ -167,9 +155,12 @@ export default {
                     clearForm()
                     alert("User created successfully!")
 
+                }).catch((err) => {
+                    console.log(err, "user not created")
                 })
         }
 
+// there is no checks for valid password and email in the update function
         function updateUser(id) {
             fetch(`http://localhost:5500/api/user/${id}`, {
                 method: "PUT",
@@ -202,6 +193,8 @@ export default {
                     getAllUsers()
                     state.selectedUser = null
                     alert("User deleted successfully!")
+                }).catch((err) => {
+                    console.log(err, "user not deleted")
                 })
         }
 
@@ -213,16 +206,13 @@ export default {
             state.newUser.password = ''
         }
 
-
-
-        function cancelForm() {
-            state.showForm = false
-            state.showForm_2 = false
-            clearForm()
-        }
-
         getAllUsers()
-        return { state, getAllUsers, selectUser, createUser, cancelForm, clearForm, updateUser, deleteUser }
+        return { state, getAllUsers, selectUser, createUser, clearForm, updateUser, deleteUser }
     }
 }
 </script>
+<style>
+#Forms {
+    padding: 5%;
+}
+</style>
