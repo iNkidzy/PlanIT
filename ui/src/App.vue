@@ -22,6 +22,7 @@ import { RouterView } from 'vue-router'
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
         <RouterLink to="/spacefun">SpaceFun</RouterLink>
+        <RouterLink to="/admin">Admin</RouterLink>
       </nav>
     </div>
 

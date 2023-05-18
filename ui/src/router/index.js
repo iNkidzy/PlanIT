@@ -28,10 +28,15 @@ const router = createRouter({
       name: 'spacefunDetail',
       component: SpaceFunDetailView
     },
-
-
-     // default redirect to home page
-   //  { path: '/:pathMatch(.*)*', redirect: '/' }
+    {
+      path: '/admin',
+      name: 'admin',
+      
+      component: () => import('../views/AdminView.vue')
+    },
+    
+      // default redirect to home page
+     //  { path: '/:pathMatch(.*)*', redirect: '/' }
   ]
 })
 
