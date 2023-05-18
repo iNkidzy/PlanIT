@@ -81,12 +81,13 @@ const createUser = async () => {
             console.log("new user created:", data)
             clearForm()
             alert("User created successfully!")
+            window.location.href = '/login';
+
 
         }).catch((err) => {
             console.log(err, "user not created")
         })
 }
-
 const clearForm = () => {
     state.value.newUser.username = ""
     state.value.newUser.name = ""
