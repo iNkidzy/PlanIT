@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import SpaceFunDetailView from '../views/SpaceFunDetailView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,11 +19,24 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue')
     },
     {
-    path: '/admin',
+        path: '/spacefun',
+        name: 'spacefun',
+        component: () => import('../views/SpacefunView.vue')
+    },
+    {
+      path: '/spacefunDetail/:id',
+      name: 'spacefunDetail',
+      component: SpaceFunDetailView
+    },
+    {
+      path: '/admin',
       name: 'admin',
       
       component: () => import('../views/AdminView.vue')
     },
+    
+      // default redirect to home page
+     //  { path: '/:pathMatch(.*)*', redirect: '/' }
   ]
 })
 

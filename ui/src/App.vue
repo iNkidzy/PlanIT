@@ -1,10 +1,18 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { RouterView } from 'vue-router'
+//import SideNav from './components/SideNav.vue';
+//import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
-  <header>
+<!-- <v-container fluid>
+   <v-layout>
+    <v-flex xs12 sm12 md12>
+        <SideNav></SideNav>
+    </v-flex>
+   </v-layout>
+</v-container> -->
+  <!-- <header>
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
@@ -13,13 +21,16 @@ import HelloWorld from './components/HelloWorld.vue'
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/spacefun">SpaceFun</RouterLink>
         <RouterLink to="/admin">Admin</RouterLink>
-
       </nav>
     </div>
-  </header>
+
+    
+  </header> -->
 
   <RouterView />
+ 
 </template>
 
 <style scoped>
