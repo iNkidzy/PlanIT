@@ -1,48 +1,14 @@
 <template>
-  <div>
-    <v-container fluid>
-      <v-layout>
-        <v-flex xs12 sm12 md12>
-
-          <!--Nav-->
-          <!-- <v-navigation-drawer
-        theme="dark"
-        rail
-        permanent
-      >
-        <v-list-item
-          nav
-          prepend-avatar="https://randomuser.me/api/portraits/women/75.jpg"
-        ></v-list-item>
-
-        <v-divider></v-divider>
-
-      </v-navigation-drawer> -->
-
-
-          <!-- <v-navigation-drawer permanent>
-        <v-list>
-          <v-list-item title="SpaceFun" value="SpaceFun"></v-list-item>
-
-          <v-list-item title="Projects" value="Projects"></v-list-item>
-        </v-list>
-        <template v-slot:append>
-          <div class="pa-2">
-            <v-btn block color="black">
-              Logout
-            </v-btn>
-          </div>
-        </template>
-      </v-navigation-drawer> -->
-          <!-- <SideNav></SideNav> -->
-
-          <v-card min-width="280%" height="80%" class="scroll">
+<v-container>
+    <v-row class="justify-center">
+    
+          <v-card min-width="300%" height="80%" class="scroll">
             <div d-flex justify-content-center>
               <v-row class="justify-space-between">
                 <v-col cols="3">
                   <v-card-title class="headline">My SpaceFuns</v-card-title>
                 </v-col>
-                <v-col cols="2">
+                <v-col cols="3">
                   <v-card-actions>
                     <v-btn variant="tonal" flat color="primary" @click="dialog = true">+ Create New</v-btn>
                   </v-card-actions>
@@ -68,8 +34,6 @@
             </v-card-item>
           </v-card>
 
-
-        </v-flex>
 
         <!--Create SpaceFun Dialog-->
         <v-row justify="center">
@@ -135,12 +99,10 @@
           </v-dialog>
         </v-row>
 
+      </v-row>
 
+  </v-container>
 
-      </v-layout>
-    </v-container>
-
-  </div>
 </template>
 
 
