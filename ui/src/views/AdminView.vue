@@ -11,12 +11,12 @@
                 <v-card-title style="font-size: medium;">
                     <h2>Create User</h2>
                 </v-card-title>
-                <v-text-field v-model="state.value.newUser.username" label="Username" required></v-text-field>
-                <v-text-field v-model="state.value.newUser.name" label="Name" required></v-text-field>
-                <v-text-field v-model="state.value.newUser.email" label="Email" required></v-text-field>
-                <v-text-field v-model="state.value.newUser.password" label="Password" required></v-text-field>
-                <v-select v-model="state.value.newUser.role" :items="['USER', 'ADMIN']" label="Role"></v-select>
-                <v-actions> <v-btn @click="createUser">Create a new user account</v-btn>
+                <v-text-field v-model="state.newUser.username" label="Username" required></v-text-field>
+                <v-text-field v-model="state.newUser.name" label="Name" required></v-text-field>
+                <v-text-field v-model="state.newUser.email" label="Email" required></v-text-field>
+                <v-text-field v-model="state.newUser.password" label="Password" required></v-text-field>
+                <v-select v-model="state.newUser.role" :items="['USER', 'ADMIN']" label="Role"></v-select>
+                <v-actions> <v-btn @click="createUser()">Create a new user account</v-btn>
                     <v-btn @click="showForm = false">Cancel</v-btn></v-actions>
             </v-form>
         </v-card>
@@ -25,33 +25,33 @@
                 <v-card-title style="font-size: medium;">
                     <h2>Edit User</h2>
                 </v-card-title>
-                <v-text-field v-model="selectedUser.username" label="Username" required></v-text-field>
-                <v-text-field v-model="selectedUser.name" label="Name" required></v-text-field>
-                <v-text-field v-model="selectedUser.email" label="Email" required></v-text-field>
-                <v-text-field v-model="selectedUser.password" label="Password" required></v-text-field>
-                <v-select v-model="selectedUser.role" :items="['USER', 'ADMIN']" label="Role"></v-select>
-                <v-actions> <v-btn @click="updateUser(selectedUser._id)">Update</v-btn>
+                <v-text-field v-model="state.selectedUser.username" label="Username" required></v-text-field>
+                <v-text-field v-model="state.selectedUser.name" label="Name" required></v-text-field>
+                <v-text-field v-model="state.selectedUser.email" label="Email" required></v-text-field>
+                <v-text-field v-model="state.selectedUser.password" label="Password" required></v-text-field>
+                <v-select v-model="state.selectedUser.role" :items="['USER', 'ADMIN']" label="Role"></v-select>
+                <v-actions> <v-btn @click="updateUser(state.selectedUser._id)">Update</v-btn>
                     <v-btn @click="showForm_2 = false">Cancel</v-btn></v-actions>
                 <br><br>
             </v-form>
         </v-card>
         <br>
-        <div v-if="selectedUser">
+        <div v-if="state.selectedUser">
             <v-card>
                 <v-card-title style="font-size: medium;">
                     <h2>Selected User</h2>
                     <v-card-subtitle>
                         <v-card-text style="font-size: larger;">
-                            <p>Username: {{ selectedUser.username }}</p>
-                            <p>Name: {{ selectedUser.name }}</p>
-                            <p>Email: {{ selectedUser.email }}</p>
-                            <p>Role: {{ selectedUser.role }}</p>
-                            <p>Created: {{ formatDate(selectedUser.date) }}</p>
+                            <p>Username: {{ state.selectedUser.username }}</p>
+                            <p>Name: {{ state.selectedUser.name }}</p>
+                            <p>Email: {{ state.selectedUser.email }}</p>
+                            <p>Role: {{ state.selectedUser.role }}</p>
+                            <p>Created: {{ formatDate(state.selectedUser.date) }}</p>
                             <v-card-actions>
-                                <v-btn @click="selectedUser = null">Close</v-btn>
+                                <v-btn @click="state.selectedUser = null">Close</v-btn>
                                 <v-btn color="primary" @click="showForm_2 = true"
-                                    data-id="{{selectedUser.id}}">Edit</v-btn>
-                                <v-btn color="error" @click="deleteUser(selectedUser._id)">Delete</v-btn>
+                                    data-id="{{state.selectedUser._id}}">Edit</v-btn>
+                                <v-btn color="error" @click="deleteUser(state.selectedUser._id)">Delete</v-btn>
                             </v-card-actions>
                         </v-card-text>
                     </v-card-subtitle>
@@ -70,7 +70,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="user in users" :key="user.id" @click="selectUser(user)" id="tuser">
+                <tr v-for="user in state.users" :key="user._id" @click="selectedUser(user)"  id="tuser">
                     <td>{{ user.username }}</td>
                     <td>{{ user.email }}</td>
                 </tr>
@@ -84,16 +84,15 @@ import { ref } from 'vue';
 
         const state = ref({
             users: {},
-            
+
             newUser: {
                 username: '',
                 name: '',
                 email: '',
                 password: '',
             },
+            selectedUser: null
         })
-
-        const selectedUser = ref(null)
 
         const showForm = ref(false)
         const showForm_2 = ref(false)
@@ -105,28 +104,29 @@ import { ref } from 'vue';
 
 
 
-        const getAllUsers = async() => {
+    const getAllUsers = async () => {
         try {
             await fetch('http://localhost:5500/api/user')
                 .then(res => res.json())
                 .then(data => {
                     state.value.users = data
-
-            })
-        }catch (err) {
+                  
+                })
+            }catch (err) {
             console.log("cannot fetch users", err)
-                }
+            }
         }
+        getAllUsers()
 
-        function selectUser(user) {
+        function selectedUser(user) {
             state.value.selectedUser = user
             console.log("selected user:", user)
         }
 
         //In summary, { ...state.newUser } creates a shallow copy of the state.newUser object,
         //allowing us to work with a separate object that won't be modified unintentionally when making changes.
-        async function createUser() {
-            if (!state.value.newUser.username || !state.value.newUser.name || !state.value.value.newUser.email || !state.value.newUser.password) {
+        const createUser = async () => {
+            if (!state.value.newUser.username || !state.value.newUser.name || !state.value.newUser.email || !state.value.newUser.password) {
                 alert("Please fill out all fields")
                 return
             }
@@ -159,13 +159,21 @@ import { ref } from 'vue';
                 alert("Email already exists")
                 return
             }
-            await fetch("http://localhost:5500/api/user/create", {
+            
+            const postReq = {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ ...state.value.newUser }),
+                body: JSON.stringify({ 
+                        username: state.value.newUser.username,
+                        name: state.value.newUser.name,
+                        email: state.value.newUser.email,
+                        password: state.value.newUser.password,
+                        role: state.value.newUser.role
             })
+            }
+            await fetch("http://localhost:5500/api/user/create", postReq)
                 .then(res => res.json())
                 .then(data => {
                     console.log("new user created:", data)
@@ -176,9 +184,9 @@ import { ref } from 'vue';
                 }).catch((err) => {
                     console.log(err, "user not created")
                 })
-        }
+            }
         // there is no checks for valid password and email in the update function
-        async function updateUser(id) {
+        async function updateUser(_id) {
             if (state.value.selectedUser.password.length < 8) {
                 alert("Password must be at least 8 characters")
                 return
@@ -208,12 +216,12 @@ import { ref } from 'vue';
                 alert("Email already exists")
                 return
             }
-            await fetch(`http://localhost:5500/api/user/${id}`, {
+            await fetch(`http://localhost:5500/api/user/${_id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ user: id, ...state.value.selectedUser }),
+                body: JSON.stringify({ user: _id, ...state.value.selectedUser }),
             })
                 .then(res => res.json())
                 .then(data => {
@@ -221,7 +229,7 @@ import { ref } from 'vue';
                     clearForm()
                     alert("User updated successfully!")
                     console.log("user updated:", data)
-                    console.log("user id:", id)
+                    console.log("user id:", _id)
 
                 }).catch((err) => {
                     console.log(err, "user not updated")
@@ -249,7 +257,11 @@ import { ref } from 'vue';
             state.value.newUser.password = ''
         }
 
-        getAllUsers()
+
+
+
+
+        //getAllUsers()
         // return { state, getAllUsers, selectUser, createUser, clearForm, updateUser, deleteUser, formatDate }
 
 </script>
