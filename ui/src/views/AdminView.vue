@@ -1,10 +1,16 @@
 <template>
-    <div>
+    <div class="container">
+        <h2 id="h2">Welcome to the Admin page :)</h2>
+
+
         <v-btn @click="state.showForm = true">Create a new user account</v-btn>
         <br> <br> <br>
         <v-card v-model="state.showForm">
 
             <v-form v-if="state.showForm" id="Forms">
+                <v-card-title style="font-size: medium;">
+                    <h2>Create User</h2>
+                </v-card-title>
                 <v-text-field v-model="state.newUser.username" label="Username" required></v-text-field>
                 <v-text-field v-model="state.newUser.name" label="Name" required></v-text-field>
                 <v-text-field v-model="state.newUser.email" label="Email" required></v-text-field>
@@ -15,7 +21,11 @@
             </v-form>
         </v-card>
         <v-card v-model="state.showForm_2">
+
             <v-form v-if="state.showForm_2" id="Forms">
+                <v-card-title style="font-size: medium;">
+                    <h2>Edit User</h2>
+                </v-card-title>
                 <v-text-field v-model="state.selectedUser.username" label="Username" required></v-text-field>
                 <v-text-field v-model="state.selectedUser.name" label="Name" required></v-text-field>
                 <v-text-field v-model="state.selectedUser.email" label="Email" required></v-text-field>
@@ -27,44 +37,46 @@
             </v-form>
         </v-card>
         <br>
-        <v-table v-if="!state.showForm || !state.showForm_2" fixed-header height="300px">
+        <div v-if="state.selectedUser">
+            <v-card>
+                <v-card-title style="font-size: medium;">
+                    <h2>Selected User</h2>
+                    <v-card-subtitle>
+                        <v-card-text style="font-size: larger;">
+                            <p>Username: {{ state.selectedUser.username }}</p>
+                            <p>Name: {{ state.selectedUser.name }}</p>
+                            <p>Email: {{ state.selectedUser.email }}</p>
+                            <p>Role: {{ state.selectedUser.role }}</p>
+                            <p>Created: {{ formatDate(state.selectedUser.date) }}</p>
+                            <v-card-actions>
+                                <v-btn @click="state.selectedUser = null">Close</v-btn>
+                                <v-btn color="primary" @click="state.showForm_2 = true"
+                                    data-id="{{state.selectedUser.id}}">Edit</v-btn>
+                                <v-btn color="error" @click="deleteUser(state.selectedUser._id)">Delete</v-btn>
+                            </v-card-actions>
+                        </v-card-text>
+                    </v-card-subtitle>
+                </v-card-title>
+            </v-card>
+        </div>
+        <v-table v-if="!state.showForm || !state.showForm_2" fixed-header height="500px" id="tbal">
             <thead>
                 <tr>
-                    <th class="text-left">
-                        username:
+                    <th class="text-center">
+                        Username:
                     </th>
-                    <th class="text-left">
-                        email:
+                    <th class="text-center">
+                        Email:
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="user in state.users" :key="user.id" @click="selectUser(user)">
+                <tr v-for="user in state.users" :key="user.id" @click="selectUser(user)" id="tuser">
                     <td>{{ user.username }}</td>
                     <td>{{ user.email }}</td>
                 </tr>
             </tbody>
         </v-table>
-    </div>
-    <div v-if="state.selectedUser">
-        <v-card>
-            <v-card-title style="font-size: medium;">
-                <h2>Selected User</h2>
-                <v-card-subtitle>
-                    <v-card-text style="font-size: larger;">
-                        <p>Username: {{ state.selectedUser.username }}</p>
-                        <p>Name: {{ state.selectedUser.name }}</p>
-                        <p>Email: {{ state.selectedUser.email }}</p>
-                        <v-card-actions>
-                            <v-btn @click="state.selectedUser = null">Close</v-btn>
-                            <v-btn color="primary" @click="state.showForm_2 = true"
-                                data-id="{{state.selectedUser.id}}">Edit</v-btn>
-                            <v-btn color="error" @click="deleteUser(state.selectedUser._id)">Delete</v-btn>
-                        </v-card-actions>
-                    </v-card-text>
-                </v-card-subtitle>
-            </v-card-title>
-        </v-card>
     </div>
 </template>
 
@@ -87,8 +99,14 @@ export default {
                     showForm: false,
                     showForm_2: false,
                 };
-            }
+            },
         })
+
+        function formatDate(value) {
+            const createdDate = new Date(value);
+            return createdDate.toLocaleString();
+        }
+
 
         async function getAllUsers() {
             await fetch("http://localhost:5500/api/user")
@@ -232,12 +250,27 @@ export default {
         }
 
         getAllUsers()
-        return { state, getAllUsers, selectUser, createUser, clearForm, updateUser, deleteUser }
+        return { state, getAllUsers, selectUser, createUser, clearForm, updateUser, deleteUser, formatDate }
     }
 }
 </script>
 <style>
 #Forms {
-    padding: 5%;
+    padding: 1%;
+    height: 500px;
+    width: 450px;
+    z-index: 999;
+    margin: auto;
+}
+
+#tbal {
+    width: 600px;
+    justify-self: center;
+    text-align: center;
+}
+
+.text-center {
+    text-align: center;
+    font-size: large;
 }
 </style>
