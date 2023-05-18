@@ -1,10 +1,10 @@
 <template>
     <div class="container">
+        <br>
         <h2 id="h2">Welcome to the Admin page :)</h2>
-
-
+        <br>
         <v-btn @click="state.showForm = true">Create a new user account</v-btn>
-        <br> <br> <br>
+        <br>
         <v-card v-model="state.showForm">
 
             <v-form v-if="state.showForm" id="Forms">
@@ -21,7 +21,6 @@
             </v-form>
         </v-card>
         <v-card v-model="state.showForm_2">
-
             <v-form v-if="state.showForm_2" id="Forms">
                 <v-card-title style="font-size: medium;">
                     <h2>Edit User</h2>
@@ -176,7 +175,6 @@ export default {
                     console.log(err, "user not created")
                 })
         }
-
         // there is no checks for valid password and email in the update function
         async function updateUser(id) {
             if (state.selectedUser.password.length < 8) {
