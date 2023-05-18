@@ -3,11 +3,11 @@
         <br>
         <h2 id="h2">Welcome to the Admin page</h2>
         <br>
-        <v-btn @click="state.showForm = true">Create a new user account</v-btn>
+        <v-btn @click="showForm = true">Create a new user account</v-btn>
         <br>
-        <v-card v-model="state.showForm">
+        <v-card v-model="showForm">
 
-            <v-form v-if="state.showForm" id="Forms">
+            <v-form v-if="showForm" id="Forms">
                 <v-card-title style="font-size: medium;">
                     <h2>Create User</h2>
                 </v-card-title>
@@ -16,12 +16,12 @@
                 <v-text-field v-model="state.newUser.email" label="Email" required></v-text-field>
                 <v-text-field v-model="state.newUser.password" label="Password" required></v-text-field>
                 <v-select v-model="state.newUser.role" :items="['USER', 'ADMIN']" label="Role"></v-select>
-                <v-actions> <v-btn @click="createUser">Create a new user account</v-btn>
-                    <v-btn @click="state.showForm = false">Cancel</v-btn></v-actions>
+                <v-actions> <v-btn @click="createUser()">Create a new user account</v-btn>
+                    <v-btn @click="showForm = false">Cancel</v-btn></v-actions>
             </v-form>
         </v-card>
-        <v-card v-model="state.showForm_2">
-            <v-form v-if="state.showForm_2" id="Forms">
+        <v-card v-model="showForm_2">
+            <v-form v-if="showForm_2" id="Forms">
                 <v-card-title style="font-size: medium;">
                     <h2>Edit User</h2>
                 </v-card-title>
@@ -31,7 +31,7 @@
                 <v-text-field v-model="state.selectedUser.password" label="Password" required></v-text-field>
                 <v-select v-model="state.selectedUser.role" :items="['USER', 'ADMIN']" label="Role"></v-select>
                 <v-actions> <v-btn @click="updateUser(state.selectedUser._id)">Update</v-btn>
-                    <v-btn @click="state.showForm_2 = false">Cancel</v-btn></v-actions>
+                    <v-btn @click="showForm_2 = false">Cancel</v-btn></v-actions>
                 <br><br>
             </v-form>
         </v-card>
@@ -49,8 +49,8 @@
                             <p>Created: {{ formatDate(state.selectedUser.date) }}</p>
                             <v-card-actions>
                                 <v-btn @click="state.selectedUser = null">Close</v-btn>
-                                <v-btn color="primary" @click="state.showForm_2 = true"
-                                    data-id="{{state.selectedUser.id}}">Edit</v-btn>
+                                <v-btn color="primary" @click="showForm_2 = true"
+                                    data-id="{{state.selectedUser._id}}">Edit</v-btn>
                                 <v-btn color="error" @click="deleteUser(state.selectedUser._id)">Delete</v-btn>
                             </v-card-actions>
                         </v-card-text>
@@ -58,7 +58,7 @@
                 </v-card-title>
             </v-card>
         </div>
-        <v-table v-if="!state.showForm || !state.showForm_2" fixed-header height="500px" id="tbal">
+        <v-table v-if="!showForm || !showForm_2" fixed-header height="500px" id="tbal">
             <thead>
                 <tr>
                     <th class="text-center">
@@ -70,7 +70,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="user in state.users" :key="user.id" @click="selectUser(user)" id="tuser">
+                <tr v-for="user in state.users" :key="user._id" @click="selectedUser(user)"  id="tuser">
                     <td>{{ user.username }}</td>
                     <td>{{ user.email }}</td>
                 </tr>
@@ -79,27 +79,23 @@
     </div>
 </template>
 
-<script>
-import { reactive } from 'vue';
+<script setup>
+import { ref } from 'vue';
 
-export default {
-    setup() {
-        const state = reactive({
+        const state = ref({
             users: {},
-            selectedUser: null,
+
             newUser: {
                 username: '',
                 name: '',
                 email: '',
                 password: '',
             },
-            data() {
-                return {
-                    showForm: false,
-                    showForm_2: false,
-                };
-            },
+            selectedUser: null
         })
+
+        const showForm = ref(false)
+        const showForm_2 = ref(false)
 
         function formatDate(value) {
             const createdDate = new Date(value);
@@ -107,63 +103,77 @@ export default {
         }
 
 
-        async function getAllUsers() {
-            await fetch("http://localhost:5500/api/user")
+
+    const getAllUsers = async () => {
+        try {
+            await fetch('http://localhost:5500/api/user')
                 .then(res => res.json())
                 .then(data => {
-                    state.users = data
-
-                }).catch(err => console.log("cannot fetch users", err))
+                    state.value.users = data
+                  
+                })
+            }catch (err) {
+            console.log("cannot fetch users", err)
+            }
         }
+        getAllUsers()
 
-        function selectUser(user) {
-            state.selectedUser = user
+        function selectedUser(user) {
+            state.value.selectedUser = user
             console.log("selected user:", user)
         }
 
         //In summary, { ...state.newUser } creates a shallow copy of the state.newUser object,
         //allowing us to work with a separate object that won't be modified unintentionally when making changes.
-        async function createUser() {
-            if (!state.newUser.username || !state.newUser.name || !state.newUser.email || !state.newUser.password) {
+        const createUser = async () => {
+            if (!state.value.newUser.username || !state.value.newUser.name || !state.value.newUser.email || !state.value.newUser.password) {
                 alert("Please fill out all fields")
                 return
             }
-            if (state.newUser.password.length < 8) {
+            if (state.value.newUser.password.length < 8) {
                 alert("Password must be at least 8 characters")
                 return
-            } if (!state.newUser.email.includes("@")) {
+            } if (!state.value.newUser.email.includes("@")) {
                 alert("Please enter a valid email address")
                 return
-            } if (!state.newUser.email.includes(".")) {
+            } if (!state.value.newUser.email.includes(".")) {
                 alert("Please enter a valid email address")
                 return
 
-            } if (state.newUser.email.includes("*", "!", (","), "#", "$", "%", "^", "&", "*", "(", ")", "+", "=", "?", "/", "<", ">", "~", "`", "[", "]", "{", "}", "|", ":", ";", "'", '"', "\\")) {
+            } if (state.value.newUser.email.includes("*", "!", (","), "#", "$", "%", "^", "&", "*", "(", ")", "+", "=", "?", "/", "<", ">", "~", "`", "[", "]", "{", "}", "|", ":", ";", "'", '"', "\\")) {
                 alert("Please enter a valid email address")
                 return
             }
-            if (state.newUser.username.length < 4) {
+            if (state.value.newUser.username.length < 4) {
                 alert("Username must be at least 4 characters")
                 return
-            } if (state.newUser.name.length < 4) {
+            } if (state.value.newUser.name.length < 4) {
                 alert("Name must be at least 4 characters")
                 return
             }
-            if (state.users.find(user => user.username === state.newUser.username)) {
+            if (state.value.users.find(user => user.username === state.value.newUser.username)) {
                 alert("Username already exists")
                 return
             }
-            if (state.users.find(user => user.email === state.newUser.email)) {
+            if (state.value.users.find(user => user.email === state.value.newUser.email)) {
                 alert("Email already exists")
                 return
             }
-            await fetch("http://localhost:5500/api/user/create", {
+            
+            const postReq = {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ ...state.newUser }),
+                body: JSON.stringify({ 
+                        username: state.value.newUser.username,
+                        name: state.value.newUser.name,
+                        email: state.value.newUser.email,
+                        password: state.value.newUser.password,
+                        role: state.value.newUser.role
             })
+            }
+            await fetch("http://localhost:5500/api/user/create", postReq)
                 .then(res => res.json())
                 .then(data => {
                     console.log("new user created:", data)
@@ -174,44 +184,44 @@ export default {
                 }).catch((err) => {
                     console.log(err, "user not created")
                 })
-        }
+            }
         // there is no checks for valid password and email in the update function
-        async function updateUser(id) {
-            if (state.selectedUser.password.length < 8) {
+        async function updateUser(_id) {
+            if (state.value.selectedUser.password.length < 8) {
                 alert("Password must be at least 8 characters")
                 return
-            } if (!state.selectedUser.email.includes("@")) {
+            } if (!state.value.selectedUser.email.includes("@")) {
                 alert("Please enter a valid email address")
                 return
-            } if (!state.selectedUser.email.includes(".")) {
+            } if (!state.value.selectedUser.email.includes(".")) {
                 alert("Please enter a valid email address")
                 return
 
-            } if (state.selectedUser.email.includes("*", "!", (","), "#", "$", "%", "^", "&", "*", "(", ")", "+", "=", "?", "/", "<", ">", "~", "`", "[", "]", "{", "}", "|", ":", ";", "'", '"', "\\")) {
+            } if (state.value.selectedUser.email.includes("*", "!", (","), "#", "$", "%", "^", "&", "*", "(", ")", "+", "=", "?", "/", "<", ">", "~", "`", "[", "]", "{", "}", "|", ":", ";", "'", '"', "\\")) {
                 alert("Please enter a valid email address")
                 return
             }
-            if (state.selectedUser.username.length < 4) {
+            if (state.value.selectedUser.username.length < 4) {
                 alert("Username must be at least 4 characters")
                 return
-            } if (state.selectedUser.name.length < 4) {
+            } if (state.value.selectedUser.name.length < 4) {
                 alert("Name must be at least 4 characters")
                 return
             }
-            if (state.users.find(user => user.username === state.newUser.username)) {
+            if (state.value.users.find(user => user.username === state.value.newUser.username)) {
                 alert("Username already exists")
                 return
             }
-            if (state.users.find(user => user.email === state.newUser.email)) {
+            if (state.value.users.find(user => user.email === state.value.newUser.email)) {
                 alert("Email already exists")
                 return
             }
-            await fetch(`http://localhost:5500/api/user/${id}`, {
+            await fetch(`http://localhost:5500/api/user/${_id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ user: id, ...state.selectedUser }),
+                body: JSON.stringify({ user: _id, ...state.value.selectedUser }),
             })
                 .then(res => res.json())
                 .then(data => {
@@ -219,7 +229,7 @@ export default {
                     clearForm()
                     alert("User updated successfully!")
                     console.log("user updated:", data)
-                    console.log("user id:", id)
+                    console.log("user id:", _id)
 
                 }).catch((err) => {
                     console.log(err, "user not updated")
@@ -233,7 +243,7 @@ export default {
                 .then(data => {
                     console.log("user deleted:", data)
                     getAllUsers()
-                    state.selectedUser = null
+                    state.value.selectedUser = null
                     alert("User deleted successfully!")
                 }).catch((err) => {
                     console.log(err, "user not deleted")
@@ -241,16 +251,19 @@ export default {
         }
 
         function clearForm() {
-            state.newUser.username = ''
-            state.newUser.name = ''
-            state.newUser.email = ''
-            state.newUser.password = ''
+            state.value.newUser.username = ''
+            state.value.newUser.name = ''
+            state.value.newUser.email = ''
+            state.value.newUser.password = ''
         }
 
-        getAllUsers()
-        return { state, getAllUsers, selectUser, createUser, clearForm, updateUser, deleteUser, formatDate }
-    }
-}
+
+
+
+
+        //getAllUsers()
+        // return { state, getAllUsers, selectUser, createUser, clearForm, updateUser, deleteUser, formatDate }
+
 </script>
 <style>
 #Forms {
