@@ -113,7 +113,7 @@ export default {
                 .then(data => {
                     state.users = data
 
-                }).catch(err => console.log(alert = "cannot fetch users", err))
+                }).catch(err => console.log("cannot fetch users", err))
         }
 
         function selectUser(user) {
