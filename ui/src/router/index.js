@@ -4,11 +4,11 @@ import SpaceFunDetailView from '../views/SpaceFunDetailView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-   
+
     {
-        path: '/spacefun',
-        name: 'spacefun',
-        component: () => import('../views/SpacefunView.vue')
+      path: '/spacefun',
+      name: 'spacefun',
+      component: () => import('../views/SpacefunView.vue')
     },
     {
       path: '/spacefunDetail/:id',
@@ -18,12 +18,19 @@ const router = createRouter({
     {
       path: '/admin',
       name: 'admin',
-      
+
       component: () => import('../views/AdminView.vue')
     },
-    
-      // default redirect to home page
-     //  { path: '/:pathMatch(.*)*', redirect: '/' }
+
+    {
+      path: '/signup',
+      name: 'signup',
+
+      component: () => import('../views/SignupView.vue')
+    },
+
+    // default redirect to home page
+    //  { path: '/:pathMatch(.*)*', redirect: '/' }
   ]
 })
 
