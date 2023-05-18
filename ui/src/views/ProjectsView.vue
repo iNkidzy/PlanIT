@@ -1,20 +1,20 @@
 <template>
   <v-container fluid>
         <v-card  min-width="70vw" height="90vh">
-              <v-row class="justify-space-between">
+              <v-row class="justify-space-between headline">
                 <v-col cols="4">
-                  <v-card-title class="headline">Projects in {{ spacefun.name }}</v-card-title>
+                  <v-card-title>Projects in <span class="nameFun">{{ spacefun.name }}</span></v-card-title>
                 </v-col>
-                <v-col cols="3">
+                <v-col cols="3" >
                   <v-card-actions>
                     <v-btn variant="tonal" flat color="primary" @click="createDialog = true">+ Create New</v-btn>
                   </v-card-actions>
                 </v-col>
-                <v-divider></v-divider>
+                <v-divider class="border-opacity-95"></v-divider>
               </v-row>
 
             <v-card-item v-for="project in pState.projects" :key="project._id">
-              <v-row class="justify-space-between">
+              <v-row class="justify-space-between headline">
                 <v-col cols="3">
                   <router-link :to="`/task/${project._id}`">
                     {{ project.name }}
@@ -223,6 +223,17 @@ const deleteProject = async (id) => {
 
 
   </script>
+
+ 
   
-  <style lang="scss" scoped></style>
+<style lang="scss" scoped>
+ .nameFun {
+    color: darkslateblue
+  }
+
+  .headline{
+    padding-top: 1%;
+    padding-left: 1%;
+  }
+</style>
   

@@ -2,20 +2,20 @@
 <v-container>
     <v-row class="justify-center">
           <v-card min-width="70vw" height="90vh" class="scroll">
-            <v-row class="justify-space-between">
+            <v-row class="justify-space-between headline">
               <v-col cols="3">
-                <v-card-title class="headline">My SpaceFuns</v-card-title>
+                <v-card-title>My SpaceFuns</v-card-title>
               </v-col>
               <v-col cols="3">
                 <v-card-actions>
                   <v-btn variant="tonal" flat color="primary" @click="dialog = true">+ Create New</v-btn>
                 </v-card-actions>
               </v-col>
-              <v-divider></v-divider>
+              <v-divider class="border-opacity-95"></v-divider>
             </v-row>
 
             <v-card-item v-for="spacefun in state.spacefuns" :key="spacefun._id">
-              <v-row class="justify-space-between">
+              <v-row class="justify-space-between headline">
                 <v-col cols="3">
                   <router-link :to="`/projects/${spacefun._id}`">
                     {{ spacefun.name }}
@@ -195,5 +195,9 @@ const updateSpaceFun = async () => {
 .scroll {
   overflow-y: scroll
 }
+.headline{
+    padding-top: 1%;
+    padding-left: 1%;
+  }
 </style>
  
