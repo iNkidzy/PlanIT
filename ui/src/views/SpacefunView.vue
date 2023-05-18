@@ -1,26 +1,23 @@
 <template>
 <v-container>
     <v-row class="justify-center">
-    
-          <v-card min-width="300%" height="80%" class="scroll">
-            <div d-flex justify-content-center>
-              <v-row class="justify-space-between">
-                <v-col cols="3">
-                  <v-card-title class="headline">My SpaceFuns</v-card-title>
-                </v-col>
-                <v-col cols="3">
-                  <v-card-actions>
-                    <v-btn variant="tonal" flat color="primary" @click="dialog = true">+ Create New</v-btn>
-                  </v-card-actions>
-                </v-col>
-                <v-divider></v-divider>
-              </v-row>
-            </div>
+          <v-card min-width="70vw" height="90vh" class="scroll">
+            <v-row class="justify-space-between">
+              <v-col cols="3">
+                <v-card-title class="headline">My SpaceFuns</v-card-title>
+              </v-col>
+              <v-col cols="3">
+                <v-card-actions>
+                  <v-btn variant="tonal" flat color="primary" @click="dialog = true">+ Create New</v-btn>
+                </v-card-actions>
+              </v-col>
+              <v-divider></v-divider>
+            </v-row>
 
             <v-card-item v-for="spacefun in state.spacefuns" :key="spacefun._id">
               <v-row class="justify-space-between">
                 <v-col cols="3">
-                  <router-link :to="`/spacefunDetail/${spacefun._id}`">
+                  <router-link :to="`/projects/${spacefun._id}`">
                     {{ spacefun.name }}
                   </router-link>
                 </v-col>
@@ -32,77 +29,72 @@
                 </v-col>
               </v-row>
             </v-card-item>
+       
           </v-card>
 
 
         <!--Create SpaceFun Dialog-->
-        <v-row justify="center">
-          <v-dialog v-model="dialog" persistent width="500">
+        <v-dialog v-model="dialog" persistent width="500">
 
-            <v-card>
-              <v-card-title class="text-h5">
-                Create new SpaceFun
-              </v-card-title>
-              <v-card-item>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field v-model="state.newName" label="Please enter a title for your SpaceFun"
-                        hide-details="auto" variant="underlined"></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-item>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="red-darken-1" variant="tonal" @click="dialog = false">
-                  Close
-                </v-btn>
-                <v-btn color="green-darken-1" variant="tonal" @click="newSpaceFun()">
-                  Create
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-        </v-row>
+          <v-card>
+            <v-card-title class="text-h5">
+              Create new SpaceFun
+            </v-card-title>
+            <v-card-item>
+              <v-container>
+                <v-row>
+                  <v-col cols="12">
+                    <v-text-field v-model="state.newName" label="Please enter a title for your SpaceFun"
+                      hide-details="auto" variant="underlined"></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-item>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="red-darken-1" variant="tonal" @click="dialog = false">
+                Close
+              </v-btn>
+              <v-btn color="green-darken-1" variant="tonal" @click="newSpaceFun()">
+                Create
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
 
 
 
 
         <!--UpdateModal-->
-        <v-row justify="center">
-          <v-dialog v-model="updateModal" persistent width="600">
-            <v-card>
-              <v-card-title>
-                <span class="text-h5">Update your SpaceFun</span>
-              </v-card-title>
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field v-model="spaceFunToEdit.name" variant="underlined" label="Please eneter the new name"
-                        required></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="red-darken-1" variant="tonal" @click="updateModal = false">
-                  Close
-                </v-btn>
-                <v-btn color="green-darken-1" variant="tonal" @click="updateSpaceFun()" click="updateModal = false">
-                  Save
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-        </v-row>
+        <v-dialog v-model="updateModal" persistent width="600">
+          <v-card>
+            <v-card-title>
+              <span class="text-h5">Update your SpaceFun</span>
+            </v-card-title>
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col cols="12">
+                    <v-text-field v-model="spaceFunToEdit.name" variant="underlined" label="Please eneter the new name"
+                      required></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="red-darken-1" variant="tonal" @click="updateModal = false">
+                Close
+              </v-btn>
+              <v-btn color="green-darken-1" variant="tonal" @click="updateSpaceFun()" click="updateModal = false">
+                Save
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
 
       </v-row>
-
   </v-container>
-
 </template>
 
 
