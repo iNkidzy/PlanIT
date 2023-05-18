@@ -15,7 +15,7 @@ router.post('/login', loginUser)
 
 //For Admin 
 
-router.post('/create', tokenVerification, createUser)
+router.post('/create', createUser)
 
 router.get('/', tokenVerification, getAllUsers)
 
