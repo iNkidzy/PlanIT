@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <br>
-        <h2 id="h2">Welcome to the Admin page :)</h2>
+        <h2 id="h2">Welcome to the Admin page</h2>
         <br>
         <v-btn @click="state.showForm = true">Create a new user account</v-btn>
         <br>
