@@ -70,7 +70,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="user in state.users" :key="user._id" @click="selectedUser(user)"  id="tuser">
+                <tr v-for="user in state.users" :key="user._id" @click="selectedUser(user)" id="tuser">
                     <td>{{ user.username }}</td>
                     <td>{{ user.email }}</td>
                 </tr>
@@ -82,180 +82,180 @@
 <script setup>
 import { ref } from 'vue';
 
-        const state = ref({
-            users: {},
+const state = ref({
+    users: {},
 
-            newUser: {
-                username: '',
-                name: '',
-                email: '',
-                password: '',
-            },
-            selectedUser: null
+    newUser: {
+        username: '',
+        name: '',
+        email: '',
+        password: '',
+    },
+    selectedUser: null
+})
+
+const showForm = ref(false)
+const showForm_2 = ref(false)
+
+function formatDate(value) {
+    const createdDate = new Date(value);
+    return createdDate.toLocaleString();
+}
+
+
+
+const getAllUsers = async () => {
+    try {
+        await fetch('http://localhost:5500/api/user')
+            .then(res => res.json())
+            .then(data => {
+                state.value.users = data
+
+            })
+    } catch (err) {
+        console.log("cannot fetch users", err)
+    }
+}
+getAllUsers()
+
+function selectedUser(user) {
+    state.value.selectedUser = user
+    console.log("selected user:", user)
+}
+
+//In summary, { ...state.newUser } creates a shallow copy of the state.newUser object,
+//allowing us to work with a separate object that won't be modified unintentionally when making changes.
+const createUser = async () => {
+    if (!state.value.newUser.username || !state.value.newUser.name || !state.value.newUser.email || !state.value.newUser.password) {
+        alert("Please fill out all fields")
+        return
+    }
+    if (state.value.newUser.password.length < 8) {
+        alert("Password must be at least 8 characters")
+        return
+    } if (!state.value.newUser.email.includes("@")) {
+        alert("Please enter a valid email address")
+        return
+    } if (!state.value.newUser.email.includes(".")) {
+        alert("Please enter a valid email address")
+        return
+
+    } if (state.value.newUser.email.includes("*", "!", (","), "#", "$", "%", "^", "&", "*", "(", ")", "+", "=", "?", "/", "<", ">", "~", "`", "[", "]", "{", "}", "|", ":", ";", "'", '"', "\\")) {
+        alert("Please enter a valid email address")
+        return
+    }
+    if (state.value.newUser.username.length < 4) {
+        alert("Username must be at least 4 characters")
+        return
+    } if (state.value.newUser.name.length < 4) {
+        alert("Name must be at least 4 characters")
+        return
+    }
+    if (state.value.users.find(user => user.username === state.value.newUser.username)) {
+        alert("Username already exists")
+        return
+    }
+    if (state.value.users.find(user => user.email === state.value.newUser.email)) {
+        alert("Email already exists")
+        return
+    }
+
+    const postReq = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            username: state.value.newUser.username,
+            name: state.value.newUser.name,
+            email: state.value.newUser.email,
+            password: state.value.newUser.password,
+            role: state.value.newUser.role
         })
+    }
+    await fetch("http://localhost:5500/api/user/create", postReq)
+        .then(res => res.json())
+        .then(data => {
+            console.log("new user created:", data)
+            getAllUsers()
+            clearForm()
+            alert("User created successfully!")
 
-        const showForm = ref(false)
-        const showForm_2 = ref(false)
+        }).catch((err) => {
+            console.log(err, "user not created")
+        })
+}
+// there is no checks for valid password and email in the update function
+async function updateUser(_id) {
+    if (state.value.selectedUser.password.length < 8) {
+        alert("Password must be at least 8 characters")
+        return
+    } if (!state.value.selectedUser.email.includes("@")) {
+        alert("Please enter a valid email address")
+        return
+    } if (!state.value.selectedUser.email.includes(".")) {
+        alert("Please enter a valid email address")
+        return
 
-        function formatDate(value) {
-            const createdDate = new Date(value);
-            return createdDate.toLocaleString();
-        }
+    } if (state.value.selectedUser.email.includes("*", "!", (","), "#", "$", "%", "^", "&", "*", "(", ")", "+", "=", "?", "/", "<", ">", "~", "`", "[", "]", "{", "}", "|", ":", ";", "'", '"', "\\")) {
+        alert("Please enter a valid email address")
+        return
+    }
+    if (state.value.selectedUser.username.length < 4) {
+        alert("Username must be at least 4 characters")
+        return
+    } if (state.value.selectedUser.name.length < 4) {
+        alert("Name must be at least 4 characters")
+        return
+    }
+    if (state.value.users.find(user => user.username === state.value.newUser.username)) {
+        alert("Username already exists")
+        return
+    }
+    if (state.value.users.find(user => user.email === state.value.newUser.email)) {
+        alert("Email already exists")
+        return
+    }
+    await fetch(`http://localhost:5500/api/user/${_id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user: _id, ...state.value.selectedUser }),
+    })
+        .then(res => res.json())
+        .then(data => {
+            getAllUsers()
+            clearForm()
+            alert("User updated successfully!")
+            console.log("user updated:", data)
+            console.log("user id:", _id)
 
+        }).catch((err) => {
+            console.log(err, "user not updated")
+        })
+}
+async function deleteUser(id) {
+    await fetch(`http://localhost:5500/api/user/${id}`, {
+        method: "DELETE",
+    })
+        .then(res => res.json())
+        .then(data => {
+            console.log("user deleted:", data)
+            getAllUsers()
+            state.value.selectedUser = null
+            alert("User deleted successfully!")
+        }).catch((err) => {
+            console.log(err, "user not deleted")
+        })
+}
 
-
-    const getAllUsers = async () => {
-        try {
-            await fetch('http://localhost:5500/api/user')
-                .then(res => res.json())
-                .then(data => {
-                    state.value.users = data
-                  
-                })
-            }catch (err) {
-            console.log("cannot fetch users", err)
-            }
-        }
-        getAllUsers()
-
-        function selectedUser(user) {
-            state.value.selectedUser = user
-            console.log("selected user:", user)
-        }
-
-        //In summary, { ...state.newUser } creates a shallow copy of the state.newUser object,
-        //allowing us to work with a separate object that won't be modified unintentionally when making changes.
-        const createUser = async () => {
-            if (!state.value.newUser.username || !state.value.newUser.name || !state.value.newUser.email || !state.value.newUser.password) {
-                alert("Please fill out all fields")
-                return
-            }
-            if (state.value.newUser.password.length < 8) {
-                alert("Password must be at least 8 characters")
-                return
-            } if (!state.value.newUser.email.includes("@")) {
-                alert("Please enter a valid email address")
-                return
-            } if (!state.value.newUser.email.includes(".")) {
-                alert("Please enter a valid email address")
-                return
-
-            } if (state.value.newUser.email.includes("*", "!", (","), "#", "$", "%", "^", "&", "*", "(", ")", "+", "=", "?", "/", "<", ">", "~", "`", "[", "]", "{", "}", "|", ":", ";", "'", '"', "\\")) {
-                alert("Please enter a valid email address")
-                return
-            }
-            if (state.value.newUser.username.length < 4) {
-                alert("Username must be at least 4 characters")
-                return
-            } if (state.value.newUser.name.length < 4) {
-                alert("Name must be at least 4 characters")
-                return
-            }
-            if (state.value.users.find(user => user.username === state.value.newUser.username)) {
-                alert("Username already exists")
-                return
-            }
-            if (state.value.users.find(user => user.email === state.value.newUser.email)) {
-                alert("Email already exists")
-                return
-            }
-            
-            const postReq = {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ 
-                        username: state.value.newUser.username,
-                        name: state.value.newUser.name,
-                        email: state.value.newUser.email,
-                        password: state.value.newUser.password,
-                        role: state.value.newUser.role
-            })
-            }
-            await fetch("http://localhost:5500/api/user/create", postReq)
-                .then(res => res.json())
-                .then(data => {
-                    console.log("new user created:", data)
-                    getAllUsers()
-                    clearForm()
-                    alert("User created successfully!")
-
-                }).catch((err) => {
-                    console.log(err, "user not created")
-                })
-            }
-        // there is no checks for valid password and email in the update function
-        async function updateUser(_id) {
-            if (state.value.selectedUser.password.length < 8) {
-                alert("Password must be at least 8 characters")
-                return
-            } if (!state.value.selectedUser.email.includes("@")) {
-                alert("Please enter a valid email address")
-                return
-            } if (!state.value.selectedUser.email.includes(".")) {
-                alert("Please enter a valid email address")
-                return
-
-            } if (state.value.selectedUser.email.includes("*", "!", (","), "#", "$", "%", "^", "&", "*", "(", ")", "+", "=", "?", "/", "<", ">", "~", "`", "[", "]", "{", "}", "|", ":", ";", "'", '"', "\\")) {
-                alert("Please enter a valid email address")
-                return
-            }
-            if (state.value.selectedUser.username.length < 4) {
-                alert("Username must be at least 4 characters")
-                return
-            } if (state.value.selectedUser.name.length < 4) {
-                alert("Name must be at least 4 characters")
-                return
-            }
-            if (state.value.users.find(user => user.username === state.value.newUser.username)) {
-                alert("Username already exists")
-                return
-            }
-            if (state.value.users.find(user => user.email === state.value.newUser.email)) {
-                alert("Email already exists")
-                return
-            }
-            await fetch(`http://localhost:5500/api/user/${_id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ user: _id, ...state.value.selectedUser }),
-            })
-                .then(res => res.json())
-                .then(data => {
-                    getAllUsers()
-                    clearForm()
-                    alert("User updated successfully!")
-                    console.log("user updated:", data)
-                    console.log("user id:", _id)
-
-                }).catch((err) => {
-                    console.log(err, "user not updated")
-                })
-        }
-        async function deleteUser(id) {
-            await fetch(`http://localhost:5500/api/user/${id}`, {
-                method: "DELETE",
-            })
-                .then(res => res.json())
-                .then(data => {
-                    console.log("user deleted:", data)
-                    getAllUsers()
-                    state.value.selectedUser = null
-                    alert("User deleted successfully!")
-                }).catch((err) => {
-                    console.log(err, "user not deleted")
-                })
-        }
-
-        function clearForm() {
-            state.value.newUser.username = ''
-            state.value.newUser.name = ''
-            state.value.newUser.email = ''
-            state.value.newUser.password = ''
-        }
+function clearForm() {
+    state.value.newUser.username = ''
+    state.value.newUser.name = ''
+    state.value.newUser.email = ''
+    state.value.newUser.password = ''
+}
 
 
 
