@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import SpaceFunDetailView from '../views/SpaceFunDetailView.vue'
+import ProjectsView from '../views/ProjectsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,9 +12,9 @@ const router = createRouter({
       component: () => import('../views/SpacefunView.vue')
     },
     {
-      path: '/spacefunDetail/:id',
-      name: 'spacefunDetail',
-      component: SpaceFunDetailView
+      path: '/projects/:id',
+      name: 'projects',
+      component: ProjectsView
     },
     {
       path: '/admin',

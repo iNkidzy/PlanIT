@@ -6,11 +6,10 @@ import SideNav from './components/SideNav.vue';
 <template>
   <v-container fluid>
     <v-layout>
-      <v-flex xs12 sm12 md12>
-        <SideNav></SideNav>
-      </v-flex>
+      <SideNav></SideNav>
+      <v-main>
+        <RouterView />
+      </v-main>
     </v-layout>
   </v-container>
-
-  <RouterView />
 </template>
