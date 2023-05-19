@@ -5,7 +5,7 @@
                 <v-col cols="4">
                   <v-card-title>Projects in <span class="nameFun">{{ spacefun.name }}</span></v-card-title>
                 </v-col>
-                <v-col cols="3" >
+                <v-col cols="2" >
                   <v-card-actions>
                     <v-btn variant="tonal" flat color="primary" @click="createDialog = true">+ Create New</v-btn>
                   </v-card-actions>
@@ -22,6 +22,7 @@
                 </v-col>
                 <v-col cols="3" class="align-self-end">
                   <v-card-actions>
+                    <v-btn variant="tonal" flat color="success" @click="inviteUsers(project._id)">Invite</v-btn>
                     <v-btn variant="tonal" flat color="info" @click="openUpdate(project)">Edit</v-btn>
                     <v-btn variant="tonal" flat color="error" @click="deleteProject(project._id)">Delete</v-btn>
                   </v-card-actions>

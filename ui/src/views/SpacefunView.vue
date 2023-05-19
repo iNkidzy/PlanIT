@@ -6,7 +6,7 @@
               <v-col cols="3">
                 <v-card-title>My SpaceFuns</v-card-title>
               </v-col>
-              <v-col cols="3">
+              <v-col cols="2">
                 <v-card-actions>
                   <v-btn variant="tonal" flat color="primary" @click="dialog = true">+ Create New</v-btn>
                 </v-card-actions>
