@@ -5,6 +5,7 @@ const app = express()
 const cors = require('cors')
 const swaggerUi = require("swagger-ui-express")
 const yaml = require("yamljs")
+const cookieParser = require("cookie-parser");
 
 const taskRoutes = require('./routes/task')
 const spaceFunRoutes = require('./routes/spaceFun')
@@ -18,12 +19,14 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE']
 })) // to allow cross origin requests
 
+app.use(cookieParser())
+
 app.use(bodyParser.json()) // to convert the request into JSON
 
 
 mongoose
     .connect(process.env.MONGO_URI, {
-        
+
         useNewUrlParser: true,
         useUnifiedTopology: true,
 
