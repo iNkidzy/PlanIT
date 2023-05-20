@@ -30,10 +30,6 @@
               </v-row>
             </v-card-item>
           
-
-              <h4> This is: {{ pState.spacefun.name }}</h4>
-              <!-- <p> ProjectId: {{ spacefun.project }}</p> -->
-
                       <!--Create project dialog-->
       <v-dialog v-model="createDialog" persistent width="500">
             <v-card>
@@ -51,9 +47,7 @@
                       variant="underlined"
                       required
                       ></v-text-field>
-
                     </v-col>
-                  
                   </v-row>
                 </v-container>
               </v-card-item>
@@ -68,8 +62,6 @@
               </v-card-actions>
             </v-card>
       </v-dialog>
-
-
 
                         <!--Update Dialog-->
 
@@ -93,13 +85,12 @@
               <v-btn color="red-darken-1" variant="tonal" @click="updateDialog = false">
                 Close
               </v-btn>
-              <v-btn color="green-darken-1" variant="tonal" @click="updateProject()" click="updateModal = false">
+              <v-btn color="green-darken-1" variant="tonal" @click="updateProject()">
                 Save
               </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
-
         </v-card>
   </v-container>
 </template>
@@ -109,16 +100,13 @@ import { ref,computed } from 'vue'
 import { useRoute } from 'vue-router';
 
     const pState = ref ({
-      //projects: {},
       newName: '',
-      spacefun: [{}]
+      spacefun: {}
       // newUsers: {
       //   userId: '',
       //   role: ''
-      // },
-      // newCreatedAt: ''
+      // }
     })
-
 
     const createDialog = ref(false)
     const updateDialog = ref(false)
@@ -150,40 +138,26 @@ import { useRoute } from 'vue-router';
     
     getSpecificSpaceFun()
 
-    const getProjects = async () => {
-        try {
-          await fetch('http://localhost:5500/api/projects/' + spacefunId.value)
-              //.then(res => res.json())
-              .then(data => {
-            pState.value.spacefun.project = data
-            })
-        } catch (err) {
-          console.log(err)
+    const newProject = async () => {
+        const reqPOST = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+            // "auth-token": state.token
+          },
+          body: JSON.stringify({
+            name: pState.value.newName,
+            spacefunId: spacefunId.value
+            // users: pState.value.newUsers,
+          })
         }
-      }
-      getProjects()
-
-  const newProject = async () => {
-    const reqPOST = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-        // "auth-token": state.token
-      },
-      body: JSON.stringify({
-        name: pState.value.newName,
-        spacefunId: spacefunId.value
-        // users: pState.value.newUsers,
-        // createdAt: pState.value.newCreatedAt,
-      })
+          await fetch('http://localhost:5500/api/projects/create', reqPOST)
+          createDialog.value = false
+          await getSpecificSpaceFun()
     }
-  await fetch('http://localhost:5500/api/projects/create', reqPOST)
-      .then(createDialog.value = false)
-      .then(getProjects())
-}
 
 
-const updateProject = async () => {
+  const updateProject = async () => {
       fetch(`http://localhost:5500/api/projects/${projectToEdit.value._id}`, {
         method: "PUT",
         headers: {
@@ -193,11 +167,10 @@ const updateProject = async () => {
       })
         .then(res => res.json())
         .then(data => {
-          getProjects()
+          getSpecificSpaceFun()
           updateDialog.value = false
           console.log("Project updated successfully!")
           console.log("Project updated:", data)
-          console.log("Project id:", projectToEdit.value._id)
 
 
 
@@ -212,15 +185,13 @@ const deleteProject = async (id) => {
   })
     .then(res => res.json())
     .then(data => {
-      getProjects()
+      getSpecificSpaceFun()
       console.log("Projects deleted successfully!")
       console.log("Projects deleted:", data)
     })
 }
 
-
-
-  </script>
+</script>
 
  
   
