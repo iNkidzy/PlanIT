@@ -13,100 +13,99 @@
         </v-form>
     </v-card>
 </template>
+
 <script setup>
-import axios from 'axios';
 import { ref } from 'vue';
 
 const state = ref({
+    users: [],
     user: {
         username: '',
         password: '',
+        role: ''
         // token: ''
     }
 })
 
 const login = async () => {
-
-    // this.$router.push('/spacefun')
-    // console.log(response)
-
-    try {
-        const response = await axios.post('http://localhost:5500/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: state.value.username,
-                password: state.value.password,
-                // username: state.value.user.username,
-                // password: state.value.user.password
-            })
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            const token = data.token;
-            console.log(token, 'here is the token')
-
-            // Stores the token in localStorage
-            localStorage.setItem('token', token);
-
-            // Redirecting to page 
-            window.location.href = '/spacefun';
-        } else {
-            throw new Error('Login failed');
-        }
-
-    } catch (error) {
-
-        console.error("Error logging in", error.message);
+    if (state.value.user.username === '' || state.value.user.password === '') {
+        console.log('Please enter username and password')
+        return
     }
+    if (state.value.users.find(user => user.username === !state.value.user.username)) {
+        alert("Wrong login, please try again")
+        return
+
+    }
+    if (state.value.users.find(user => user.email === state.value.user.email)) {
+        alert("Wrong login, please try again")
+        return
+    }
+
+    const request = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: state.value.user.username,
+            password: state.value.user.password,
+            // username: state.value.user.username,
+            // password: state.value.user.password
+        })
+    }
+    await fetch('http://localhost:5500/api/user/login', request)
+        .then(response =>
+            response.json())
+        .then(data => {
+            console.log(data)
+            const token = data.token
+
+            // Stores the token in localStorage, bad way to do it
+            //  localStorage.setItem('token', token);
+
+            // setting a cookie, better way to do it more secure because of http request
+            //   Cookies.set('jwtToken', token, { expires: 7 });
+
+            // Check if user is admin or user role here,  and then sent to eiter admin page or spacefun page on login
+            if (state.value.user.role === 'ADMIN') {
+                console.log('admin')
+                window.location.href = '/admin';
+            } else {
+                console.log('user')
+                window.location.href = '/spacefun';
+            }
+        })
+        .catch(error => { console.error('Login falied:', error) })
 }
-// import { ref } from 'vue';
-
-// const state = ref({
-//     data() {
-//         return {
-//             username: '',
-//             password: '',
-//         }
-//     }
-
-// })
+            // Stores the token in localStorage, bad way to do it
+          //  localStorage.setItem('token', token);
 
 
-// const login = async () => {
-//     try {
-//         const response = await fetch('http://localhost:5500/api/login', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify({
-//                 username: state.username,
-//                 password: state.password
-//             })
-//         });
+            // setting a cookie, better way to do it more secure because of http request
+            // Cookies.set('jwtToken', data.token, { expires: 7, path: '/spacefun' });
 
-//         if (response.ok) {
-//             const data = await response.json();
-//             const token = data.token;
-//             // Stores the token in localStorage
-//             console.log(token, 'here is the token')
-//             localStorage.setItem('token', token);
-//             window.location.href = '/spacefun';
-//             // Redirecting to page 
+            // console.log("cookie is set", Cookies);
+            // Check if user is admin or user role here,  and then sent to eiter admin page or spacefun page on login
+            // Redirecting to page
+            // if (state.value.user.role === 'ADMIN') {
+            //     console.log('admin')
+            //     window.location.href = '/admin';
+            // } else {
+            //     console.log('user')
+            //     window.location.href = '/spacefun';
+            // }
 //         } else {
 //             throw new Error('Login failed');
 //         }
+
 //     } catch (error) {
-//         // Handle login error (e.g., display error message)
-//         console.error(error);
+
+//         console.error("Error logging in", error.message);
 //     }
 // }
-
 </script>
+
 
 <style>
 #Forms {

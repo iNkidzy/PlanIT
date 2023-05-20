@@ -64,7 +64,9 @@ const loginUser = async (req, res) => {
     },
 
     )
-    //attach to header
+    res.cookie('auth-token', token, { sameSite: 'strict' });
+
+    // //attach to header
     res.header("auth-token", token).json({
         error: null,
         data: { token }
