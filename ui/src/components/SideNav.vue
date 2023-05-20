@@ -6,7 +6,6 @@
 
   </v-navigation-drawer>
   <v-navigation-drawer permanent>
-    <v-btn @click="logOut()">Log out</v-btn>
     <v-list>
       <v-list-item title="SpaceFun" value="SpaceFun"></v-list-item>
 
@@ -14,7 +13,7 @@
     </v-list>
     <template v-slot:append>
       <div class="pa-2">
-        <v-btn block color="black">
+        <v-btn @click="logOut()" block color="black">
           Logout
         </v-btn>
       </div>
