@@ -2,9 +2,16 @@
 
 <script>
 // header function
-export const authHeader = () => {
+export const authHeader = (req) => {
+    req = req??{}
     return {
-        headers: { "auth-token": localStorage.getItem('token') }
+        // js specifc syntax - if req is null then return an empty object       
+        // making a null check - ... means everything that is in the request req - spread operator
+        ...req,
+        headers: { 
+            ...(req.headers??{}),
+            "auth-token": localStorage.getItem('token') }
+
     }
 }
 </script>

@@ -75,7 +75,7 @@ const createUser = async () => {
             //  role: state.value.newUser.role
         })
     }
-    await fetch("http://localhost:5500/api/user/create", postReq)
+    await fetch("http://localhost:5500/api/user/create", authHeader(postReq))
         .then(res => res.json())
         .then(data => {
             console.log("new user created:", data)

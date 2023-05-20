@@ -81,6 +81,8 @@ const login = async () => {
         })
         .catch(error => { console.error('Login falied:', error) })
 }
+
+
             // Stores the token in localStorage, bad way to do it
           //  localStorage.setItem('token', token);
 

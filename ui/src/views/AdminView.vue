@@ -3,10 +3,10 @@
         <br>
         <h2 id="h2">Welcome to the Admin page</h2>
         <br>
-        <v-btn @click="showForm = true">Create a new user account</v-btn>
+        <v-btn @click="createForm = true">Create a new user account</v-btn>
         <br>
-        <v-card v-model="showForm">
-            <v-form v-if="showForm" id="Forms">
+        <v-card v-model="createForm">
+            <v-form v-if="createForm" id="Forms">
                 <v-card-title style="font-size: medium;">
                     <h2>Create User</h2>
                 </v-card-title>
@@ -16,21 +16,21 @@
                 <v-text-field v-model="state.newUser.password" label="Password" required></v-text-field>
                 <v-select v-model="state.newUser.role" :items="['USER', 'ADMIN']" label="Role"></v-select>
                 <v-actions> <v-btn @click="createUser()">Create a new user account</v-btn>
-                    <v-btn @click="showForm = false">Cancel</v-btn></v-actions>
+                    <v-btn @click="createForm = false">Cancel</v-btn></v-actions>
             </v-form>
         </v-card>
-        <v-card v-model="showForm_2">
-            <v-form v-if="showForm_2" id="Forms">
+        <v-card v-model="updateForm">
+            <v-form v-if="updateForm" id="Forms">
                 <v-card-title style="font-size: medium;">
                     <h2>Edit User</h2>
                 </v-card-title>
                 <v-text-field v-model="state.selectedUser.username" label="Username" required></v-text-field>
                 <v-text-field v-model="state.selectedUser.name" label="Name" required></v-text-field>
                 <v-text-field v-model="state.selectedUser.email" label="Email" required></v-text-field>
-                <v-text-field v-model="state.selectedUser.password" label="Password" required></v-text-field>
+                <v-text-field v-model="state.selectedUser.password" label="Password"></v-text-field>
                 <v-select v-model="state.selectedUser.role" :items="['USER', 'ADMIN']" label="Role"></v-select>
                 <v-actions> <v-btn @click="updateUser(state.selectedUser._id)">Update</v-btn>
-                    <v-btn @click="showForm_2 = false">Cancel</v-btn></v-actions>
+                    <v-btn @click="updateForm = false">Cancel</v-btn></v-actions>
                 <br><br>
             </v-form>
         </v-card>
@@ -48,7 +48,7 @@
                             <p>Created: {{ formatDate(state.selectedUser.date) }}</p>
                             <v-card-actions>
                                 <v-btn @click="state.selectedUser = null">Close</v-btn>
-                                <v-btn color="primary" @click="showForm_2 = true"
+                                <v-btn color="primary" @click="updateForm = true"
                                     data-id="{{state.selectedUser._id}}">Edit</v-btn>
                                 <v-btn color="error" @click="deleteUser(state.selectedUser._id)">Delete</v-btn>
                             </v-card-actions>
@@ -57,7 +57,7 @@
                 </v-card-title>
             </v-card>
         </div>
-        <v-table v-if="!showForm || !showForm_2" fixed-header height="500px" id="tbal">
+        <v-table v-if="!createForm || !updateForm" fixed-header height="500px" id="tbal">
             <thead>
                 <tr>
                     <th class="text-center">
@@ -94,8 +94,8 @@ const state = ref({
     selectedUser: null
 })
 
-const showForm = ref(false)
-const showForm_2 = ref(false)
+const createForm = ref(false)
+const updateForm = ref(false)
 
 function formatDate(value) {
     const createdDate = new Date(value);
@@ -130,11 +130,11 @@ function selectedUser(user) {
 }
 
 const createUser = async () => {
-    if (!state.value.newUser.username || !state.value.newUser.name || !state.value.newUser.email || !state.value.newUser.password) {
+    if (!state.value.newUser.username || !state.value.newUser.name || !state.value.newUser.email) {
         alert("Please fill out all fields")
         return
     }
-    if (state.value.newUser.password.length < 8) {
+    if (state.value.newUser.password && state.value.newUser.password.length < 8) {
         alert("Password must be at least 8 characters")
         return
     } if (!state.value.newUser.email.includes("@")) {
@@ -177,7 +177,7 @@ const createUser = async () => {
             role: state.value.newUser.role
         })
     }
-    await fetch("http://localhost:5500/api/user/create", postReq)
+    await fetch("http://localhost:5500/api/user/create", authHeader(postReq))
         .then(res => res.json())
         .then(data => {
             console.log("new user created:", data)
@@ -191,7 +191,7 @@ const createUser = async () => {
 }
 // there is no checks for valid password and email in the update function
 async function updateUser(_id) {
-    if (state.value.selectedUser.password.length < 8) {
+    if (state.value.selectedUser.password && state.value.selectedUser.password.length < 8) {
         alert("Password must be at least 8 characters")
         return
     } if (!state.value.selectedUser.email.includes("@")) {
@@ -220,13 +220,13 @@ async function updateUser(_id) {
         alert("Email already exists")
         return
     }
-    await fetch(`http://localhost:5500/api/user/${_id}`, {
+    await fetch(`http://localhost:5500/api/user/${_id}`, authHeader({
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ user: _id, ...state.value.selectedUser }),
-    })
+    }))
         .then(res => res.json())
         .then(data => {
             getAllUsers()
@@ -240,9 +240,9 @@ async function updateUser(_id) {
         })
 }
 async function deleteUser(id) {
-    await fetch(`http://localhost:5500/api/user/${id}`, {
+    await fetch(`http://localhost:5500/api/user/${id}`, authHeader({
         method: "DELETE",
-    })
+    }))
         .then(res => res.json())
         .then(data => {
             console.log("user deleted:", data)
