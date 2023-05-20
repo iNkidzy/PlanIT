@@ -30,7 +30,7 @@ const loginValidation = (data) => {
 //verifying the token
 
 const tokenVerification = (req, res, next) => {
-    const token = req.header["auth-token"];
+    const token = req.header("auth-token");
     if (!token) {
         return res.status(401).json({ error: 'Access Denied' });
     }
@@ -40,6 +40,7 @@ const tokenVerification = (req, res, next) => {
         req.user = verified;
         next();
     } catch (err) {
+        console.log(err);
         res.status(400).json({ error: 'Invalid Token' });
     }
 

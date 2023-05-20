@@ -6,7 +6,6 @@
         <v-btn @click="showForm = true">Create a new user account</v-btn>
         <br>
         <v-card v-model="showForm">
-
             <v-form v-if="showForm" id="Forms">
                 <v-card-title style="font-size: medium;">
                     <h2>Create User</h2>
@@ -81,6 +80,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import { authHeader } from '../AuthHelper.vue';
 
 const state = ref({
     users: {},
@@ -102,11 +102,17 @@ function formatDate(value) {
     return createdDate.toLocaleString();
 }
 
+// // header function
+// const authHeader = () => {
+//     return headers = {
+//         "auth-token": localStorage.getItem('token')
+//     }
+// }
 
 
 const getAllUsers = async () => {
     try {
-        await fetch('http://localhost:5500/api/user', { headers: { "auth-token": `Bearer ${localStorage.getItem('token')}` } })
+        await fetch('http://localhost:5500/api/user', authHeader())
             .then(res => res.json())
             .then(data => {
                 state.value.users = data
@@ -123,8 +129,6 @@ function selectedUser(user) {
     console.log("selected user:", user)
 }
 
-//In summary, { ...state.newUser } creates a shallow copy of the state.newUser object,
-//allowing us to work with a separate object that won't be modified unintentionally when making changes.
 const createUser = async () => {
     if (!state.value.newUser.username || !state.value.newUser.name || !state.value.newUser.email || !state.value.newUser.password) {
         alert("Please fill out all fields")
@@ -256,13 +260,6 @@ function clearForm() {
     state.value.newUser.email = ''
     state.value.newUser.password = ''
 }
-
-
-
-
-
-        //getAllUsers()
-        // return { state, getAllUsers, selectUser, createUser, clearForm, updateUser, deleteUser, formatDate }
 
 </script>
 <style>

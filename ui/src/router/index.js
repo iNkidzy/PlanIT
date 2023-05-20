@@ -43,7 +43,7 @@ const router = createRouter({
 
   ]
 })
-//if the route has auth and the user is not logged in, it redirects you to login page everytime
+//if the route has auth and the user token is expired, it redirects you to login page everytime
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && tokenIsExpired()) {
     next("/login")
