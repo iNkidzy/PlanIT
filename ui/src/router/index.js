@@ -14,11 +14,13 @@ const router = createRouter({
     {
       path: '/projects/:id',
       name: 'projects',
+      meta: { requiresAuth: true },
       component: ProjectsView
     },
     {
       path: '/admin',
       name: 'admin',
+      meta: { requiresAuth: true },
 
       component: () => import('../views/AdminView.vue')
     },
@@ -45,7 +47,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && tokenIsExpired()) {
     next("/login")
-  } else { next() }
+  } else {
+    next()
+  }
 })
 
 function tokenIsExpired() {

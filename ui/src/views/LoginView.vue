@@ -62,6 +62,7 @@ const login = async () => {
             console.log(data)
             const token = data.data.token
             localStorage.setItem('token', token);
+            const payload = JSON.parse(atob(token.split('.')[1]));
 
             // Stores the token in localStorage, bad way to do it
             //  localStorage.setItem('token', token);
@@ -70,7 +71,7 @@ const login = async () => {
             //   Cookies.set('jwtToken', token, { expires: 7 });
 
             // Check if user is admin or user role here,  and then sent to eiter admin page or spacefun page on login
-            if (state.value.user.role === 'ADMIN') {
+            if (payload.role === 'ADMIN') {
                 console.log('admin')
                 window.location.href = '/admin';
             } else {

@@ -106,7 +106,7 @@ function formatDate(value) {
 
 const getAllUsers = async () => {
     try {
-        await fetch('http://localhost:5500/api/user')
+        await fetch('http://localhost:5500/api/user', { headers: { "auth-token": `Bearer ${localStorage.getItem('token')}` } })
             .then(res => res.json())
             .then(data => {
                 state.value.users = data
