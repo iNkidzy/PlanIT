@@ -58,8 +58,10 @@ const login = async () => {
         .then(response =>
             response.json())
         .then(data => {
+
             console.log(data)
-            const token = data.token
+            const token = data.data.token
+            localStorage.setItem('token', token);
 
             // Stores the token in localStorage, bad way to do it
             //  localStorage.setItem('token', token);

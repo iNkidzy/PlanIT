@@ -8,7 +8,7 @@ const router = createRouter({
     {
       path: '/spacefun',
       name: 'spacefun',
-    //  meta: { requiresAuth: true },
+      meta: { requiresAuth: true },
       component: () => import('../views/SpacefunView.vue')
     },
     {
@@ -42,10 +42,18 @@ const router = createRouter({
   ]
 })
 //if the route has auth and the user is not logged in, it redirects you to login page everytime
-// router.beforeEach((to, from, next) => {
-//   if (to.meta.requiresAuth) {
-//     next("/login")
-//   } else { next() }
-// })
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth && tokenIsExpired()) {
+    next("/login")
+  } else { next() }
+})
+
+function tokenIsExpired() {
+  const token = localStorage.getItem('token');
+  const payload = JSON.parse(atob(token.split('.')[1]));
+  const now = (new Date()).getTime();
+  const isExpired = now >= (payload.exp * 1000);
+  return isExpired;
+}
 
 export default router
