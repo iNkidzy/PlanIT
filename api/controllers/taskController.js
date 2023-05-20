@@ -1,9 +1,21 @@
 const task = require('../models/task')
+const projectsSchema = require('../models/project')
+const mongoose = require('mongoose');
 
 const createTask = async(req,res) => {
     data = req.body;
     try {
         const newTask = await task.create(data)
+
+          //convert to string
+          const projectId = new mongoose.Types.ObjectId(data.projectId);
+          // find spaceFun
+          const project = await projectsSchema.findOne(projectId)
+
+          project.task.push(newTask._id)
+
+          project.save()
+
         res.status(200).send(newTask)
     } catch(err) {
         res.status(500).send({message: err.message})

@@ -1,10 +1,21 @@
 const project = require('../models/project')
+const spaceFunSchema = require('../models/spaceFun')
+const mongoose = require('mongoose');
 
     const createProject = async (req, res) => {
         try {
             data = req.body;
-    
+            
             const newProject = await project.create(data)
+
+            const spaceFunId = new mongoose.Types.ObjectId(data.spacefunId);
+            // find spaceFun
+            const spaceFun = await spaceFunSchema.findOne(spaceFunId).populate('project')
+
+            spaceFun.project.push(newProject._id)
+
+            spaceFun.save()
+            
             res.status(200).send(newProject)
         } catch (err) {
             res.status(500).send(err.message)
@@ -22,7 +33,7 @@ const project = require('../models/project')
 
     const getSpecificProject = async (req, res) => {
         try{
-            const findOneProject = await project.findById(req.params.id)
+            const findOneProject = await project.findById(req.params.id).populate('task')
             res.status(200).send(findOneProject)
         } catch(err) {
             res.status(500).send({ message: err.message })
