@@ -31,7 +31,7 @@ const router = createRouter({
     {
       path: '/admin',
       name: 'admin',
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true, requiresAdminAuth: true },
 
       component: () => import('../views/AdminView.vue')
     },
@@ -40,13 +40,13 @@ const router = createRouter({
     //   path: '/signup',
     //   name: 'signup',
 
-    //   component: () => import('../views/SignupView.vue')
+    //   component: () => import('../components/SignupComponents.vue')
     // },
     // {
     //   path: '/login',
     //   name: 'login',
 
-    //   component: () => import('../views/LoginView.vue')
+    //   component: () => import('../components/LoginComponents.vue')
     // },
 
     // default redirect to home page
@@ -56,16 +56,21 @@ const router = createRouter({
 })
 //if the route has auth and the user token is expired, it redirects you to login page everytime
 router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth && tokenIsExpired()) {
+  const token = localStorage.getItem('token');
+  const payload = JSON.parse(atob(token.split('.')[1]));
+  if (to.meta.requiresAuth && tokenIsExpired(payload)) {
     next("/login")
-  } else {
+  }
+  else if (to.meta.requiresAdminAuth && payload.role != 'ADMIN') {
+    next("/spacefun")
+  }
+  else {
     next()
   }
 })
 
-function tokenIsExpired() {
-  const token = localStorage.getItem('token');
-  const payload = JSON.parse(atob(token.split('.')[1]));
+function tokenIsExpired(payload) {
+
   const now = (new Date()).getTime();
   const isExpired = now >= (payload.exp * 1000);
   return isExpired;
