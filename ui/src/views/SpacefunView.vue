@@ -16,7 +16,7 @@
 
         <v-card-item v-for="spacefun in state.spacefuns" :key="spacefun._id">
           <v-row class="justify-space-between headline">
-            <v-col cols="3">
+            <v-col cols="3" class="sizeName">
               <router-link :to="`/projects/${spacefun._id}`">
                 {{ spacefun.name }}
               </router-link>
@@ -193,7 +193,9 @@ const updateSpaceFun = async () => {
 .scroll {
   overflow-y: scroll
 }
-
+.sizeName{
+  font-size: 20px
+}
 .headline {
   padding-top: 1%;
   padding-left: 1%;
