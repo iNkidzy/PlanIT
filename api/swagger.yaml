@@ -159,6 +159,8 @@ paths:
                   type: string
                 password:
                   type: string
+                role:
+                  type: Array
 
       responses:
         200:

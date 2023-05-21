@@ -1,99 +1,99 @@
 <template>
-<v-container>
+  <v-container>
     <v-row class="justify-center">
-          <v-card min-width="70vw" height="90vh" class="scroll">
-            <v-row class="justify-space-between headline">
-              <v-col cols="3">
-                <v-card-title>My SpaceFuns</v-card-title>
-              </v-col>
-              <v-col cols="2">
-                <v-card-actions>
-                  <v-btn variant="tonal" flat color="primary" @click="dialog = true">+ Create New</v-btn>
-                </v-card-actions>
-              </v-col>
-              <v-divider class="border-opacity-95"></v-divider>
-            </v-row>
+      <v-card min-width="70vw" height="90vh" class="scroll">
+        <v-row class="justify-space-between headline">
+          <v-col cols="3">
+            <v-card-title>My SpaceFuns</v-card-title>
+          </v-col>
+          <v-col cols="2">
+            <v-card-actions>
+              <v-btn variant="tonal" flat color="primary" @click="dialog = true">+ Create New</v-btn>
+            </v-card-actions>
+          </v-col>
+          <v-divider class="border-opacity-95"></v-divider>
+        </v-row>
 
-            <v-card-item v-for="spacefun in state.spacefuns" :key="spacefun._id">
-              <v-row class="justify-space-between headline">
-                <v-col cols="3">
-                  <router-link :to="`/projects/${spacefun._id}`">
-                    {{ spacefun.name }}
-                  </router-link>
-                </v-col>
-                <v-col cols="3" class="align-self-end">
-                  <v-card-actions>
-                    <v-btn variant="tonal" flat color="info" @click="openUpdateModal(spacefun)">Edit</v-btn>
-                    <v-btn variant="tonal" flat color="error" @click="deleteSpaceFun(spacefun._id)">Delete</v-btn>
-                  </v-card-actions>
+        <v-card-item v-for="spacefun in state.spacefuns" :key="spacefun._id">
+          <v-row class="justify-space-between headline">
+            <v-col cols="3">
+              <router-link :to="`/projects/${spacefun._id}`">
+                {{ spacefun.name }}
+              </router-link>
+            </v-col>
+            <v-col cols="3" class="align-self-end">
+              <v-card-actions>
+                <v-btn variant="tonal" flat color="info" @click="openUpdateModal(spacefun)">Edit</v-btn>
+                <v-btn variant="tonal" flat color="error" @click="deleteSpaceFun(spacefun._id)">Delete</v-btn>
+              </v-card-actions>
+            </v-col>
+          </v-row>
+        </v-card-item>
+
+      </v-card>
+
+
+      <!--Create SpaceFun Dialog-->
+      <v-dialog v-model="dialog" persistent width="500">
+
+        <v-card>
+          <v-card-title class="text-h5">
+            Create new SpaceFun
+          </v-card-title>
+          <v-card-item>
+            <v-container>
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field v-model="state.newName" label="Please enter a title for your SpaceFun" hide-details="auto"
+                    variant="underlined"></v-text-field>
                 </v-col>
               </v-row>
-            </v-card-item>
-       
-          </v-card>
-
-
-        <!--Create SpaceFun Dialog-->
-        <v-dialog v-model="dialog" persistent width="500">
-
-          <v-card>
-            <v-card-title class="text-h5">
-              Create new SpaceFun
-            </v-card-title>
-            <v-card-item>
-              <v-container>
-                <v-row>
-                  <v-col cols="12">
-                    <v-text-field v-model="state.newName" label="Please enter a title for your SpaceFun"
-                      hide-details="auto" variant="underlined"></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-item>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="red-darken-1" variant="tonal" @click="dialog = false">
-                Close
-              </v-btn>
-              <v-btn color="green-darken-1" variant="tonal" @click="newSpaceFun()">
-                Create
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+            </v-container>
+          </v-card-item>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="red-darken-1" variant="tonal" @click="dialog = false">
+              Close
+            </v-btn>
+            <v-btn color="green-darken-1" variant="tonal" @click="newSpaceFun()">
+              Create
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
 
 
 
 
-        <!--UpdateModal-->
-        <v-dialog v-model="updateModal" persistent width="600">
-          <v-card>
-            <v-card-title>
-              <span class="text-h5">Update your SpaceFun</span>
-            </v-card-title>
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12">
-                    <v-text-field v-model="spaceFunToEdit.name" variant="underlined" label="Please eneter the new name"
-                      required></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="red-darken-1" variant="tonal" @click="updateModal = false">
-                Close
-              </v-btn>
-              <v-btn color="green-darken-1" variant="tonal" @click="updateSpaceFun()" click="updateModal = false">
-                Save
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+      <!--UpdateModal-->
+      <v-dialog v-model="updateModal" persistent width="600">
+        <v-card>
+          <v-card-title>
+            <span class="text-h5">Update your SpaceFun</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field v-model="spaceFunToEdit.name" variant="underlined" label="Please eneter the new name"
+                    required></v-text-field>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="red-darken-1" variant="tonal" @click="updateModal = false">
+              Close
+            </v-btn>
+            <v-btn color="green-darken-1" variant="tonal" @click="updateSpaceFun()" click="updateModal = false">
+              Save
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
 
-      </v-row>
+    </v-row>
   </v-container>
 </template>
 
@@ -103,6 +103,7 @@
 
 import { ref } from 'vue'
 //import SideNav from '../components/SideNav.vue';
+import { authHeader } from '../AuthHelper.vue';
 
 const state = ref({
   spacefuns: {},
@@ -118,7 +119,7 @@ const updateModal = ref(false)
 
 const fetchSpaceFun = async () => {
   try {
-    await fetch('http://localhost:5500/api/spaceFun')
+    await fetch('http://localhost:5500/api/spaceFun', authHeader())
       .then(res => res.json())
       .then(data => {
         state.value.spacefuns = data
@@ -130,9 +131,9 @@ const fetchSpaceFun = async () => {
 fetchSpaceFun()
 
 const deleteSpaceFun = async (id) => {
-  await fetch(`http://localhost:5500/api/spaceFun/${id}`, {
+  await fetch(`http://localhost:5500/api/spaceFun/${id}`, authHeader({
     method: "DELETE",
-  })
+  }))
     .then(res => res.json())
     .then(data => {
       fetchSpaceFun()
@@ -152,7 +153,7 @@ const newSpaceFun = async () => {
       name: state.value.newName
     })
   }
-  await fetch('http://localhost:5500/api/spaceFun/create', reqPOST)
+  await fetch('http://localhost:5500/api/spaceFun/create', authHeader(reqPOST))
     .then(dialog.value = false)
     .then(fetchSpaceFun())
 
@@ -166,13 +167,13 @@ const openUpdateModal = async (payload) => {
 }
 
 const updateSpaceFun = async () => {
-  fetch(`http://localhost:5500/api/spaceFun/${spaceFunToEdit.value._id}`, {
+  fetch(`http://localhost:5500/api/spaceFun/${spaceFunToEdit.value._id}`, authHeader({
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ spacefun: spaceFunToEdit.value._id, name: spaceFunToEdit.value.name }),
-  })
+  }))
     .then(res => res.json())
     .then(data => {
       fetchSpaceFun()
@@ -195,9 +196,10 @@ const updateSpaceFun = async () => {
 .scroll {
   overflow-y: scroll
 }
-.headline{
-    padding-top: 1%;
-    padding-left: 1%;
-  }
+
+.headline {
+  padding-top: 1%;
+  padding-left: 1%;
+}
 </style>
  
