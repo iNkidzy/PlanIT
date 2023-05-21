@@ -27,7 +27,6 @@
                     <v-btn variant="tonal" flat color="error" @click="deleteProject(project._id)">Delete</v-btn>
                   </v-card-actions>
                 </v-col>
-
               </v-row>
             </v-card-item>
           
@@ -159,8 +158,6 @@ import { authHeader } from '../AuthHelper.vue';
           createDialog.value = false
           await getSpecificSpaceFun()
     }
-
-// getSpecificSpaceFun()
 
   const updateProject = async () => {
       fetch(`http://localhost:5500/api/projects/${projectToEdit.value._id}`, authHeader({
