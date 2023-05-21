@@ -45,4 +45,12 @@ const tokenVerification = (req, res, next) => {
 
 }
 
-module.exports = { signupValidation, loginValidation, tokenVerification }
+const requireAdmin = (req, res, next) => {
+    if (req.user.role == 'ADMIN') {
+        next();
+    } else {
+        res.status(401).json({ error: 'Requires admin' });
+    }
+}
+
+module.exports = { signupValidation, loginValidation, tokenVerification, requireAdmin }

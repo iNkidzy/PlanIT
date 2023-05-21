@@ -10,15 +10,16 @@
             <v-text-field v-model="state.newUser.password" label="Password" required></v-text-field>
             <!-- <v-select v-model="state.newUser.role" :items="['USER', 'ADMIN']" label="Role"></v-select> -->
             <v-actions> <v-btn @click="createUser()">Create a new user account</v-btn>
-                <v-btn>Cancel</v-btn></v-actions>
+                <v-btn @click="$emit('cancel')">Cancel</v-btn></v-actions>
         </v-form>
     </v-card>
 </template>
 
 <script setup>
+defineEmits(["cancel"])
 import { ref } from 'vue';
 import { authHeader } from '../AuthHelper.vue'
- 
+
 
 const state = ref({
     newUser: {
