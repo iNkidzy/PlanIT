@@ -19,6 +19,8 @@
 defineEmits(["cancel"])
 import { ref } from 'vue';
 import { authHeader } from '../AuthHelper.vue'
+import { useRouter } from 'vue-router'
+
 
 
 const state = ref({
@@ -29,6 +31,8 @@ const state = ref({
         password: '',
     }
 })
+
+const router = useRouter()
 
 const createUser = async () => {
     if (!state.value.newUser.username || !state.value.newUser.name || !state.value.newUser.email || !state.value.newUser.password) {
@@ -78,13 +82,13 @@ const createUser = async () => {
             //  role: state.value.newUser.role
         })
     }
-    await fetch("http://localhost:5500/api/user/create", authHeader(postReq))
+    await fetch("http://localhost:5500/api/user/signup", authHeader(postReq))
         .then(res => res.json())
         .then(data => {
             console.log("new user created:", data)
             clearForm()
             alert("User created successfully!")
-            window.location.href = '/login';
+
 
 
         }).catch((err) => {

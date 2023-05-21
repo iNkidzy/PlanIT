@@ -1,7 +1,10 @@
 <template>
     <div class="container">
         <br>
-        <h2 id="h2">Welcome to the Admin page</h2>
+        <v-btn @click="logOut()" block color="grey">
+            Logout
+        </v-btn>
+        <h2 id="h2">Welcome to the Admin page </h2>
         <br>
         <v-btn @click="createForm = true">Create a new user account</v-btn>
         <br>
@@ -81,6 +84,10 @@
 <script setup>
 import { ref } from 'vue';
 import { authHeader } from '../AuthHelper.vue';
+import { inject } from 'vue';
+import { useRouter } from 'vue-router'
+
+const { setUser } = inject('authenticatedUser');
 
 const state = ref({
     users: {},
@@ -94,6 +101,8 @@ const state = ref({
     selectedUser: null
 })
 
+const router = useRouter()
+
 const createForm = ref(false)
 const updateForm = ref(false)
 
@@ -101,14 +110,6 @@ function formatDate(value) {
     const createdDate = new Date(value);
     return createdDate.toLocaleString();
 }
-
-// // header function
-// const authHeader = () => {
-//     return headers = {
-//         "auth-token": localStorage.getItem('token')
-//     }
-// }
-
 
 const getAllUsers = async () => {
     try {
@@ -259,6 +260,13 @@ function clearForm() {
     state.value.newUser.name = ''
     state.value.newUser.email = ''
     state.value.newUser.password = ''
+}
+
+const logOut = async () => {
+    await localStorage.removeItem('token');
+    setUser({});
+    router.push('/')
+
 }
 
 </script>

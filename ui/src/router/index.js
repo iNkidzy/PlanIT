@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import ProjectsView from '../views/ProjectsView.vue'
 import TasksView from '../views/TasksView.vue'
+import WelcomeView from '../views/WelcomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,7 +10,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'welcome',
-      component: () => import('../views/WelcomeView.vue')
+      component: WelcomeView,
     },
     {
       path: '/spacefun',
@@ -21,7 +22,7 @@ const router = createRouter({
       path: '/projects/:id',
       name: 'projects',
       meta: { requiresAuth: true },
-      component: ProjectsView
+      component: ProjectsView,
     },
     {
       path: '/tasks/:id',
@@ -32,31 +33,16 @@ const router = createRouter({
     {
       path: '/admin',
       name: 'admin',
-      meta: { requiresAuth: true, requiresAdminAuth: true },
+      meta: { requiresAuth: true, requiresAdminAuth: true, hideNavBar: true },
 
       component: () => import('../views/AdminView.vue')
     },
-
-    // {
-    //   path: '/signup',
-    //   name: 'signup',
-
-    //   component: () => import('../components/SignupComponents.vue')
-    // },
-    // {
-    //   path: '/login',
-    //   name: 'login',
-
-    //   component: () => import('../components/LoginComponents.vue')
-    // },
-
-    // default redirect to home page
-    //  { path: '/:pathMatch(.*)*', redirect: '/' }
 
   ]
 })
 //if the route has auth and the user token is expired, it redirects you to login page everytime
 router.beforeEach((to, from, next) => {
+
   if (to.meta.requiresAuth || to.meta.requiresAdminAuth) {
     const token = localStorage.getItem('token');
     const payload = JSON.parse(atob(token.split('.')[1]));
@@ -68,7 +54,7 @@ router.beforeEach((to, from, next) => {
     } else {
       next()
     }
-  } 
+  }
   else {
     next()
   }

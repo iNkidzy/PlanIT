@@ -1,5 +1,5 @@
 <template>
-    <v-card v-model="loginForms">
+    <v-card v-model="loginForms" id="formLogin">
         <v-form v-if="loginForms = true">
             <v-card-title style="font-size: medium;">
                 <h2>Login</h2>
@@ -18,7 +18,8 @@
 
 <script setup>
 defineEmits(["cancel"])
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
+import { useRouter } from 'vue-router'
 
 const state = ref({
     users: [],
@@ -26,9 +27,12 @@ const state = ref({
         username: '',
         password: '',
         role: ''
-        // token: ''
     }
 })
+
+const router = useRouter()
+
+const { setUser } = inject('authenticatedUser');
 
 const loginForms = ref(false)
 
@@ -55,8 +59,6 @@ const login = async () => {
         body: JSON.stringify({
             username: state.value.user.username,
             password: state.value.user.password,
-            // username: state.value.user.username,
-            // password: state.value.user.password
         })
     }
     await fetch('http://localhost:5500/api/user/login', request)
@@ -68,57 +70,26 @@ const login = async () => {
             const token = data.data.token
             localStorage.setItem('token', token);
             const payload = JSON.parse(atob(token.split('.')[1]));
-
-            // Stores the token in localStorage, bad way to do it
-            //  localStorage.setItem('token', token);
-
-            // setting a cookie, better way to do it more secure because of http request
-            //   Cookies.set('jwtToken', token, { expires: 7 });
-
+            setUser(payload)
             // Check if user is admin or user role here,  and then sent to eiter admin page or spacefun page on login
             if (payload.role === 'ADMIN') {
                 console.log('admin')
-                window.location.href = '/admin';
+                router.push('/admin')
+
             } else {
                 console.log('user')
-                window.location.href = '/spacefun';
+                router.push('/spacefun')
+
             }
         })
-        .catch(error => { console.error('Login falied:', error) })
+        .catch(error => { alert("Wrong login, please try again") })
 }
 
-
-            // Stores the token in localStorage, bad way to do it
-          //  localStorage.setItem('token', token);
-
-
-            // setting a cookie, better way to do it more secure because of http request
-            // Cookies.set('jwtToken', data.token, { expires: 7, path: '/spacefun' });
-
-            // console.log("cookie is set", Cookies);
-            // Check if user is admin or user role here,  and then sent to eiter admin page or spacefun page on login
-            // Redirecting to page
-            // if (state.value.user.role === 'ADMIN') {
-            //     console.log('admin')
-            //     window.location.href = '/admin';
-            // } else {
-            //     console.log('user')
-            //     window.location.href = '/spacefun';
-            // }
-//         } else {
-//             throw new Error('Login failed');
-//         }
-
-//     } catch (error) {
-
-//         console.error("Error logging in", error.message);
-//     }
-// }
 </script>
 
 
 <style>
-#Forms {
+#formLogin {
     padding: 5%;
     height: 300px;
     width: 450px;
