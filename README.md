@@ -43,7 +43,10 @@ It includes simple testing using Mocha&Chai, GitHub actions for CI/CD and Authen
 Live version:
 - Api: [planit-api.onrender.com](https://planit-api.onrender.com/api/welcome)
 
-- PlanIT:
+- PlanIT: [planit-vue.netlify.app](https://dev--planit-vue.netlify.app)
+
+  [![Netlify Status](https://api.netlify.com/api/v1/badges/9da9cec1-d26f-4b52-bf5c-9a327f0422a1/deploy-status)](https://app.netlify.com/sites/planit-vue/deploys)
+
 
 Documentation: [planit-api.onrender.com/docs](https://planit-api.onrender.com/api/docs/)
 
@@ -65,9 +68,10 @@ $ npm install
 
 $ npm run dev // development
 
-$ npm run start // production
+$ npm run start // api
 
-$ npm run test // tests
+$ npm run build // ui
+
 
 ```
 
