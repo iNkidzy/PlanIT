@@ -41,7 +41,7 @@ const loginUser = async (req, res) => {
         return res.status(400).json({ message: error.details[0].message });
     }
     //valid login data finds a user
-    const User = await user.findOne({ username: req.body.username });
+    const User = await user.findOne({ username: req.body.username }).select('+password');
 
     //wrong username error or there is no user with this username
     if (!User) return res.status(400).json({ message: "Error: Wrong username or User doesn't exists" });
@@ -55,7 +55,8 @@ const loginUser = async (req, res) => {
     const token = jwt.sign(
         {
             username: User.username,
-            id: User._id
+            id: User._id,
+            role: User.role
         },
         //SECRET TOKEN
         process.env.TOKEN_SECRET, {
@@ -64,8 +65,9 @@ const loginUser = async (req, res) => {
     },
 
     )
-    //attach to header
-    res.header("auth-token", token).json({
+
+    // //attach to header
+    res.json({
         error: null,
         data: { token }
     })

@@ -1,36 +1,36 @@
 <template>
-<v-container>
+  <v-container>
     <v-row class="justify-center">
-          <v-card min-width="70vw" height="90vh" class="scroll">
-            <v-row class="justify-space-between headline">
-              <v-col cols="3">
-                <v-card-title>My SpaceFuns</v-card-title>
-              </v-col>
-              <v-col cols="2">
-                <v-card-actions>
-                  <v-btn variant="tonal" flat color="primary" @click="dialog = true">+ Create New</v-btn>
-                </v-card-actions>
-              </v-col>
-              <v-divider class="border-opacity-95"></v-divider>
-            </v-row>
+      <v-card min-width="70vw" height="90vh" class="scroll">
+        <v-row class="justify-space-between headline">
+          <v-col cols="3">
+            <v-card-title>My SpaceFuns</v-card-title>
+          </v-col>
+          <v-col cols="2">
+            <v-card-actions>
+              <v-btn variant="tonal" flat color="primary" @click="dialog = true">+ Create New</v-btn>
+            </v-card-actions>
+          </v-col>
+          <v-divider class="border-opacity-95"></v-divider>
+        </v-row>
 
-            <v-card-item v-for="spacefun in state.spacefuns" :key="spacefun._id">
-              <v-row class="justify-space-between headline">
-                <v-col cols="3">
-                  <router-link :to="`/projects/${spacefun._id}`">
-                    {{ spacefun.name }}
-                  </router-link>
-                </v-col>
-                <v-col cols="3" class="align-self-end">
-                  <v-card-actions>
-                    <v-btn variant="tonal" flat color="info" @click="openUpdateModal(spacefun)">Edit</v-btn>
-                    <v-btn variant="tonal" flat color="error" @click="deleteSpaceFun(spacefun._id)">Delete</v-btn>
-                  </v-card-actions>
-                </v-col>
-              </v-row>
-            </v-card-item>
-       
-          </v-card>
+        <v-card-item v-for="spacefun in state.spacefuns" :key="spacefun._id">
+          <v-row class="justify-space-between headline">
+            <v-col cols="3">
+              <router-link :to="`/projects/${spacefun._id}`">
+                {{ spacefun.name }}
+              </router-link>
+            </v-col>
+            <v-col cols="3" class="align-self-end">
+              <v-card-actions>
+                <v-btn variant="tonal" flat color="info" @click="openUpdateModal(spacefun)">Edit</v-btn>
+                <v-btn variant="tonal" flat color="error" @click="deleteSpaceFun(spacefun._id)">Delete</v-btn>
+              </v-card-actions>
+            </v-col>
+          </v-row>
+        </v-card-item>
+
+      </v-card>
 
 
         <!--Create SpaceFun Dialog-->
@@ -61,9 +61,6 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-
-
-
 
         <!--UpdateModal-->
         <v-dialog v-model="updateModal" persistent width="600">
@@ -103,6 +100,9 @@
 
 import { ref } from 'vue'
 
+//import SideNav from '../components/SideNav.vue';
+import { authHeader } from '../AuthHelper.vue';
+
 const state = ref({
   spacefuns: {},
   newName: ''
@@ -115,7 +115,7 @@ const updateModal = ref(false)
 
 const fetchSpaceFun = async () => {
   try {
-    await fetch('http://localhost:5500/api/spaceFun')
+    await fetch('http://localhost:5500/api/spaceFun', authHeader())
       .then(res => res.json())
       .then(data => {
         state.value.spacefuns = data
@@ -127,9 +127,9 @@ const fetchSpaceFun = async () => {
 fetchSpaceFun()
 
 const deleteSpaceFun = async (id) => {
-  await fetch(`http://localhost:5500/api/spaceFun/${id}`, {
+  await fetch(`http://localhost:5500/api/spaceFun/${id}`, authHeader({
     method: "DELETE",
-  })
+  }))
     .then(res => res.json())
     .then(data => {
       fetchSpaceFun()
@@ -149,7 +149,7 @@ const newSpaceFun = async () => {
       name: state.value.newName
     })
   }
-   await fetch('http://localhost:5500/api/spaceFun/create', reqPOST)
+  await fetch('http://localhost:5500/api/spaceFun/create', authHeader(reqPOST))
     .then(dialog.value = false)
     .then(() => {fetchSpaceFun()})
     
@@ -164,13 +164,13 @@ const openUpdateModal = async (payload) => {
 }
 
 const updateSpaceFun = async () => {
-  fetch(`http://localhost:5500/api/spaceFun/${spaceFunToEdit.value._id}`, {
+  fetch(`http://localhost:5500/api/spaceFun/${spaceFunToEdit.value._id}`, authHeader({
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ spacefun: spaceFunToEdit.value._id, name: spaceFunToEdit.value.name }),
-  })
+  }))
     .then(res => res.json())
     .then(data => {
       fetchSpaceFun()
@@ -193,9 +193,10 @@ const updateSpaceFun = async () => {
 .scroll {
   overflow-y: scroll
 }
-.headline{
-    padding-top: 1%;
-    padding-left: 1%;
-  }
+
+.headline {
+  padding-top: 1%;
+  padding-left: 1%;
+}
 </style>
  

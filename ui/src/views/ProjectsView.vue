@@ -27,6 +27,7 @@
                     <v-btn variant="tonal" flat color="error" @click="deleteProject(project._id)">Delete</v-btn>
                   </v-card-actions>
                 </v-col>
+
               </v-row>
             </v-card-item>
           
@@ -91,13 +92,18 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+
         </v-card>
+      </v-dialog>
+
+    </v-card>
   </v-container>
 </template>
   
 <script setup>
-import { ref,computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router';
+import { authHeader } from '../AuthHelper.vue';
 
     const pState = ref ({
       newName: '',
@@ -124,7 +130,7 @@ import { useRoute } from 'vue-router';
 
     const getSpecificSpaceFun = async () => {
         try {
-            await fetch(`http://localhost:5500/api/spaceFun/${spacefunId.value}`)
+            await fetch(`http://localhost:5500/api/spaceFun/${spacefunId.value}`, authHeader())
                 .then(res => res.json())
                 .then(data => {
                   console.log(data)
@@ -156,13 +162,14 @@ import { useRoute } from 'vue-router';
           await getSpecificSpaceFun()
     }
 
+getSpecificSpaceFun()
 
   const updateProject = async () => {
-      fetch(`http://localhost:5500/api/projects/${projectToEdit.value._id}`, {
+      fetch(`http://localhost:5500/api/projects/${projectToEdit.value._id}`, authHeader({
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-        },
+        }),
         body: JSON.stringify({ project: projectToEdit.value._id, name: projectToEdit.value.name }),
       })
         .then(res => res.json())
@@ -171,18 +178,15 @@ import { useRoute } from 'vue-router';
           updateDialog.value = false
           console.log("Project updated successfully!")
           console.log("Project updated:", data)
-
-
-
     }).catch((err) => {
       console.log(err, "Project not updated")
     })
 }
 
 const deleteProject = async (id) => {
-  await fetch(`http://localhost:5500/api/projects/${id}`, {
+  await fetch(`http://localhost:5500/api/projects/${id}`, authHeader( {
     method: "DELETE",
-  })
+  }))
     .then(res => res.json())
     .then(data => {
       getSpecificSpaceFun()

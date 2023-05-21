@@ -15,6 +15,7 @@ const router = createRouter({
     {
       path: '/projects/:id',
       name: 'projects',
+      meta: { requiresAuth: true },
       component: ProjectsView
     },
     {
@@ -25,6 +26,7 @@ const router = createRouter({
     {
       path: '/admin',
       name: 'admin',
+      meta: { requiresAuth: true },
 
       component: () => import('../views/AdminView.vue')
     },
@@ -42,18 +44,26 @@ const router = createRouter({
       component: () => import('../views/LoginView.vue')
     },
 
-
-
     // default redirect to home page
     //  { path: '/:pathMatch(.*)*', redirect: '/' }
 
   ]
 })
-//if the route has auth and the user is not logged in, it redirects you to login page everytime
+//if the route has auth and the user token is expired, it redirects you to login page everytime
 router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth) {
+  if (to.meta.requiresAuth && tokenIsExpired()) {
     next("/login")
-  } else { next() }
+  } else {
+    next()
+  }
 })
+
+function tokenIsExpired() {
+  const token = localStorage.getItem('token');
+  const payload = JSON.parse(atob(token.split('.')[1]));
+  const now = (new Date()).getTime();
+  const isExpired = now >= (payload.exp * 1000);
+  return isExpired;
+}
 
 export default router
