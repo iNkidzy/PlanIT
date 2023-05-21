@@ -8,10 +8,6 @@
                   <v-col cols="2" >
                     <v-card-actions>
                       <v-btn variant="tonal" flat color="primary" @click="createDialog = true">+ Create New</v-btn>
-                      <!-- <v-dialog v-model="createDialog" persistent width="500">
-                        <TaskCreate @close="createDialog = false"></TaskCreate>
-                      </v-dialog> -->
-                  
                     </v-card-actions>
                   </v-col>
                   <v-divider class="border-opacity-95"></v-divider>
@@ -23,7 +19,7 @@
                     <v-card :elevation="6" class="my-4 pa-6" @click="openUpdate(task)">
                        <h4 class="titles"> {{ task.title }}</h4>
                         <p class="taskInfos"> Created by: {{ task.author }} </p>
-                        <p>Created at: {{ task.creationDate }} </p>
+                        <p>Created at: {{ formatDate(task.creationDate) }} </p>
                     </v-card>
                   </v-col>          
                   <v-col cols="2" class="align-self-center">
@@ -57,7 +53,7 @@
                       <v-textarea v-model="tState.newDescription" variant="solo" label="Description"
                         ></v-textarea>
                     </v-col>
-                    <!-- <v-col cols="12">
+                    <v-col cols="12">
                       Comments:
                       <v-textarea v-for="com in tState.projects.task.comments" :key="com._id" variant="solo" disabled>
                       
@@ -71,7 +67,7 @@
                               
                       </v-text-field>
                          
-                    </v-col> -->
+                    </v-col>
                       </v-row>
 
                   </v-container>
@@ -169,22 +165,21 @@
 
 
 //TODO: Fix comments
-//TODO: FORMAT CREATION date
-//TODO: User invite 
-//TODO: ClearForm
+//TODO: User invite
   
-    // const createComment = () => {
-    //     tState.value.projects.task.newComments.push({
-    //         commments: tState.value.newComments
-    //     })
-    //     tState.value.newTask = null
-    // }
+    const createComment = () => {
+        tState.value.projects.task.newComments.push({
+            commments: tState.value.newComments
+        })
+        tState.value.newTask = null
+    }
 
 
-  
+      const route = useRoute()
+      const projectId = computed(() => route.params.id)
+      
       const createDialog = ref(false)
       const updateDialog = ref(false)
-      
       const tasksToEdit = ref(null)
     
       
@@ -193,10 +188,11 @@
           updateDialog.value = true
       }
   
-  
-      const route = useRoute()
-      const projectId = computed(() => route.params.id)
-      
+      function formatDate(value) {
+      const createdDate = new Date(value);
+      return createdDate.toLocaleString();
+      }
+
   
       const getSpecificProject = async () => {
           try {
@@ -228,7 +224,6 @@
           description: tState.value.newDescription,
           comments: tState.value.newComments,
           projectId: projectId.value
-          // users: pState.value.newUsers,
         })
       }
       await fetch('http://localhost:5500/api/task/create', authHeader(reqPOST))
