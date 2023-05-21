@@ -26,6 +26,7 @@ const router = createRouter({
     {
       path: '/tasks/:id',
       name: 'tasks',
+      meta: { requiresAuth: true },
       component: TasksView
     },
     {
@@ -56,14 +57,18 @@ const router = createRouter({
 })
 //if the route has auth and the user token is expired, it redirects you to login page everytime
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token');
-  const payload = JSON.parse(atob(token.split('.')[1]));
-  if (to.meta.requiresAuth && tokenIsExpired(payload)) {
-    next("/login")
-  }
-  else if (to.meta.requiresAdminAuth && payload.role != 'ADMIN') {
-    next("/spacefun")
-  }
+  if (to.meta.requiresAuth || to.meta.requiresAdminAuth) {
+    const token = localStorage.getItem('token');
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    if (to.meta.requiresAuth && tokenIsExpired(payload)) {
+      next("/login")
+    }
+    else if (to.meta.requiresAdminAuth && payload.role != 'ADMIN') {
+      next("/spacefun")
+    } else {
+      next()
+    }
+  } 
   else {
     next()
   }
