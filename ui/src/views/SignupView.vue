@@ -17,6 +17,8 @@
 
 <script setup>
 import { ref } from 'vue';
+import { authHeader } from '../AuthHelper.vue'
+ 
 
 const state = ref({
     newUser: {
