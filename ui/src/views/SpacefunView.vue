@@ -86,7 +86,7 @@
               <v-btn color="red-darken-1" variant="tonal" @click="updateModal = false">
                 Close
               </v-btn>
-              <v-btn color="green-darken-1" variant="tonal" @click="updateSpaceFun()" click="updateModal = false">
+              <v-btn color="green-darken-1" variant="tonal" @click="updateSpaceFun()">
                 Save
               </v-btn>
             </v-card-actions>
@@ -102,7 +102,6 @@
 <script setup>
 
 import { ref } from 'vue'
-//import SideNav from '../components/SideNav.vue';
 
 const state = ref({
   spacefuns: {},
@@ -111,8 +110,6 @@ const state = ref({
 
 const dialog = ref(false)
 const updateModal = ref(false)
-
-
 
 
 
@@ -152,9 +149,10 @@ const newSpaceFun = async () => {
       name: state.value.newName
     })
   }
-  await fetch('http://localhost:5500/api/spaceFun/create', reqPOST)
+   await fetch('http://localhost:5500/api/spaceFun/create', reqPOST)
     .then(dialog.value = false)
-    .then(fetchSpaceFun())
+    .then(() => {fetchSpaceFun()})
+    
 
 }
 
@@ -191,7 +189,7 @@ const updateSpaceFun = async () => {
 
 </script>
   
-<style lang="css" scoped>
+<style scoped>
 .scroll {
   overflow-y: scroll
 }

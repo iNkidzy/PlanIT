@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import ProjectsView from '../views/ProjectsView.vue'
+import TasksView from '../views/TasksView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,6 +16,11 @@ const router = createRouter({
       path: '/projects/:id',
       name: 'projects',
       component: ProjectsView
+    },
+    {
+      path: '/tasks/:id',
+      name: 'tasks',
+      component: TasksView
     },
     {
       path: '/admin',

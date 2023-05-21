@@ -1,9 +1,9 @@
 <template>
   <v-container fluid>
-        <v-card  min-width="70vw" height="90vh">
+        <v-card  min-width="70vw" height="90vh" class="scroll">
               <v-row class="justify-space-between headline">
                 <v-col cols="4">
-                  <v-card-title>Projects in <span class="nameFun">{{ spacefun.name }}</span></v-card-title>
+                  <v-card-title>Projects in <span class="nameFun">{{ pState.spacefun.name }}</span></v-card-title>
                 </v-col>
                 <v-col cols="2" >
                   <v-card-actions>
@@ -13,10 +13,10 @@
                 <v-divider class="border-opacity-95"></v-divider>
               </v-row>
 
-            <v-card-item v-for="project in pState.projects" :key="project._id">
+            <v-card-item v-for="project in pState.spacefun.project" :key="project._id">
               <v-row class="justify-space-between headline">
                 <v-col cols="3">
-                  <router-link :to="`/task/${project._id}`">
+                  <router-link :to="`/tasks/${project._id}`">
                     {{ project.name }}
                   </router-link>
                 </v-col>
@@ -30,10 +30,6 @@
               </v-row>
             </v-card-item>
           
-
-              <h4> This is: {{ spacefun.name }}</h4>
-              <p> ProjectId: {{ spacefun.project }}</p>
-
                       <!--Create project dialog-->
       <v-dialog v-model="createDialog" persistent width="500">
             <v-card>
@@ -51,9 +47,7 @@
                       variant="underlined"
                       required
                       ></v-text-field>
-
                     </v-col>
-                  
                   </v-row>
                 </v-container>
               </v-card-item>
@@ -67,13 +61,10 @@
                 </v-btn>
               </v-card-actions>
             </v-card>
-            </v-dialog>
+      </v-dialog>
 
+                        <!--Update Dialog-->
 
-
-            <!--Update Dialog-->
-
-               <!--UpdateModal-->
         <v-dialog v-model="updateDialog" persistent width="600">
           <v-card>
             <v-card-title>
@@ -94,13 +85,12 @@
               <v-btn color="red-darken-1" variant="tonal" @click="updateDialog = false">
                 Close
               </v-btn>
-              <v-btn color="green-darken-1" variant="tonal" @click="updateProject()" click="updateModal = false">
+              <v-btn color="green-darken-1" variant="tonal" @click="updateProject()">
                 Save
               </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
-
         </v-card>
   </v-container>
 </template>
@@ -110,15 +100,13 @@ import { ref,computed } from 'vue'
 import { useRoute } from 'vue-router';
 
     const pState = ref ({
-      projects: {},
       newName: '',
+      spacefun: {}
       // newUsers: {
       //   userId: '',
       //   role: ''
-      // },
-      // newCreatedAt: ''
+      // }
     })
-
 
     const createDialog = ref(false)
     const updateDialog = ref(false)
@@ -134,15 +122,13 @@ import { useRoute } from 'vue-router';
     const route = useRoute()
     const spacefunId = computed(() => route.params.id)
 
-    const spacefun = ref({})
-
     const getSpecificSpaceFun = async () => {
         try {
             await fetch(`http://localhost:5500/api/spaceFun/${spacefunId.value}`)
                 .then(res => res.json())
                 .then(data => {
                   console.log(data)
-                    spacefun.value = data
+                    pState.value.spacefun = data
                  })
                  console.log("Project",spacefunId.value)
         } catch (err) {
@@ -152,41 +138,26 @@ import { useRoute } from 'vue-router';
     
     getSpecificSpaceFun()
 
-    const getProjects = async () => {
-        try {
-          await fetch('http://localhost:5500/api/projects')
-              .then(res => res.json())
-              .then(data => {
-            pState.value.projects = data
-            })
-        } catch (err) {
-          console.log(err)
+    const newProject = async () => {
+        const reqPOST = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+            // "auth-token": state.token
+          },
+          body: JSON.stringify({
+            name: pState.value.newName,
+            spacefunId: spacefunId.value
+            // users: pState.value.newUsers,
+          })
         }
-      }
-      getProjects()
-
-
-// TODO: when new project is created it should be inside the SpaceFun Array
-  const newProject = async () => {
-    const reqPOST = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-        // "auth-token": state.token
-      },
-      body: JSON.stringify({
-        name: pState.value.newName,
-        // users: pState.value.newUsers,
-        // createdAt: pState.value.newCreatedAt,
-      })
+          await fetch('http://localhost:5500/api/projects/create', reqPOST)
+          createDialog.value = false
+          await getSpecificSpaceFun()
     }
-  await fetch('http://localhost:5500/api/projects/create', reqPOST)
-      .then(createDialog.value = false)
-      .then(getProjects())
-}
 
 
-const updateProject = async () => {
+  const updateProject = async () => {
       fetch(`http://localhost:5500/api/projects/${projectToEdit.value._id}`, {
         method: "PUT",
         headers: {
@@ -196,11 +167,10 @@ const updateProject = async () => {
       })
         .then(res => res.json())
         .then(data => {
-          getProjects()
+          getSpecificSpaceFun()
           updateDialog.value = false
           console.log("Project updated successfully!")
           console.log("Project updated:", data)
-          console.log("Project id:", projectToEdit.value._id)
 
 
 
@@ -215,23 +185,24 @@ const deleteProject = async (id) => {
   })
     .then(res => res.json())
     .then(data => {
-      getProjects()
+      getSpecificSpaceFun()
       console.log("Projects deleted successfully!")
       console.log("Projects deleted:", data)
     })
 }
 
-
-
-  </script>
+</script>
 
  
   
-<style lang="scss" scoped>
+<style scoped>
  .nameFun {
     color: darkslateblue
   }
 
+  .scroll {
+  overflow-y: scroll
+}
   .headline{
     padding-top: 1%;
     padding-left: 1%;
