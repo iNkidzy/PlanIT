@@ -21,7 +21,7 @@ const getAllSpaceFuns = async (req,res) => {
 
 const getSpecificSpaceFun = async (req,res) => {
     try {
-        const findOneSpaceFun = await spaceFun.findById(req.params.id)
+        const findOneSpaceFun = await spaceFun.findById(req.params.id).populate('project')
         res.status(200).send(findOneSpaceFun)
     } catch(err) {
         res.status(500).send({message: err.message})

@@ -33,67 +33,64 @@
       </v-card>
 
 
-      <!--Create SpaceFun Dialog-->
-      <v-dialog v-model="dialog" persistent width="500">
+        <!--Create SpaceFun Dialog-->
+        <v-dialog v-model="dialog" persistent width="500">
 
-        <v-card>
-          <v-card-title class="text-h5">
-            Create new SpaceFun
-          </v-card-title>
-          <v-card-item>
-            <v-container>
-              <v-row>
-                <v-col cols="12">
-                  <v-text-field v-model="state.newName" label="Please enter a title for your SpaceFun" hide-details="auto"
-                    variant="underlined"></v-text-field>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-card-item>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="red-darken-1" variant="tonal" @click="dialog = false">
-              Close
-            </v-btn>
-            <v-btn color="green-darken-1" variant="tonal" @click="newSpaceFun()">
-              Create
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+          <v-card>
+            <v-card-title class="text-h5">
+              Create new SpaceFun
+            </v-card-title>
+            <v-card-item>
+              <v-container>
+                <v-row>
+                  <v-col cols="12">
+                    <v-text-field v-model="state.newName" label="Please enter a title for your SpaceFun"
+                      hide-details="auto" variant="underlined"></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-item>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="red-darken-1" variant="tonal" @click="dialog = false">
+                Close
+              </v-btn>
+              <v-btn color="green-darken-1" variant="tonal" @click="newSpaceFun()">
+                Create
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
 
+        <!--UpdateModal-->
+        <v-dialog v-model="updateModal" persistent width="600">
+          <v-card>
+            <v-card-title>
+              <span class="text-h5">Update your SpaceFun</span>
+            </v-card-title>
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col cols="12">
+                    <v-text-field v-model="spaceFunToEdit.name" variant="underlined" label="Please eneter the new name"
+                      required></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="red-darken-1" variant="tonal" @click="updateModal = false">
+                Close
+              </v-btn>
+              <v-btn color="green-darken-1" variant="tonal" @click="updateSpaceFun()">
+                Save
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
 
-
-
-      <!--UpdateModal-->
-      <v-dialog v-model="updateModal" persistent width="600">
-        <v-card>
-          <v-card-title>
-            <span class="text-h5">Update your SpaceFun</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container>
-              <v-row>
-                <v-col cols="12">
-                  <v-text-field v-model="spaceFunToEdit.name" variant="underlined" label="Please eneter the new name"
-                    required></v-text-field>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="red-darken-1" variant="tonal" @click="updateModal = false">
-              Close
-            </v-btn>
-            <v-btn color="green-darken-1" variant="tonal" @click="updateSpaceFun()" click="updateModal = false">
-              Save
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-
-    </v-row>
+      </v-row>
   </v-container>
 </template>
 
@@ -102,6 +99,7 @@
 <script setup>
 
 import { ref } from 'vue'
+
 //import SideNav from '../components/SideNav.vue';
 import { authHeader } from '../AuthHelper.vue';
 
@@ -112,8 +110,6 @@ const state = ref({
 
 const dialog = ref(false)
 const updateModal = ref(false)
-
-
 
 
 
@@ -155,7 +151,8 @@ const newSpaceFun = async () => {
   }
   await fetch('http://localhost:5500/api/spaceFun/create', authHeader(reqPOST))
     .then(dialog.value = false)
-    .then(fetchSpaceFun())
+    .then(() => {fetchSpaceFun()})
+    
 
 }
 
@@ -192,7 +189,7 @@ const updateSpaceFun = async () => {
 
 </script>
   
-<style lang="css" scoped>
+<style scoped>
 .scroll {
   overflow-y: scroll
 }
