@@ -57,7 +57,7 @@
                       <v-textarea v-model="tState.newDescription" variant="solo" label="Description"
                         ></v-textarea>
                     </v-col>
-                    <v-col cols="12">
+                    <!-- <v-col cols="12">
                       Comments:
                       <v-textarea v-for="com in tState.projects.task.comments" :key="com._id" variant="solo" disabled>
                       
@@ -69,9 +69,9 @@
                             @keydown.enter="createComment()"
                             >
                               
-                            </v-text-field>
+                      </v-text-field>
                          
-                        </v-col>
+                    </v-col> -->
                       </v-row>
 
                   </v-container>
@@ -155,6 +155,8 @@
   import { ref,computed } from 'vue'
   import { useRoute } from 'vue-router'
   //import  TaskCreate from '../components/TaskCreate.vue'
+  import { authHeader } from '../AuthHelper.vue'
+
 
       const tState = ref ({
         newTitle: '',
@@ -198,7 +200,7 @@
   
       const getSpecificProject = async () => {
           try {
-              await fetch(`http://localhost:5500/api/projects/${projectId.value}`)
+              await fetch(`http://localhost:5500/api/projects/${projectId.value}`, authHeader())
                   .then(res => res.json())
                   .then(data => {
                     console.log(data)
@@ -229,14 +231,14 @@
           // users: pState.value.newUsers,
         })
       }
-      await fetch('http://localhost:5500/api/task/create', reqPOST)
+      await fetch('http://localhost:5500/api/task/create', authHeader(reqPOST))
       createDialog.value = false
       await getSpecificProject()
   }
   
   
   const updateTasks = async () => {
-        fetch(`http://localhost:5500/api/task/${tasksToEdit.value._id}`, {
+        fetch(`http://localhost:5500/api/task/${tasksToEdit.value._id}`, authHeader({
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -248,7 +250,7 @@
             description: tasksToEdit.value.description,
             comments: tasksToEdit.value.comments    
          }),
-        })
+        }))
           .then(res => res.json())
           .then(data => {
             getSpecificProject()
@@ -265,9 +267,9 @@
   }
   
   const deleteTask = async (id) => {
-    await fetch(`http://localhost:5500/api/task/${id}`, {
+    await fetch(`http://localhost:5500/api/task/${id}`, authHeader( {
       method: "DELETE",
-    })
+    }))
       .then(res => res.json())
       .then(data => {
         getSpecificProject()

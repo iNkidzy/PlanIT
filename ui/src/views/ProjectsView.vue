@@ -94,9 +94,7 @@
         </v-dialog>
 
         </v-card>
-      </v-dialog>
 
-    </v-card>
   </v-container>
 </template>
   
@@ -157,21 +155,21 @@ import { authHeader } from '../AuthHelper.vue';
             // users: pState.value.newUsers,
           })
         }
-          await fetch('http://localhost:5500/api/projects/create', reqPOST)
+          await fetch('http://localhost:5500/api/projects/create', authHeader(reqPOST))
           createDialog.value = false
           await getSpecificSpaceFun()
     }
 
-getSpecificSpaceFun()
+// getSpecificSpaceFun()
 
   const updateProject = async () => {
       fetch(`http://localhost:5500/api/projects/${projectToEdit.value._id}`, authHeader({
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-        }),
+        },
         body: JSON.stringify({ project: projectToEdit.value._id, name: projectToEdit.value.name }),
-      })
+      }))
         .then(res => res.json())
         .then(data => {
           getSpecificSpaceFun()
