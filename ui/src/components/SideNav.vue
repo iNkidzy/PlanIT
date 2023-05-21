@@ -13,7 +13,7 @@
     </v-list>
     <template v-slot:append>
       <div class="pa-2">
-        <v-btn @click="logOut()" block color="black">
+        <v-btn @click="logOut()" block color="grey">
           Logout
         </v-btn>
       </div>
@@ -23,11 +23,22 @@
 
 
 <script setup>
+import { inject } from 'vue';
+import { useRouter, useRoute } from 'vue-router'
+
+const router = useRouter()
+const route = useRoute()
+
+const { setUser } = inject('authenticatedUser');
+
 
 const logOut = async () => {
   await localStorage.removeItem('token');
-  window.location.href = '/';
+  setUser({});
+  router.push('/')
 }
+
+
 </script>
 
 
