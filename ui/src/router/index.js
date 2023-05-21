@@ -7,6 +7,11 @@ const router = createRouter({
   routes: [
 
     {
+      path: '/',
+      name: 'welcome',
+      component: () => import('../views/WelcomeView.vue')
+    },
+    {
       path: '/spacefun',
       name: 'spacefun',
       meta: { requiresAuth: true },
@@ -31,18 +36,18 @@ const router = createRouter({
       component: () => import('../views/AdminView.vue')
     },
 
-    {
-      path: '/signup',
-      name: 'signup',
+    // {
+    //   path: '/signup',
+    //   name: 'signup',
 
-      component: () => import('../views/SignupView.vue')
-    },
-    {
-      path: '/login',
-      name: 'login',
+    //   component: () => import('../views/SignupView.vue')
+    // },
+    // {
+    //   path: '/login',
+    //   name: 'login',
 
-      component: () => import('../views/LoginView.vue')
-    },
+    //   component: () => import('../views/LoginView.vue')
+    // },
 
     // default redirect to home page
     //  { path: '/:pathMatch(.*)*', redirect: '/' }
