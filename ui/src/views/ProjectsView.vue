@@ -195,7 +195,7 @@ const deleteProject = async (id) => {
 
  
   
-<style lang="scss" scoped>
+<style scoped>
  .nameFun {
     color: darkslateblue
   }

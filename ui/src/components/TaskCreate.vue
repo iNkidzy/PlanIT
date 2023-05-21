@@ -1,4 +1,5 @@
 <template>
+   <v-dialog v-model="createDialog" persistent width="500">
             <v-card>
                 <v-card-title class="text-h5">
                   Create new Task
@@ -49,14 +50,15 @@
                   </v-btn>
                 </v-card-actions>
               </v-card>
+            </v-dialog>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
-defineProps({
-  createDialog: Boolean
-})
+// defineProps({
+//   createDialog: Boolean
+// })
 const emits = defineEmits(['close'])
 
 const createState = ref ({
@@ -91,7 +93,7 @@ const newTask = async () => {
       })
     }
     await fetch('http://localhost:5500/api/task/create', reqPOST)
-    //createDialog.value = false
+     closeModal()
     await getSpecificProject()
 }
 

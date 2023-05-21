@@ -8,9 +8,10 @@
                   <v-col cols="2" >
                     <v-card-actions>
                       <v-btn variant="tonal" flat color="primary" @click="createDialog = true">+ Create New</v-btn>
-                      <v-dialog v-model="createDialog" persistent width="500">
+                      <!-- <v-dialog v-model="createDialog" persistent width="500">
                         <TaskCreate @close="createDialog = false"></TaskCreate>
-                      </v-dialog>
+                      </v-dialog> -->
+                  
                     </v-card-actions>
                   </v-col>
                   <v-divider class="border-opacity-95"></v-divider>
@@ -32,17 +33,9 @@
                   </v-col>       
                 </v-row>
               </v-card-item>
-            
-            
-  
-                  <v-label>I am Empty .. Please create new Task</v-label>
-  
-      
-  
-                  <v-label>I am Empty .. Please create new Task</v-label>
   
                         <!--Create project dialog-->
-        <!-- <v-dialog v-model="createDialog" persistent width="500">
+        <v-dialog v-model="createDialog" persistent width="500">
               <v-card>
                 <v-card-title class="text-h5">
                   Create new Task
@@ -66,11 +59,11 @@
                     </v-col>
                     <v-col cols="12">
                       Comments:
-                      <v-textarea v-model="tState.newComments" variant="solo" disabled>
+                      <v-textarea v-for="com in tState.projects.task.comments" :key="com._id" variant="solo" disabled>
                       
                       </v-textarea>
                             <v-text-field
-                            v-model="newComments"
+                            v-model="tState.newComments"
                             label=""
                             variant="solo"
                             @keydown.enter="createComment()"
@@ -93,7 +86,7 @@
                   </v-btn>
                 </v-card-actions>
               </v-card>
-        </v-dialog> -->
+        </v-dialog>
   
                         <!--UpdateModal-->
           <v-dialog v-model="updateDialog" persistent width="600">
@@ -133,7 +126,7 @@
                       </v-textarea>
               
                             <v-text-field
-                            v-model="newComments"
+                            v-model="tState.newComments"
                             label=""
                             variant="solo"
                             @keydown.enter="createComment()"
@@ -161,13 +154,13 @@
   <script setup>
   import { ref,computed } from 'vue'
   import { useRoute } from 'vue-router'
-  import  TaskCreate from '../components/TaskCreate.vue'
+  //import  TaskCreate from '../components/TaskCreate.vue'
 
       const tState = ref ({
-        // newTitle: '',
-        // newAuthor: '',
-        // newDescription: '',
-        // newComments: '',
+        newTitle: '',
+        newAuthor: '',
+        newDescription: '',
+        newComments: '',
         newCreationDate: Date.now,
         projects: {},
       })
@@ -175,6 +168,8 @@
 
 //TODO: Fix comments
 //TODO: FORMAT CREATION date
+//TODO: User invite 
+//TODO: ClearForm
   
     // const createComment = () => {
     //     tState.value.projects.task.newComments.push({
@@ -200,11 +195,6 @@
       const route = useRoute()
       const projectId = computed(() => route.params.id)
       
-      
-     // const projects = ref({})
-  
-  
-     // const projects = ref({})
   
       const getSpecificProject = async () => {
           try {
@@ -222,41 +212,27 @@
       
       getSpecificProject()
   
-      // const getTasks = async () => {
-      //     try {
-      //       await fetch('http://localhost:5500/api/task/' + projectId.value)
-      //           .then(data => {
-      //             console.log(data)
-      //         tState.value.projects.task = data 
-      //         })
-      //         console.log("getTask:", tState.value.projects.task)
-      //     } catch (err) {
-      //       console.log("GeTTaskERR",err)
-      //     }
-      //   }
-      //   getTasks()
   
-  
-  //   const newTask = async () => {
-  //     const reqPOST = {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //         // "auth-token": state.token
-  //       },
-  //       body: JSON.stringify({
-  //         title: tState.value.newTitle,
-  //         author: tState.value.newAuthor,
-  //         description: tState.value.newDescription,
-  //         comments: tState.value.newComments,
-  //         projectId: projectId.value
-  //         // users: pState.value.newUsers,
-  //       })
-  //     }
-  //     await fetch('http://localhost:5500/api/task/create', reqPOST)
-  //     createDialog.value = false
-  //     await getSpecificProject()
-  // }
+    const newTask = async () => {
+      const reqPOST = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+          // "auth-token": state.token
+        },
+        body: JSON.stringify({
+          title: tState.value.newTitle,
+          author: tState.value.newAuthor,
+          description: tState.value.newDescription,
+          comments: tState.value.newComments,
+          projectId: projectId.value
+          // users: pState.value.newUsers,
+        })
+      }
+      await fetch('http://localhost:5500/api/task/create', reqPOST)
+      createDialog.value = false
+      await getSpecificProject()
+  }
   
   
   const updateTasks = async () => {
@@ -301,7 +277,7 @@
   }
 </script>
    
-<style lang="scss" scoped>
+<style scoped>
   .scroll {
   overflow-y: scroll
 }

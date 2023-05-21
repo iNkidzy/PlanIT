@@ -189,7 +189,7 @@ const updateSpaceFun = async () => {
 
 </script>
   
-<style lang="css" scoped>
+<style scoped>
 .scroll {
   overflow-y: scroll
 }
