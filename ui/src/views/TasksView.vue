@@ -53,9 +53,9 @@
                       <v-textarea v-model="tState.newDescription" variant="solo" label="Description"
                         ></v-textarea>
                     </v-col>
-                    <v-col cols="12">
+                    <!-- <v-col cols="12">
                       Comments:
-                      <v-textarea v-for="com in tState.projects.task.comments" :key="com._id" variant="solo" disabled>
+                      <v-textarea v-for="com in tState.projects.task.comments" :key="com.comments" variant="solo" disabled>
                       
                       </v-textarea>
                             <v-text-field
@@ -67,7 +67,7 @@
                               
                       </v-text-field>
                          
-                    </v-col>
+                    </v-col> -->
                       </v-row>
 
                   </v-container>
@@ -116,9 +116,50 @@
                       <v-textarea v-model="tasksToEdit.description" variant="solo" label="Description"
                       required></v-textarea>
                     </v-col>
-                    <v-col cols="12">
+                                <!--Comments -->
+                    <!-- <v-col cols="12">
+                      <v-text-field
+                          v-model="tState.newComments"
+                          label="What are you working on?"
+                          variant="solo"
+                          @keydown.enter="createComment"
+                        >
+                          <template v-slot:append>
+                            <v-fade-transition>
+                              <v-icon
+                                v-if="tState.newComments"
+                                @click="createComment"
+                              >
+                                mdi-plus-circle
+                              </v-icon>
+                            </v-fade-transition>
+                          </template>
+                        </v-text-field>
+
+                        <v-card>
+                          <v-slide-y-transition
+                            class="py-0"
+                            group
+                            tag="v-list"
+                          >
+                            <template v-for="(comments, i) in tState.comments" :key="`${i}-${comments.text}`">
+                              <v-divider
+                                v-if="i !== 0"
+                                :key="`${i}-divider`"
+                              ></v-divider>
+                              </template>
+                              </v-slide-y-transition>
+                      </v-card>
+
+
+                        <v-divider class="mt-4"></v-divider>
+
                       Comments:
-                      <v-textarea v-model="tasksToEdit.comments" variant="solo" disabled>
+                      <v-card-item v-for="com in tasksToEdit.comments" :key="com.comments">
+                          {{ com.newComments }}
+                      </v-card-item>
+                      <v-textarea variant="solo" disabled>
+                     
                       </v-textarea>
               
                             <v-text-field
@@ -129,7 +170,7 @@
                             >
                             </v-text-field>
                          
-                    </v-col>
+                    </v-col> -->
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -150,7 +191,6 @@
   <script setup>
   import { ref,computed } from 'vue'
   import { useRoute } from 'vue-router'
-  //import  TaskCreate from '../components/TaskCreate.vue'
   import { authHeader } from '../AuthHelper.vue'
 
 
@@ -161,18 +201,19 @@
         newComments: '',
         newCreationDate: Date.now,
         projects: {},
+        comments: []
       })
 
 
-//TODO: Fix comments
-//TODO: User invite
+//TODO: Fix Comments
+
   
-    const createComment = () => {
-        tState.value.projects.task.newComments.push({
-            commments: tState.value.newComments
-        })
-        tState.value.newTask = null
-    }
+    // const createComment = () => {
+    //     tState.value.comments.push({
+    //         commments: tState.value.comments
+    //     })
+    //     tState.value.comments = null
+    // }
 
 
       const route = useRoute()

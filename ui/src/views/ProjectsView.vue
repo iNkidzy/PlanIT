@@ -15,7 +15,7 @@
 
             <v-card-item v-for="project in pState.spacefun.project" :key="project._id">
               <v-row class="justify-space-between headline">
-                <v-col cols="3">
+                <v-col cols="3" class="sizeName">
                   <router-link :to="`/tasks/${project._id}`">
                     {{ project.name }}
                   </router-link>
@@ -105,11 +105,9 @@ import { authHeader } from '../AuthHelper.vue';
     const pState = ref ({
       newName: '',
       spacefun: {}
-      // newUsers: {
-      //   userId: '',
-      //   role: ''
-      // }
     })
+
+//TODO: User invite
 
     const createDialog = ref(false)
     const updateDialog = ref(false)
@@ -195,6 +193,9 @@ const deleteProject = async (id) => {
  
   
 <style scoped>
+.sizeName{
+  font-size: 20px
+}
  .nameFun {
     color: darkslateblue
   }
