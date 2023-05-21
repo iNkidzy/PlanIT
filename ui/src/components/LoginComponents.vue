@@ -1,6 +1,6 @@
 <template>
-    <v-card>
-        <v-form id="Forms">
+    <v-card v-model="loginForms">
+        <v-form v-if="loginForms = true">
             <v-card-title style="font-size: medium;">
                 <h2>Login</h2>
             </v-card-title>
@@ -8,13 +8,16 @@
                 required></v-text-field>
             <v-text-field v-model="state.user.password" type="password" id="password" label="Password"
                 required></v-text-field>
-            <v-actions> <v-btn @click="login()">Login</v-btn>
-                <v-btn>Cancel</v-btn></v-actions>
+            <v-actions>
+                <v-btn @click="login()">Login</v-btn>
+                <v-btn @click="$emit('cancel')">Cancel</v-btn>
+            </v-actions>
         </v-form>
     </v-card>
 </template>
 
 <script setup>
+defineEmits(["cancel"])
 import { ref } from 'vue';
 
 const state = ref({
@@ -26,6 +29,8 @@ const state = ref({
         // token: ''
     }
 })
+
+const loginForms = ref(false)
 
 const login = async () => {
     if (state.value.user.username === '' || state.value.user.password === '') {
