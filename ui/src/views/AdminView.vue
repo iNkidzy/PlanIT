@@ -1,63 +1,65 @@
 <template>
-    <div class="container">
+    <v-container>
         <br>
         <h2 id="h2">Welcome to the Admin page </h2>
         <br>
         <v-btn @click="createForm = true">Create a new user account</v-btn>
         <br>
-        <v-card v-model="createForm">
-            <v-form v-if="createForm" id="Forms">
-                <v-card-title style="font-size: medium;">
-                    <h2>Create User</h2>
-                </v-card-title>
-                <v-text-field v-model="state.newUser.username" label="Username" required></v-text-field>
-                <v-text-field v-model="state.newUser.name" label="Name" required></v-text-field>
-                <v-text-field v-model="state.newUser.email" label="Email" required></v-text-field>
-                <v-text-field v-model="state.newUser.password" label="Password" required></v-text-field>
-                <v-select v-model="state.newUser.role" :items="['USER', 'ADMIN']" label="Role"></v-select>
-                <v-actions> <v-btn @click="createUser()">Create a new user account</v-btn>
-                    <v-btn @click="createForm = false">Cancel</v-btn></v-actions>
-            </v-form>
-        </v-card>
-        <v-card v-model="updateForm">
-            <v-form v-if="updateForm" id="Forms">
-                <v-card-title style="font-size: medium;">
-                    <h2>Edit User</h2>
-                </v-card-title>
-                <v-text-field v-model="state.selectedUser.username" label="Username" required></v-text-field>
-                <v-text-field v-model="state.selectedUser.name" label="Name" required></v-text-field>
-                <v-text-field v-model="state.selectedUser.email" label="Email" required></v-text-field>
-                <v-text-field v-model="state.selectedUser.password" label="Password"></v-text-field>
-                <v-select v-model="state.selectedUser.role" :items="['USER', 'ADMIN']" label="Role"></v-select>
-                <v-actions> <v-btn @click="updateUser(state.selectedUser._id)">Update</v-btn>
-                    <v-btn @click="updateForm = false">Cancel</v-btn></v-actions>
-                <br><br>
-            </v-form>
-        </v-card>
-        <br>
-        <div v-if="state.selectedUser">
-            <v-card>
-                <v-card-title style="font-size: medium;">
-                    <h2>Selected User</h2>
-                    <v-card-subtitle>
-                        <v-card-text style="font-size: larger;">
-                            <p>Username: {{ state.selectedUser.username }}</p>
-                            <p>Name: {{ state.selectedUser.name }}</p>
-                            <p>Email: {{ state.selectedUser.email }}</p>
-                            <p>Role: {{ state.selectedUser.role }}</p>
-                            <p>Created: {{ formatDate(state.selectedUser.date) }}</p>
-                            <v-card-actions>
-                                <v-btn @click="state.selectedUser = null">Close</v-btn>
-                                <v-btn color="primary" @click="updateForm = true"
-                                    data-id="{{state.selectedUser._id}}">Edit</v-btn>
-                                <v-btn color="error" @click="deleteUser(state.selectedUser._id)">Delete</v-btn>
-                            </v-card-actions>
-                        </v-card-text>
-                    </v-card-subtitle>
-                </v-card-title>
-            </v-card>
-        </div>
-        <v-table v-if="!createForm || !updateForm" fixed-header height="500px" id="tbal">
+        <v-row class="justify-center">
+            <v-col cols="5">
+                <v-card v-model="createForm">
+                    <v-form v-if="createForm" id="Forms">
+                        <v-card-title style="font-size: medium;">
+                            <h2>Create User</h2>
+                        </v-card-title>
+                        <v-text-field v-model="state.newUser.username" label="Username" required></v-text-field>
+                        <v-text-field v-model="state.newUser.name" label="Name" required></v-text-field>
+                        <v-text-field v-model="state.newUser.email" label="Email" required></v-text-field>
+                        <v-text-field v-model="state.newUser.password" label="Password" required></v-text-field>
+                        <v-select v-model="state.newUser.role" :items="['USER', 'ADMIN']" label="Role"></v-select>
+                        <v-actions> <v-btn @click="createUser()">Create a new user account</v-btn>
+                            <v-btn @click="createForm = false">Cancel</v-btn></v-actions>
+                    </v-form>
+                </v-card>
+                <v-card v-model="updateForm">
+                    <v-form v-if="updateForm" id="Forms">
+                        <v-card-title style="font-size: medium;">
+                            <h2>Edit User</h2>
+                        </v-card-title>
+                        <v-text-field v-model="state.selectedUser.username" label="Username" required></v-text-field>
+                        <v-text-field v-model="state.selectedUser.name" label="Name" required></v-text-field>
+                        <v-text-field v-model="state.selectedUser.email" label="Email" required></v-text-field>
+                        <v-text-field v-model="state.selectedUser.password" label="Password"></v-text-field>
+                        <v-select v-model="state.selectedUser.role" :items="['USER', 'ADMIN']" label="Role"></v-select>
+                        <v-actions> <v-btn @click="updateUser(state.selectedUser._id)">Update</v-btn>
+                            <v-btn @click="updateForm = false">Cancel</v-btn></v-actions>
+                        <br><br>
+                    </v-form>
+                </v-card>
+                <br>
+                <div v-if="state.selectedUser">
+                    <v-card>
+                        <v-card-title style="font-size: medium;">
+                            <h2>Selected User</h2>
+                            <v-card-subtitle>
+                                <v-card-text style="font-size: larger;">
+                                    <p>Username: {{ state.selectedUser.username }}</p>
+                                    <p>Name: {{ state.selectedUser.name }}</p>
+                                    <p>Email: {{ state.selectedUser.email }}</p>
+                                    <p>Role: {{ state.selectedUser.role }}</p>
+                                    <p>Created: {{ formatDate(state.selectedUser.date) }}</p>
+                                    <v-card-actions>
+                                        <v-btn @click="state.selectedUser = null">Close</v-btn>
+                                        <v-btn color="primary" @click="updateForm = true"
+                                            data-id="{{state.selectedUser._id}}">Edit</v-btn>
+                                        <v-btn color="error" @click="deleteUser(state.selectedUser._id)">Delete</v-btn>
+                                    </v-card-actions>
+                                </v-card-text>
+                            </v-card-subtitle>
+                        </v-card-title>
+                    </v-card>
+                </div>
+            <v-table v-if="!createForm || !updateForm" fixed-header height="500px" id="tbal">
             <thead>
                 <tr>
                     <th class="text-center">
@@ -74,11 +76,15 @@
                     <td>{{ user.email }}</td>
                 </tr>
             </tbody>
-        </v-table>
-        <v-btn @click="logOut()" block color="grey">
-            Logout
-        </v-btn>
-    </div>
+            </v-table>
+                <v-btn variant="outlined" @click="logOut()" block >
+                Logout
+                </v-btn>
+
+            </v-col>
+        
+        </v-row>
+    </v-container>
 </template>
 
 <script setup>
