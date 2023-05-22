@@ -13,8 +13,5 @@ const UserSchema = new Schema({
         default: "USER"
     },
     date: { type: Date, default: Date.now },
-   //spacefun: [{type: Schema.Types.ObjectId, ref: 'SpaceFun'}]
-
 })
-// TODO: Discuss properties if needed
 module.exports = mongoose.model('User', UserSchema);

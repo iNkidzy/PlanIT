@@ -102,7 +102,6 @@ const state = ref({
 })
 
 const router = useRouter()
-
 const createForm = ref(false)
 const updateForm = ref(false)
 
@@ -190,7 +189,6 @@ const createUser = async () => {
             console.log(err, "user not created")
         })
 }
-// there is no checks for valid password and email in the update function
 async function updateUser(_id) {
     if (state.value.selectedUser.password && state.value.selectedUser.password.length < 8) {
         alert("Password must be at least 8 characters")
@@ -266,10 +264,9 @@ const logOut = async () => {
     await localStorage.removeItem('token');
     setUser({});
     router.push('/')
-
 }
-
 </script>
+
 <style>
 #Forms {
     padding: 1%;

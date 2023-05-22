@@ -8,14 +8,12 @@ const {
     deleteUser } = require('../controllers/userController');
 const { signupUser, loginUser } = require('../controllers/authController');
 
-
 //For User
 router.post('/signup', signupUser)
 
 router.post('/login', loginUser)
 
 //For Admin 
-
 router.post('/create', tokenVerification, requireAdmin, createUser)
 
 router.get('/', tokenVerification, requireAdmin, getAllUsers)

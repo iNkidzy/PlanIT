@@ -13,7 +13,6 @@
           </v-col>
           <v-divider class="border-opacity-95"></v-divider>
         </v-row>
-
         <v-card-item v-for="spacefun in state.spacefuns" :key="spacefun._id">
           <v-row class="justify-space-between headline">
             <v-col cols="3" class="sizeName">
@@ -29,13 +28,10 @@
             </v-col>
           </v-row>
         </v-card-item>
-
       </v-card>
-
 
       <!--Create SpaceFun Dialog-->
       <v-dialog v-model="dialog" persistent width="500">
-
         <v-card>
           <v-card-title class="text-h5">
             Create new SpaceFun
@@ -89,18 +85,12 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-
     </v-row>
   </v-container>
 </template>
 
-
-  
 <script setup>
-
 import { ref } from 'vue'
-
-//import SideNav from '../components/SideNav.vue';
 import { authHeader } from '../AuthHelper.vue';
 
 const state = ref({
@@ -111,8 +101,6 @@ const state = ref({
 
 const dialog = ref(false)
 const updateModal = ref(false)
-
-
 
 const fetchSpaceFun = async () => {
   try {
@@ -167,8 +155,6 @@ const newSpaceFun = async () => {
   await fetch('http://localhost:5500/api/spaceFun/create', authHeader(reqPOST))
     .then(dialog.value = false)
     .then(() => { getSpecificUSerSpaceFun() })
-
-
 }
 
 const spaceFunToEdit = ref(null)
@@ -193,15 +179,10 @@ const updateSpaceFun = async () => {
       console.log("SpaceFun updated successfully!")
       console.log("spacefun updated:", data)
       console.log("spacefun id:", spaceFunToEdit.value._id)
-
-
-
     }).catch((err) => {
       console.log(err, "spacefun not updated")
     })
 }
-
-
 </script>
   
 <style scoped>

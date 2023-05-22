@@ -1,5 +1,6 @@
 const Joi = require('joi');
 const jwt = require('jsonwebtoken');
+
 //validation for register
 const signupValidation = (data) => {
     const schema = Joi.object(
@@ -28,7 +29,6 @@ const loginValidation = (data) => {
 }
 
 //verifying the token
-
 const tokenVerification = (req, res, next) => {
     const token = req.header("auth-token");
     if (!token) {
