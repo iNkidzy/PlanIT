@@ -1,25 +1,24 @@
-const { Router } = require('express')
-const SpaceFun = require('../models/spaceFun')
-const { spaceFun } = require('../controllers/spaceFunController')
-//const cors = require('cors')
+const router = require('express').Router();
+const { tokenVerification } = require("../validation");
 
-const router = Router()
+// const SpaceFun = require('../models/spaceFun')
+const { 
+    createSpaceFun,
+    getAllSpaceFuns,
+    getSpecificSpaceFun,
+    updateSpaceFun,
+    deleteSpaceFun } = require('../controllers/spaceFunController');
 
 
+router.get('/', tokenVerification, getAllSpaceFuns )
 
-router.get('/', spaceFun )
+router.get('/:id', tokenVerification, getSpecificSpaceFun)
 
-// async (req, res) => {
-//     controller.spaceFun()
-//    /*  try {
-//         // controller.findAll();
-//          const spaceFun = await SpaceFun.find({})
-//          if (!spaceFun) throw new Error('No Fun')
-//          res.status(200).json(spaceFun)
-//      } catch (error) {
-//          res.status(500).json({ message: error.message })
-//      }   */
-// })
+router.post('/create', tokenVerification, createSpaceFun)
+
+router.put('/:id',tokenVerification, updateSpaceFun)
+
+router.delete('/:id', tokenVerification, deleteSpaceFun)
 
 
 module.exports = router
