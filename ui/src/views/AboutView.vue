@@ -31,7 +31,7 @@
             </div>
             </v-col>
             <v-col cols="7" class="align-self-end">
-                <img src="../assets/nachi.png" width="900" height="820"/>
+                <img src="../assets/nachi.png" width="800" height="720"/>
             </v-col>
         </v-row>
     </v-container>
