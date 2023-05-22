@@ -21,8 +21,6 @@ import { ref } from 'vue';
 import { authHeader } from '../AuthHelper.vue'
 import { useRouter } from 'vue-router'
 
-
-
 const state = ref({
     newUser: {
         username: '',
@@ -79,7 +77,6 @@ const createUser = async () => {
             name: state.value.newUser.name,
             email: state.value.newUser.email,
             password: state.value.newUser.password,
-            //  role: state.value.newUser.role
         })
     }
     await fetch("http://localhost:5500/api/user/signup", authHeader(postReq))
@@ -88,8 +85,6 @@ const createUser = async () => {
             console.log("new user created:", data)
             clearForm()
             alert("User created successfully!")
-
-
 
         }).catch((err) => {
             console.log(err, "user not created")
@@ -100,7 +95,6 @@ const clearForm = () => {
     state.value.newUser.name = ""
     state.value.newUser.email = ""
     state.value.newUser.password = ""
-    // state.value.newUser.role = ""
 }
 
 </script>

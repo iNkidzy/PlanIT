@@ -31,7 +31,6 @@ const signupUser = async (req, res) => {
     } catch (error) {
         res.status(400).json({ error });
     }
-
 }
 
 const loginUser = async (req, res) => {
@@ -50,7 +49,6 @@ const loginUser = async (req, res) => {
     const passwordIsValid = await bcrypt.compare(req.body.password, User.password);
     if (!passwordIsValid) return res.status(400).json({ message: "Error: Incorrect password" });
 
-
     //token generation authentication with username and id
     const token = jwt.sign(
         {
@@ -63,9 +61,7 @@ const loginUser = async (req, res) => {
         //EXP TIME
         expiresIn: process.env.JWT_EXPIRES_IN
     },
-
     )
-
     // //attach to header
     res.json({
         error: null,

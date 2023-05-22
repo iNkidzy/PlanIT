@@ -82,11 +82,9 @@ const login = async () => {
 
             }
         })
-        .catch(error => { alert("Wrong login, please try again") })
+        .catch(() => { alert("Wrong login, please try again") })
 }
-
 </script>
-
 
 <style>
 #formLogin {

@@ -12,7 +12,6 @@ const UserSchema = new Schema({
         enum: ["ADMIN", "USER"],
         default: "USER"
     },
-    date: { type: Date, default: Date.now }
+    date: { type: Date, default: Date.now },
 })
-// TODO: Discuss properties if needed
 module.exports = mongoose.model('User', UserSchema);

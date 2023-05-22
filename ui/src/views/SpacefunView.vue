@@ -13,7 +13,6 @@
           </v-col>
           <v-divider class="border-opacity-95"></v-divider>
         </v-row>
-
         <v-card-item v-for="spacefun in state.spacefuns" :key="spacefun._id">
           <v-row class="justify-space-between headline">
             <v-col cols="3" class="sizeName">
@@ -29,89 +28,79 @@
             </v-col>
           </v-row>
         </v-card-item>
-
       </v-card>
 
+      <!--Create SpaceFun Dialog-->
+      <v-dialog v-model="dialog" persistent width="500">
+        <v-card>
+          <v-card-title class="text-h5">
+            Create new SpaceFun
+          </v-card-title>
+          <v-card-item>
+            <v-container>
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field v-model="state.newName" label="Please enter a title for your SpaceFun" hide-details="auto"
+                    variant="underlined"></v-text-field>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-item>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="red-darken-1" variant="tonal" @click="dialog = false">
+              Close
+            </v-btn>
+            <v-btn color="green-darken-1" variant="tonal" @click="newSpaceFun()">
+              Create
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
 
-        <!--Create SpaceFun Dialog-->
-        <v-dialog v-model="dialog" persistent width="500">
-
-          <v-card>
-            <v-card-title class="text-h5">
-              Create new SpaceFun
-            </v-card-title>
-            <v-card-item>
-              <v-container>
-                <v-row>
-                  <v-col cols="12">
-                    <v-text-field v-model="state.newName" label="Please enter a title for your SpaceFun"
-                      hide-details="auto" variant="underlined"></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-item>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="red-darken-1" variant="tonal" @click="dialog = false">
-                Close
-              </v-btn>
-              <v-btn color="green-darken-1" variant="tonal" @click="newSpaceFun()">
-                Create
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-
-        <!--UpdateModal-->
-        <v-dialog v-model="updateModal" persistent width="600">
-          <v-card>
-            <v-card-title>
-              <span class="text-h5">Update your SpaceFun</span>
-            </v-card-title>
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12">
-                    <v-text-field v-model="spaceFunToEdit.name" variant="underlined" label="Please eneter the new name"
-                      required></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="red-darken-1" variant="tonal" @click="updateModal = false">
-                Close
-              </v-btn>
-              <v-btn color="green-darken-1" variant="tonal" @click="updateSpaceFun()">
-                Save
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-
-      </v-row>
+      <!--UpdateModal-->
+      <v-dialog v-model="updateModal" persistent width="600">
+        <v-card>
+          <v-card-title>
+            <span class="text-h5">Update your SpaceFun</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field v-model="spaceFunToEdit.name" variant="underlined" label="Please eneter the new name"
+                    required></v-text-field>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="red-darken-1" variant="tonal" @click="updateModal = false">
+              Close
+            </v-btn>
+            <v-btn color="green-darken-1" variant="tonal" @click="updateSpaceFun()">
+              Save
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
   </v-container>
 </template>
 
-
-  
 <script setup>
-
 import { ref } from 'vue'
-
-//import SideNav from '../components/SideNav.vue';
 import { authHeader } from '../AuthHelper.vue';
 
 const state = ref({
   spacefuns: {},
-  newName: ''
+  newName: '',
+  user: {}
 })
 
 const dialog = ref(false)
 const updateModal = ref(false)
-
-
 
 const fetchSpaceFun = async () => {
   try {
@@ -138,6 +127,20 @@ const deleteSpaceFun = async (id) => {
     })
 }
 
+const getSpecificUSerSpaceFun = async () => {
+  try {
+    await fetch(`http://localhost:5500/api/spaceFun/${userId.value}`, authHeader())
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+        state.value.user = data
+      })
+    console.log("spaceFun", state.value.userId.value)
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 const newSpaceFun = async () => {
   const reqPOST = {
     method: 'POST',
@@ -146,14 +149,12 @@ const newSpaceFun = async () => {
       // "auth-token": state.token
     },
     body: JSON.stringify({
-      name: state.value.newName
+      name: state.value.newName,
     })
   }
   await fetch('http://localhost:5500/api/spaceFun/create', authHeader(reqPOST))
     .then(dialog.value = false)
-    .then(() => {fetchSpaceFun()})
-    
-
+    .then(() => { getSpecificUSerSpaceFun() })
 }
 
 const spaceFunToEdit = ref(null)
@@ -178,15 +179,10 @@ const updateSpaceFun = async () => {
       console.log("SpaceFun updated successfully!")
       console.log("spacefun updated:", data)
       console.log("spacefun id:", spaceFunToEdit.value._id)
-
-
-
     }).catch((err) => {
       console.log(err, "spacefun not updated")
     })
 }
-
-
 </script>
   
 <style scoped>

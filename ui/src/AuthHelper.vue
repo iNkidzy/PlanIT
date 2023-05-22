@@ -12,7 +12,6 @@ export const authHeader = (req) => {
         headers: { 
             ...(req.headers??{}),
             "auth-token": localStorage.getItem('token') }
-
     }
 }
 </script>
