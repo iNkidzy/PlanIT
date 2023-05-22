@@ -7,7 +7,7 @@
   </v-navigation-drawer>
   <v-navigation-drawer permanent>
     <v-list>
-      <v-list-item @click="spacefunPage()" title="SpaceFun" value="SpaceFun"></v-list-item>
+      <v-list-item @click="spaceFunPage()" title="SpaceFun" value="SpaceFun"></v-list-item>
     </v-list>
     <template v-slot:append>
       <div class="pa-2">
@@ -28,6 +28,13 @@ const router = useRouter()
 
 const { setUser } = inject('authenticatedUser');
 
+const spaceFunPage = () => {
+  router.push('/spaceFun')
+}
+
+const projectsPage = () => {
+  router.push('/projects')
+}
 
 const logOut = async () => {
   await localStorage.removeItem('token');
@@ -36,7 +43,7 @@ const logOut = async () => {
 }
 
 const spacefunPage = () => {
-    router.push('/spacefun')
+  router.push('/spacefun')
 }
 
 </script>

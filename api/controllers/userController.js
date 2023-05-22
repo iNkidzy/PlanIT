@@ -33,7 +33,7 @@ const getAllUsers = async (req, res) => {
 
 const getSpecificUser = async (req, res) => {
     try {
-        const findOneUser = await user.findById(req.params.id)
+        const findOneUser = await user.findById(req.params.id).populate('spacefun')
         res.status(200).send(findOneUser)
     } catch (err) {
         res.status(500).send({ message: err.message })

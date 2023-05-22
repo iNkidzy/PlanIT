@@ -1,9 +1,6 @@
 <template>
     <div class="container">
         <br>
-        <v-btn @click="logOut()" block color="grey">
-            Logout
-        </v-btn>
         <h2 id="h2">Welcome to the Admin page </h2>
         <br>
         <v-btn @click="createForm = true">Create a new user account</v-btn>
@@ -78,6 +75,9 @@
                 </tr>
             </tbody>
         </v-table>
+        <v-btn @click="logOut()" block color="grey">
+            Logout
+        </v-btn>
     </div>
 </template>
 
