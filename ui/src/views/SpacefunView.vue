@@ -30,7 +30,7 @@
         </v-card-item>
       </v-card>
 
-      <!--Create SpaceFun Dialog-->
+                <!--Create SpaceFun Dialog-->
       <v-dialog v-model="dialog" persistent width="500">
         <v-card>
           <v-card-title class="text-h5">
@@ -58,7 +58,7 @@
         </v-card>
       </v-dialog>
 
-      <!--UpdateModal-->
+              <!--UpdateModal-->
       <v-dialog v-model="updateModal" persistent width="600">
         <v-card>
           <v-card-title>
@@ -131,7 +131,6 @@ const newSpaceFun = async () => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
-      // "auth-token": state.token
     },
     body: JSON.stringify({
       name: state.value.newName,

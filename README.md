@@ -6,11 +6,6 @@ PlanIT
 ![MEVN Logo](https://vuejsexamples.com/content/images/2022/01/Snipaste_2022-01-08_22-59-25.jpg)
 
 <h1 align="center">
-<!--IF we do CI/CD-->
-<!-- [![NodeJS CI/CD](https://github.com/iNkidzy/CatsRestAPI/actions/workflows/main.yaml/badge.svg)](https://github.com/iNkidzy/CatsRestAPI/actions/workflows/main.yaml)-->
-
-<!--IF we do pull requests -->
-<!--![GitHub pull requests](https://img.shields.io/github/issues-pr/iNkidzy/PlanIT) -->
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/iNkidzy/PlanIT)
 ![GitHub language count](https://img.shields.io/github/languages/count/iNkidzy/PlanIT)
@@ -29,7 +24,7 @@ PlanIT
 :small_blue_diamond: [Setup](#setup)
 
 ## About
-PlantIT is a project managment tool using the MEVN stack, demonstrating the basic interaction between MongoDB,ExpressJS,VueJS and Nodejs. 
+PlantIT is a project managment tool using the MEVN stack, demonstrating the basic interaction between MongoDB,ExpressJS,Vue 3 and Nodejs. 
 
 
 <!-- It emphasizes the use of the basic CRUD operations + Authentication. 
@@ -43,7 +38,7 @@ It includes simple testing using Mocha&Chai, GitHub actions for CI/CD and Authen
 Live version:
 - Api: [planit-api.onrender.com](https://planit-api.onrender.com/api/welcome)
 
-- PlanIT: [planit-vue.netlify.app](https://dev--planit-vue.netlify.app)
+- PlanIT: [planit-vue.netlify.app](https://master--planit-vue.netlify.app)
 
   [![Netlify Status](https://api.netlify.com/api/v1/badges/9da9cec1-d26f-4b52-bf5c-9a327f0422a1/deploy-status)](https://app.netlify.com/sites/planit-vue/deploys)
 
@@ -58,7 +53,6 @@ Project is created with:
 * Mongoose
 * NodeJS
 * VueJS 3
-* ...
 
 ## Setup
 To run this project, install it locally using npm:

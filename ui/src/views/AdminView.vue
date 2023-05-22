@@ -80,9 +80,7 @@
                 <v-btn variant="outlined" @click="logOut()" block >
                 Logout
                 </v-btn>
-
             </v-col>
-        
         </v-row>
     </v-container>
 </template>

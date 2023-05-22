@@ -2,6 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import ProjectsView from '../views/ProjectsView.vue'
 import TasksView from '../views/TasksView.vue'
 import WelcomeView from '../views/WelcomeView.vue'
+import SpaceFunView from '../views/SpacefunView.vue'
+import AdminView from '../views/AdminView.vue'
+import AboutView from '../views/AboutView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,32 +18,32 @@ const router = createRouter({
     {
       path: '/spacefun',
       name: 'spacefun',
+      component: SpaceFunView,
       meta: { requiresAuth: true },
-      component: () => import('../views/SpacefunView.vue')
     },
     {
       path: '/projects/:id',
       name: 'projects',
-      meta: { requiresAuth: true },
       component: ProjectsView,
+      meta: { requiresAuth: true },
     },
     {
       path: '/tasks/:id',
       name: 'tasks',
+      component: TasksView,
       meta: { requiresAuth: true },
-      component: TasksView
     },
     {
       path: '/admin',
       name: 'admin',
+      component: AdminView,
       meta: { requiresAuth: true, requiresAdminAuth: true, hideNavBar: true },
 
-      component: () => import('../views/AdminView.vue')
     },
     {
       path: '/about',
       name: 'about',
-      component: () => import('../views/AboutView.vue')
+      component: AboutView,
     }
 
   ]

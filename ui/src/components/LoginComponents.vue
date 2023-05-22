@@ -71,7 +71,7 @@ const login = async () => {
             localStorage.setItem('token', token);
             const payload = JSON.parse(atob(token.split('.')[1]));
             setUser(payload)
-            // Check if user is admin or user role here,  and then sent to eiter admin page or spacefun page on login
+            // Check if user is admin or user role here,and then sent to either admin page or spacefun page on login
             if (payload.role === 'ADMIN') {
                 console.log('admin')
                 router.push('/admin')

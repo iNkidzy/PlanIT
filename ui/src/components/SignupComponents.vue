@@ -8,7 +8,6 @@
             <v-text-field v-model="state.newUser.name" label="Name" required></v-text-field>
             <v-text-field v-model="state.newUser.email" label="Email" required></v-text-field>
             <v-text-field v-model="state.newUser.password" label="Password" required></v-text-field>
-            <!-- <v-select v-model="state.newUser.role" :items="['USER', 'ADMIN']" label="Role"></v-select> -->
             <v-actions> <v-btn @click="createUser()">Create a new user account</v-btn>
                 <v-btn @click="$emit('cancel')">Cancel</v-btn></v-actions>
         </v-form>
@@ -19,7 +18,6 @@
 defineEmits(["cancel"])
 import { ref } from 'vue';
 import { authHeader } from '../AuthHelper.vue'
-import { useRouter } from 'vue-router'
 
 const state = ref({
     newUser: {
@@ -30,7 +28,6 @@ const state = ref({
     }
 })
 
-const router = useRouter()
 
 const createUser = async () => {
     if (!state.value.newUser.username || !state.value.newUser.name || !state.value.newUser.email || !state.value.newUser.password) {
@@ -58,14 +55,11 @@ const createUser = async () => {
         alert("Name must be at least 4 characters")
         return
     }
-    // if (state.value.users.find(user => user.username === state.newUser.username)) {
+    // if (state.value.users.findOne(user => user.username === state.value.newUser.username)) {
     //     alert("Username already exists")
     //     return
     // }
-    // if (state.value.users.find(user => user.email === state.newUser.email)) {
-    //     alert("Email already exists")
-    //     return
-    // }
+
 
     const postReq = {
         method: "POST",

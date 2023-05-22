@@ -3,7 +3,7 @@
         <v-card  min-width="70vw" height="90vh" class="scroll">
               <v-row class="justify-space-between headline">
                 <v-col cols="4">
-                  <v-card-title>Projects in <span class="nameFun">{{ pState.spacefun.name }}</span></v-card-title>
+                  <v-card-title>Projects in <span class="nameFun">{{ state.spacefun.name }}</span></v-card-title>
                 </v-col>
                 <v-col cols="2" >
                   <v-card-actions>
@@ -13,14 +13,14 @@
                 <v-divider class="border-opacity-95"></v-divider>
               </v-row>
 
-            <v-card-item v-for="project in pState.spacefun.project" :key="project._id">
+            <v-card-item v-for="project in state.spacefun.project" :key="project._id">
               <v-row class="justify-space-between headline">
                 <v-col cols="3" class="sizeName">
                   <router-link :to="`/tasks/${project._id}`">
                     {{ project.name }}
                   </router-link>
                 </v-col>
-                <v-col cols="3" class="align-self-end">
+                <v-col cols="4" class="align-self-end">
                   <v-card-actions>
                     <v-btn variant="tonal" flat color="success" @click="inviteUsers(project._id)">Invite</v-btn>
                     <v-btn variant="tonal" flat color="info" @click="openUpdate(project)">Edit</v-btn>
@@ -41,7 +41,7 @@
                   <v-row>
                     <v-col cols="12">
                       <v-text-field 
-                      v-model="pState.newName" 
+                      v-model="state.newName" 
                       label="Please enter a title for your project"
                       hide-details="auto" 
                       variant="underlined"
@@ -64,7 +64,6 @@
       </v-dialog>
 
                         <!--Update Dialog-->
-
         <v-dialog v-model="updateDialog" persistent width="600">
           <v-card>
             <v-card-title>
@@ -91,9 +90,7 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-
         </v-card>
-
   </v-container>
 </template>
   
@@ -102,12 +99,10 @@ import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router';
 import { authHeader } from '../AuthHelper.vue';
 
-    const pState = ref ({
+    const state = ref ({
       newName: '',
       spacefun: {}
     })
-
-//TODO: User invite
 
     const createDialog = ref(false)
     const updateDialog = ref(false)
@@ -119,7 +114,6 @@ import { authHeader } from '../AuthHelper.vue';
         updateDialog.value = true
 }
 
-
     const route = useRoute()
     const spacefunId = computed(() => route.params.id)
 
@@ -129,7 +123,7 @@ import { authHeader } from '../AuthHelper.vue';
                 .then(res => res.json())
                 .then(data => {
                   console.log(data)
-                    pState.value.spacefun = data
+                    state.value.spacefun = data
                  })
                  console.log("Project",spacefunId.value)
         } catch (err) {
@@ -144,12 +138,10 @@ import { authHeader } from '../AuthHelper.vue';
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
-            // "auth-token": state.token
           },
           body: JSON.stringify({
-            name: pState.value.newName,
+            name: state.value.newName,
             spacefunId: spacefunId.value
-            // users: pState.value.newUsers,
           })
         }
           await fetch('http://localhost:5500/api/projects/create', authHeader(reqPOST))
@@ -189,8 +181,6 @@ const deleteProject = async (id) => {
 }
 
 </script>
-
- 
   
 <style scoped>
 .sizeName{

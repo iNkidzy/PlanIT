@@ -1,9 +1,7 @@
 <template>
   <v-container fluid>
     <v-layout>
-
       <SideNav v-if="authenticatedUser.role == 'USER'"></SideNav>
-
       <v-main>
         <RouterView />
       </v-main>

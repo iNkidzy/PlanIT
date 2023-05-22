@@ -3,7 +3,7 @@
     <v-card min-width="70vw" height="90vh" class="scroll">
       <v-row class="justify-space-between headline">
         <v-col cols="4">
-          <v-card-title>Tasks in <span class="nameFun">{{ tState.projects.name }}</span></v-card-title>
+          <v-card-title>Tasks in <span class="nameFun">{{ state.projects.name }}</span></v-card-title>
         </v-col>
         <v-col cols="2">
           <v-card-actions>
@@ -13,7 +13,7 @@
         <v-divider class="border-opacity-95"></v-divider>
       </v-row>
 
-      <v-card-item v-for="task in tState.projects.task" :key="task._id">
+      <v-card-item v-for="task in state.projects.task" :key="task._id">
         <v-row class="justify-space-between headline">
           <v-col cols="10">
             <v-card :elevation="6" class="my-4 pa-6" @click="openUpdate(task)">
@@ -40,23 +40,23 @@
             <v-container>
               <v-row class="justify-space-between">
                 <v-col cols="6">
-                  <v-text-field v-model="tState.newTitle" variant="underlined" label="Title" required></v-text-field>
+                  <v-text-field v-model="state.newTitle" variant="underlined" label="Title" required></v-text-field>
                 </v-col>
                 <v-col cols="5">
-                  <v-text-field v-model="tState.newAuthor" variant="underlined" label="Who made this?"></v-text-field>
+                  <v-text-field v-model="state.newAuthor" variant="underlined" label="Who made this?"></v-text-field>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col cols="12">
-                  <v-textarea v-model="tState.newDescription" variant="solo" label="Description"></v-textarea>
+                  <v-textarea v-model="state.newDescription" variant="solo" label="Description"></v-textarea>
                 </v-col>
                 <!-- <v-col cols="12">
                       Comments:
-                      <v-textarea v-for="com in tState.projects.task.comments" :key="com.comments" variant="solo" disabled>
+                      <v-textarea v-for="com in state.projects.task.comments" :key="com.comments" variant="solo" disabled>
                       
                       </v-textarea>
                             <v-text-field
-                            v-model="tState.newComments"
+                            v-model="state.newComments"
                             label=""
                             variant="solo"
                             @keydown.enter="createComment()"
@@ -110,10 +110,10 @@
                 <v-col cols="12">
                   <v-textarea v-model="tasksToEdit.description" variant="solo" label="Description" required></v-textarea>
                 </v-col>
-                <!--Comments -->
+                          <!--Comments -->
                 <!-- <v-col cols="12">
                       <v-text-field
-                          v-model="tState.newComments"
+                          v-model="state.newComments"
                           label="What are you working on?"
                           variant="solo"
                           @keydown.enter="createComment"
@@ -121,7 +121,7 @@
                           <template v-slot:append>
                             <v-fade-transition>
                               <v-icon
-                                v-if="tState.newComments"
+                                v-if="state.newComments"
                                 @click="createComment"
                               >
                                 mdi-plus-circle
@@ -136,7 +136,7 @@
                             group
                             tag="v-list"
                           >
-                            <template v-for="(comments, i) in tState.comments" :key="`${i}-${comments.text}`">
+                            <template v-for="(comments, i) in state.comments" :key="`${i}-${comments.text}`">
                               <v-divider
                                 v-if="i !== 0"
                                 :key="`${i}-divider`"
@@ -157,7 +157,7 @@
                       </v-textarea>
               
                             <v-text-field
-                            v-model="tState.newComments"
+                            v-model="state.newComments"
                             label=""
                             variant="solo"
                             @keydown.enter="createComment()"
@@ -188,25 +188,23 @@ import { useRoute } from 'vue-router'
 import { authHeader } from '../AuthHelper.vue'
 
 
-const tState = ref({
+const state = ref({
   newTitle: '',
   newAuthor: '',
   newDescription: '',
   newComments: '',
   newCreationDate: Date.now,
   projects: {},
-  comments: []
+  //comments: []
 })
-
 
 //TODO: Fix Comments
 
-
 // const createComment = () => {
-//     tState.value.comments.push({
-//         commments: tState.value.comments
+//     state.value.comments.push({
+//         commments: state.value.comments
 //     })
-//     tState.value.comments = null
+//     state.value.comments = null
 // }
 
 
@@ -228,14 +226,13 @@ function formatDate(value) {
   return createdDate.toLocaleString();
 }
 
-
 const getSpecificProject = async () => {
   try {
     await fetch(`http://localhost:5500/api/projects/${projectId.value}`, authHeader())
       .then(res => res.json())
       .then(data => {
         console.log(data)
-        tState.value.projects = data
+        state.value.projects = data
       })
     console.log("Project", projectId.value)
   } catch (err) {
@@ -245,19 +242,17 @@ const getSpecificProject = async () => {
 
 getSpecificProject()
 
-
 const newTask = async () => {
   const reqPOST = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
-      // "auth-token": state.token
     },
     body: JSON.stringify({
-      title: tState.value.newTitle,
-      author: tState.value.newAuthor,
-      description: tState.value.newDescription,
-      comments: tState.value.newComments,
+      title: state.value.newTitle,
+      author: state.value.newAuthor,
+      description: state.value.newDescription,
+      comments: state.value.newComments,
       projectId: projectId.value
     })
   }
@@ -267,7 +262,6 @@ const newTask = async () => {
   clearForm()
 
 }
-
 
 const updateTasks = async () => {
   fetch(`http://localhost:5500/api/task/${tasksToEdit.value._id}`, authHeader({
@@ -291,9 +285,6 @@ const updateTasks = async () => {
       console.log("Task updated successfully!")
       console.log("Task updated:", data)
       console.log("Task id:", tasksToEdit.value._id)
-
-
-
     }).catch((err) => {
       console.log(err, "Task is not updated")
     })
@@ -312,9 +303,9 @@ const deleteTask = async (id) => {
 }
 
 function clearForm() {
-  tState.value.newTitle = ''
-  tState.value.newAuthor = ''
-  tState.value.newDescription = ''
+  state.value.newTitle = ''
+  state.value.newAuthor = ''
+  state.value.newDescription = ''
 }
 </script>
    

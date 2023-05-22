@@ -8,17 +8,13 @@
                 <v-btn class="btns" variant="tonal" @click="back()" >Back</v-btn>
             </v-col>
         </v-row> 
-
         <v-row class="justify-space-between">
-
             <v-col cols="5">
                 <div style="margin-bottom:20%">
                     <img src="../assets/nachilogo2.png" width="520" height="320"/>
                 
                     <h5 class="text-white-smoke text-h5 ps-4"> 
                         Created by this.developers  
-                        <br><br>
-                        It all started this week :D 
                         <br><br>
                         Here is our links to the book series of 
                         <br>
@@ -48,5 +44,4 @@ const back = () => {router.push('/')}
 .btns{
   color: white; 
 }
-
 </style>

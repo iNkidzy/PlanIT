@@ -14,7 +14,6 @@ const ProjectSchema = new Schema({
     }],
     createdAt: { type: Date, default: Date.now },
 })
-// TODO: Discuss properties if needed
 const Project = mongoose.model('Project', ProjectSchema);
 
 module.exports = Project
