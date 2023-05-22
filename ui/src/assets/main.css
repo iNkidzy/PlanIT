@@ -2,9 +2,9 @@
 
 #app {
   margin: 0 auto;
-  padding: 2rem;
-
+  padding: 1rem;
   font-weight: normal;
+  min-width: 100%;
 }
 
 a,
@@ -23,7 +23,6 @@ a,
 @media (min-width: 1024px) {
   body {
     display: flex;
-    place-items: center;
   }
 
 }
