@@ -95,8 +95,7 @@ import { authHeader } from '../AuthHelper.vue';
 
 const state = ref({
   spacefuns: {},
-  newName: '',
-  user: {}
+  newName: ''
 })
 
 const dialog = ref(false)
@@ -127,20 +126,6 @@ const deleteSpaceFun = async (id) => {
     })
 }
 
-const getSpecificUSerSpaceFun = async () => {
-  try {
-    await fetch(`http://localhost:5500/api/spaceFun/${userId.value}`, authHeader())
-      .then(res => res.json())
-      .then(data => {
-        console.log(data)
-        state.value.user = data
-      })
-    console.log("spaceFun", state.value.userId.value)
-  } catch (err) {
-    console.log(err)
-  }
-}
-
 const newSpaceFun = async () => {
   const reqPOST = {
     method: 'POST',
@@ -154,7 +139,7 @@ const newSpaceFun = async () => {
   }
   await fetch('http://localhost:5500/api/spaceFun/create', authHeader(reqPOST))
     .then(dialog.value = false)
-    .then(() => { getSpecificUSerSpaceFun() })
+    .then(() => { fetchSpaceFun() })
 }
 
 const spaceFunToEdit = ref(null)
