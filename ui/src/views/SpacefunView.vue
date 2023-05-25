@@ -103,7 +103,7 @@ const updateModal = ref(false)
 
 const fetchSpaceFun = async () => {
   try {
-    await fetch('http://localhost:5500/api/spaceFun', authHeader())
+    await fetch(`${import.meta.env.VITE_BASE_API_URL}/api/spaceFun`, authHeader())
       .then(res => res.json())
       .then(data => {
         state.value.spacefuns = data
@@ -115,7 +115,7 @@ const fetchSpaceFun = async () => {
 fetchSpaceFun()
 
 const deleteSpaceFun = async (id) => {
-  await fetch(`http://localhost:5500/api/spaceFun/${id}`, authHeader({
+  await fetch(`${import.meta.env.VITE_BASE_API_URL}/api/spaceFun/${id}`, authHeader({
     method: "DELETE",
   }))
     .then(res => res.json())
@@ -136,7 +136,7 @@ const newSpaceFun = async () => {
       name: state.value.newName,
     })
   }
-  await fetch('http://localhost:5500/api/spaceFun/create', authHeader(reqPOST))
+  await fetch(`${import.meta.env.VITE_BASE_API_URL}/api/spaceFun/create`, authHeader(reqPOST))
     .then(dialog.value = false)
     .then(() => { fetchSpaceFun() })
 }
@@ -149,7 +149,7 @@ const openUpdateModal = async (payload) => {
 }
 
 const updateSpaceFun = async () => {
-  fetch(`http://localhost:5500/api/spaceFun/${spaceFunToEdit.value._id}`, authHeader({
+  fetch(`${import.meta.env.VITE_BASE_API_URL}/api/spaceFun/${spaceFunToEdit.value._id}`, authHeader({
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

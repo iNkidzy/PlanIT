@@ -21,6 +21,7 @@ defineEmits(["cancel"])
 import { ref, inject } from 'vue';
 import { useRouter } from 'vue-router'
 
+
 const state = ref({
     users: [],
     user: {
@@ -61,7 +62,7 @@ const login = async () => {
             password: state.value.user.password,
         })
     }
-    await fetch('http://localhost:5500/api/user/login', request)
+    await fetch(`${import.meta.env.VITE_BASE_API_URL}/api/user/login`, request)
         .then(response =>
             response.json())
         .then(data => {

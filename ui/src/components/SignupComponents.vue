@@ -73,7 +73,7 @@ const createUser = async () => {
             password: state.value.newUser.password,
         })
     }
-    await fetch("http://localhost:5500/api/user/signup", authHeader(postReq))
+    await fetch(`${import.meta.env.VITE_BASE_API_URL}/api/user/signup`, authHeader(postReq))
         .then(res => res.json())
         .then(data => {
             console.log("new user created:", data)

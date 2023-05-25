@@ -228,7 +228,7 @@ function formatDate(value) {
 
 const getSpecificProject = async () => {
   try {
-    await fetch(`http://localhost:5500/api/projects/${projectId.value}`, authHeader())
+    await fetch(`${import.meta.env.VITE_BASE_API_URL}/api/projects/${projectId.value}`, authHeader())
       .then(res => res.json())
       .then(data => {
         console.log(data)
@@ -256,7 +256,7 @@ const newTask = async () => {
       projectId: projectId.value
     })
   }
-  await fetch('http://localhost:5500/api/task/create', authHeader(reqPOST))
+  await fetch(`${import.meta.env.VITE_BASE_API_URL}/api/task/create`, authHeader(reqPOST))
   createDialog.value = false
   await getSpecificProject()
   clearForm()
@@ -264,7 +264,7 @@ const newTask = async () => {
 }
 
 const updateTasks = async () => {
-  fetch(`http://localhost:5500/api/task/${tasksToEdit.value._id}`, authHeader({
+  fetch(`${import.meta.env.VITE_BASE_API_URL}/api/task/${tasksToEdit.value._id}`, authHeader({
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -291,7 +291,7 @@ const updateTasks = async () => {
 }
 
 const deleteTask = async (id) => {
-  await fetch(`http://localhost:5500/api/task/${id}`, authHeader({
+  await fetch(`${import.meta.env.VITE_BASE_API_URL}/api/task/${id}`, authHeader({
     method: "DELETE",
   }))
     .then(res => res.json())

@@ -119,7 +119,7 @@ import { authHeader } from '../AuthHelper.vue';
 
     const getSpecificSpaceFun = async () => {
         try {
-            await fetch(`http://localhost:5500/api/spaceFun/${spacefunId.value}`, authHeader())
+            await fetch(`${import.meta.env.VITE_BASE_API_URL}/api/spaceFun/${spacefunId.value}`, authHeader())
                 .then(res => res.json())
                 .then(data => {
                   console.log(data)
@@ -144,13 +144,13 @@ import { authHeader } from '../AuthHelper.vue';
             spacefunId: spacefunId.value
           })
         }
-          await fetch('http://localhost:5500/api/projects/create', authHeader(reqPOST))
+          await fetch(`${import.meta.env.VITE_BASE_API_URL}/api/projects/create`, authHeader(reqPOST))
           createDialog.value = false
           await getSpecificSpaceFun()
     }
 
   const updateProject = async () => {
-      fetch(`http://localhost:5500/api/projects/${projectToEdit.value._id}`, authHeader({
+      fetch(`${import.meta.env.VITE_BASE_API_URL}/api/projects/${projectToEdit.value._id}`, authHeader({
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -169,7 +169,7 @@ import { authHeader } from '../AuthHelper.vue';
 }
 
 const deleteProject = async (id) => {
-  await fetch(`http://localhost:5500/api/projects/${id}`, authHeader( {
+  await fetch(`${import.meta.env.VITE_BASE_API_URL}/api/projects/${id}`, authHeader( {
     method: "DELETE",
   }))
     .then(res => res.json())

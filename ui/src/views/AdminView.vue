@@ -116,7 +116,7 @@ function formatDate(value) {
 
 const getAllUsers = async () => {
     try {
-        await fetch('http://localhost:5500/api/user', authHeader())
+        await fetch(`${import.meta.env.VITE_BASE_API_URL}/api/user`, authHeader())
             .then(res => res.json())
             .then(data => {
                 state.value.users = data
@@ -181,7 +181,7 @@ const createUser = async () => {
             role: state.value.newUser.role
         })
     }
-    await fetch("http://localhost:5500/api/user/create", authHeader(postReq))
+    await fetch(`${import.meta.env.VITE_BASE_API_URL}/api/user/create`, authHeader(postReq))
         .then(res => res.json())
         .then(data => {
             console.log("new user created:", data)
@@ -223,7 +223,7 @@ async function updateUser(_id) {
         alert("Email already exists")
         return
     }
-    await fetch(`http://localhost:5500/api/user/${_id}`, authHeader({
+    await fetch(`${import.meta.env.VITE_BASE_API_URL}/api/user/${_id}`, authHeader({
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -243,7 +243,7 @@ async function updateUser(_id) {
         })
 }
 async function deleteUser(id) {
-    await fetch(`http://localhost:5500/api/user/${id}`, authHeader({
+    await fetch(`${import.meta.env.VITE_BASE_API_URL}/api/user/${id}`, authHeader({
         method: "DELETE",
     }))
         .then(res => res.json())
