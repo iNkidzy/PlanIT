@@ -62,7 +62,7 @@ const login = async () => {
             password: state.value.user.password,
         })
     }
-    await fetch(`/api/user/login`, request)
+    await fetch('/api/user/login', request)
         .then(response =>
             response.json())
         .then(data => {

@@ -1,2 +1,2 @@
-/*     /      200
-/api/* https://planit-api.onrender.com 200
+/api/* https://planit-api.onrender.com/api/:splat 200
+/*     /index.html      200
