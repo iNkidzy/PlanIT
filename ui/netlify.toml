@@ -1,0 +1,5 @@
+[[redirects]]
+    from = "/*"
+    to = "https://planit-api.onrender.com/api/"
+    status = 200
+    force = true
